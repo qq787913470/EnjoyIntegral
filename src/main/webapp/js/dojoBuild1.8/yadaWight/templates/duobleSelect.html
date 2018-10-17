@@ -1,0 +1,21 @@
+<div class="${baseClass}" >
+	<table>
+	<tr>
+		<td >
+		<input type="hidden" id="leftSelect" name="leftSelect"/>
+			<select style="width: 300px;height: 300px" id="leftContainerSelect" class="${baseClass}Select" multiple='true'  data-dojo-attach-point='leftFocusNode' data-dojo-attach-event='onchange: _onChange'></select>
+		</td>
+		<td id="center" class="${baseClass}TDImage" >
+			<div   data-dojo-attach-point="centerButton_allLeftMove" data-dojo-attach-event="ondijitclick:_onClick_toRightAll"><img style="width: 30px;height: 30px" class="${baseClass}Image"  src="${spore}/dojoBuild1.8/yadaWight/image/toRightAll.png"  ></div>
+			<div class="${baseClass}ImageDiv"  data-dojo-attach-point="centerButton_leftMove" data-dojo-attach-event="ondijitclick:_onClick_toRight"><img style="width: 30px;height: 30px;margin-top: 30px" class="${baseClass}Image"  src="${spore}/dojoBuild1.8/yadaWight/image/toRight.png"  ></div>
+			<div class="${baseClass}ImageDiv"  data-dojo-attach-point="centerButton_rightMove" data-dojo-attach-event="ondijitclick:_onClick_toLeft"><img style="width: 30px;height: 30px;margin-top: 30px" class="${baseClass}Image" src="${spore}/dojoBuild1.8/yadaWight/image/toLeft.png"  ></div>
+			<div class="${baseClass}ImageDiv"  data-dojo-attach-point="centerButton_allRightMove" data-dojo-attach-event="ondijitclick:_onClick_toLeftAll"><img style="width: 30px;height: 30px;margin-top: 30px" class="${baseClass}Image" src="${spore}/dojoBuild1.8/yadaWight/image/toLeftAll.png"></div>
+		</td>
+		<td >
+		<input type="hidden" name="rightSelect" id="rightSelect"/>
+			<select style="width: 300px;height: 300px"  id="rightContainerSelect" class="${baseClass}Select"  multiple='true'  data-dojo-attach-point='rightFocusNode' data-dojo-attach-event='onchange: _onChange'></select>
+		</td>
+		</tr>
+	</table>
+	<div data-dojo-attach-point='containerNode' ></div>
+</div>

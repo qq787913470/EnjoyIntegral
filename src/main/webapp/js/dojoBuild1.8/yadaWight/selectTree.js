@@ -1,0 +1,2 @@
+//>>built
+define("yadaWight/selectTree",["./YDLazyTree","dojo/_base/declare","dijit/Tree"],function(_1,_2,_3){var _4=_2([_3._TreeNode],{});return _2("yadaWight.selectTree",[_1],{textId:null,onClick:function(){var _5=this.selectedItems[0];dojo.byId("selectof"+this.textId).innerText=_5["treeName"];dojo.byId(this.textId+"_name").value=_5["treeId"];dojo.style("selectchild"+this.textId,{display:"none"});}});});

@@ -1,0 +1,18 @@
+<table style="border: 1px">
+
+<tr>
+  <td>
+	<select multiple='true'
+		${!nameAttrSetting} data-dojo-attach-point='containerNode,focusNode'
+		data-dojo-attach-event='onchange: _onChange' style="${style}">
+	</select>
+  </td>
+  <td style="padding-left: 20px;padding-right: 20px">
+	
+	<div data-dojo-attach-event="ondijitclick:UpTop"><img style="width: 25px;height: 25px" src="${spore}/yadaWight/image/upTop.png"></div>
+	<div style="margin-top:  20%; " data-dojo-attach-event="ondijitclick:Up"><img style="width: 25px;height: 25px" src="${spore}/yadaWight/image/up.png"></div>
+	<div style="margin-top:  20%; " data-dojo-attach-event="ondijitclick:Down"><img style="width: 25px;height: 25px" src="${spore}/yadaWight/image/down.png"></div>
+	<div style="margin-top:  20%; " data-dojo-attach-event="ondijitclick:DownEnd"><img style="width: 25px;height: 25px" src="${spore}/yadaWight/image/downEnd.png"></div>
+  </td>
+</tr>
+</table>
