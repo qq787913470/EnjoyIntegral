@@ -1,0 +1,15 @@
+.left { filter: DropShadow(Color=CFA03A, OffX=2, OffY=2, Positive=100); color: #333333 ; text-align: justify}
+.name {  font-family: "ËÎÌו"; font-size: 18px; color: #0066CC; filter: DropShadow(Color=0066cc, OffX=1, OffY=1, Positive=3); text-decoration: underline}
+A:link {
+	TEXT-DECORATION: none;COLOR: 000000;
+}
+A:visited {
+	FONT-WEIGHT: normal; COLOR: 000000; FONT-STYLE: normal; TEXT-DECORATION: none
+}
+A:active {
+	FONT-WEIGHT: normal;  COLOR: #000000; FONT-STYLE: normal; TEXT-DECORATION: none
+}
+A:hover {
+	FONT-WEIGHT: normal;  COLOR:#0033FF; FONT-STYLE: normal; TEXT-DECORATION: none
+}
+
