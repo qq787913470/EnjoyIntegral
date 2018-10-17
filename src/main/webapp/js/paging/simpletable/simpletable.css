@@ -1,0 +1,409 @@
+.gridTable {
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+	font-family:'Microsoft Yahei','Simsun';
+}
+
+/** grid body */
+
+.gridBody {
+	border-right: 1px solid silver;
+	border-top: 1px solid silver;
+	
+  background: #C6E8FB;width:96%;margin-top:10px; 
+  csp:expression(this.cellSpacing=1);margin:0 0;
+	
+}
+.gridBody th {
+
+    white-space:nowrap;
+	overflow:hidden;
+	word-break:keep-all;
+	padding-right: 3px;
+	padding-left: 3px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	font-family:Microsoft Yahei','Simsun;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left;
+	margin: 0px;
+	text-align: center;
+	height:10px;color:#000000; background:url(../../styles/images/listmate_thbg.gif) repeat-x; font-weight:bold; text-align:center
+}
+
+.gridBody td {
+	white-space:nowrap;
+	overflow:hidden;
+	word-break:keep-all;
+
+}
+
+/** grid header sort */
+.gridBody th.sort {
+}
+.gridBody th.sort.desc {
+	background:#c5c5c5 url(images/sort_desc.gif) center right no-repeat
+}
+.gridBody th.sort.asc {
+	background:#c5c5c5 url(images/sort_asc.gif) center right no-repeat
+}
+
+/** mouse hove over sort header */
+.gridBody .tableHeaderSortHover {
+	background-color: #f5f5f5 !important;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+/** gridBody row colors */
+.gridBody .odd {
+	background-color: #FFFFFF;
+}
+.gridBody .even {
+	background-color: #E4ECF7;
+}
+.gridBody .highlight {
+	background-color: #fdeccf !important;
+}
+
+
+/** grid body2 */
+
+.gridBody2 {
+	border-bottom: 0px solid silver;
+	border-top: 1px solid silver;
+	
+  background: #C6E8FB;width:100%;margin-top:10px;padding:10;
+  csp:expression(this.cellSpacing=1);margin:0 0;
+	
+	
+}
+.gridBody2 th {
+
+    white-space:nowrap;
+	overflow:hidden;
+	word-break:keep-all;
+	padding-right: 3px;
+	padding-left: 3px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	font-family:Microsoft Yahei','Simsun;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left;
+	margin: 0px;
+	text-align: center;
+	height:10px;color:#000000; background:url(../../styles/images/listmate_thbg.gif) repeat-x; font-weight:bold; text-align:center
+}
+
+.gridBody2 td {
+	white-space:nowrap;
+	overflow:hidden;
+	word-break:keep-all;
+
+}
+
+/** grid header sort */
+.gridBody2 th.sort {
+}
+.gridBody2 th.sort.desc {
+	background:#c5c5c5 url(images/sort_desc.gif) center right no-repeat
+}
+.gridBody2 th.sort.asc {
+	background:#c5c5c5 url(images/sort_asc.gif) center right no-repeat
+}
+
+/** mouse hove over sort header */
+.gridBody2 .tableHeaderSortHover {
+	background-color: #f5f5f5 !important;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+/** gridBody row colors */
+.gridBody2 .odd {
+	background-color: #FFFFFF;
+}
+.gridBody2 .even {
+	background-color: #E4ECF7;
+}
+.gridBody2 .highlight {
+	background-color: #fdeccf !important;
+}
+
+
+/** grid toolbar */
+.gridToolbar
+{
+margin-top:10px; csp:expression(this.cellSpacing=1);margin:0;
+}
+.gridToolbar .leftControls {
+	
+}
+.gridToolbar .paginationControls .buttonLabel{
+	line-height:32px;
+	margin-bottom:50px;
+	font-size: 12px;
+	margin:0 10px
+}
+.page_num_font{
+   font-size: 8px;
+}
+.gridToolbar .box div {
+
+	
+}
+.gridToolbar .box .paginationControls {
+	line-height:32px;
+	text-align:right;
+	font-size: 12px;
+	margin-right:0px;
+	align:top;
+	
+}
+.gridToolbar td{
+
+}
+
+.gridBody .odd a, .even a {
+	font-size: 12px;
+	font-weight: bold;
+	color: #527DA7 !important;
+}
+
+.eXtremeTable {
+	margin: 0;
+	padding: 0;
+}
+
+.eXtremeTable .pageNum {
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.eXtremeTable .currentNum {
+	font-weight: bold;
+	color: green;
+	font-size: 12px;
+}
+
+.eXtremeTable select {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 9px;
+	border: solid 1px #EEE;
+	width: 75px;
+}
+
+.eXtremeTable .tableRegion {
+	
+	padding: 2px;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 12px;
+	margin-top: 7px;
+	background: #000000;width:100%;margin-top:10px; csp:expression(this.cellSpacing=1) ;
+}
+
+.eXtremeTable .filter {
+	background-color: #F4F4F4;
+}
+
+.eXtremeTable .filter td {
+	padding: 2px;
+}
+
+.eXtremeTable .title {
+	color: #444444;
+	font-weight: bold;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 15px;
+	vertical-align: middle;
+}
+
+.eXtremeTable .titleRow {
+	background-color: #F4F4F4;
+}
+
+.eXtremeTable .titleRow td {
+	border-bottom: 1px solid #308dbb;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.eXtremeTable .titleRow span {
+	color: #444444;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.eXtremeTable .filter input {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 12px;
+	border: solid 1px grey;
+	padding: 1px;
+}
+
+.eXtremeTable .filter select {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 9px;
+	border: solid 1px #EEE;
+}
+
+.eXtremeTable .tableHeader {
+	background-color: #B0C4DE;
+	color: white;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	text-align: left;
+	
+	margin: 0px;
+
+	text-align: center;
+	height:10px;color:#298dc8; background:url(../../styles/images/listmate_thbg.gif) repeat-x; font-weight:bold; text-align:center
+}
+
+.eXtremeTable .tableHeaderSort {
+	background-color: #3a95c2;
+	color: white;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	text-align: left;
+	padding-right: 3px;
+	padding-left: 3px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	border-right-style: solid;
+	border-right-width: 1px;
+	border-color: white;
+	text-align: center;
+	height:30px;color:#298dc8; background:url(../../styles/images/listmate_thbg001.gif) repeat-x; font-weight:bold; text-align:center
+
+}
+.tableBody {}
+.tableBody td{height:24px;}
+.eXtremeTable .odd a, .even a {
+	color: #000000;
+	font-size: 12px;
+	
+}
+
+.eXtremeTable .odd td, .eXtremeTable .even td {
+	padding-top: 2px;
+	padding-right: 3px;
+	padding-bottom: 2px;
+	padding-left: 3px;
+	vertical-align: middle;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 12px;
+}
+
+.eXtremeTable .odd {
+	background-color: #F2F5FA;height:24px;
+}
+
+.eXtremeTable .even {
+	background-color: #E4ECF7;height:24px;
+}
+
+.eXtremeTable .highlight td {
+	color: black;
+	font-size: 12px;
+	padding-top: 2px;
+	padding-right: 3px;
+	padding-bottom: 2px;
+	padding-left: 3px;
+	vertical-align: middle;
+	background-color: #fdecae;
+}
+
+.eXtremeTable .highlight a, .highlight a {
+	color: black;
+	font-size: 12px;
+}
+
+.eXtremeTable .compactToolbar {
+	background-color: #ffffff;
+}
+
+.eXtremeTable .toolbar {
+	background-color: #F4F4F4;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 9px;
+	margin-right: 1px;
+	border-right: 1px solid silver;
+	border-left: 1px solid silver;
+	border-top: 1px solid silver;
+	border-bottom: 1px solid silver;
+}
+
+.eXtremeTable .toolbar a:hover {
+	background-color: transparent;
+}
+
+.eXtremeTable .toolbar td {
+	color: #444444;
+	padding: 0px 3px 0px 3px;
+	text-align: center;
+}
+
+.eXtremeTable .separator {
+	width: 7px;
+}
+
+.eXtremeTable .statusBar {
+	background-color: #ffffff;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 12px;
+	padding-left:8px;
+	height:24px;
+}
+
+.eXtremeTable .filterButtons {
+	background-color: #F4F4F4;
+	text-align: right;
+}
+
+.eXtremeTable .title span {
+	margin-left: 7px;
+}
+
+.eXtremeTable .formButtons {
+	display: block;
+	margin-top: 12px;
+	margin-left: 5px;
+}
+
+.eXtremeTable .formButton {
+	cursor: pointer;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	background-color: #7b792b;
+	color: white;
+	margin-top: 5px;
+	border: outset 1px #333;
+	vertical-align: middle;
+}
+
+.eXtremeTable .calcRow {
+	background-color: #F4F4F4;
+}
+
+.eXtremeTable .calcTitle {
+	background-color: #F4F4F4;
+	color: black;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.eXtremeTable .calcResult {
+	background-color: #F4F4F4;
+	color: black;
+	font-family: verdana, arial, helvetica, sans-serif;
+}
