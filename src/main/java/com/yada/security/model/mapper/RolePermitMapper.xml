@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.RolePermitDao">
+
+	<resultMap id="RolePermit" type="com.yada.security.model.RolePermit">
+        <result property="rolePermitId" column="ROLE_PERMIT_ID"/>
+        <result property="permitId" column="PERMIT_ID"/>
+        <result property="roleId" column="ROLE_ID"/>
+	</resultMap>
+	 <!-- 一对一   一的标识 -->
+	<resultMap  id="rolePermitRole" type="com.yada.security.model.RolePermit" extends="RolePermit">
+	 <!-- 放入association -->
+	 
+	</resultMap>
+	 <!-- 一对一   一的标识 -->
+	<resultMap  id="rolePermitPermit" type="com.yada.security.model.RolePermit" extends="RolePermit">
+	 <!-- 放入association -->
+	 
+	</resultMap>
+	<sql id="RolePermit_columns">
+		ROLE_PERMIT_ID,PERMIT_ID,ROLE_ID
+	</sql>
+	
+	<insert id="RolePermit_insert" keyProperty="rolePermitId" parameterType="com.yada.security.model.RolePermit" >
+	   <selectKey resultType="Long" order="BEFORE"  keyProperty="rolePermitId">
+			SELECT T_SEQ_P_SHIRO_ROLE_PERMIT.nextval AS ID FROM DUAL 
+        </selectKey>
+        INSERT INTO T_P_SHIRO_ROLE_PERMIT (
+        	ROLE_PERMIT_ID ,
+        	PERMIT_ID ,
+        	ROLE_ID 
+        ) VALUES (
+        	#{rolePermitId} ,
+        	#{permitId} ,
+        	#{roleId} 
+        )
+	</insert>
+	
+	<insert id="res2RoleInsert" >
+		insert into T_P_SHIRO_role_permit
+		  select T_SEQ_P_SHIRO_ROLE_PERMIT.nextval, p.permit_id, r.role_id
+		    from T_P_SHIRO_permit p, T_P_SHIRO_role r, DUAL
+		   where p.permit_id in 
+		   		<foreach item="item" index="index" collection="permits"
+			       open="(" separator="," close=")">
+			         #{item}
+			     </foreach>
+		     and r.role_id in 
+		     	<foreach item="item" index="index" collection="roles"
+			       open="(" separator="," close=")">
+			         #{item}
+			     </foreach>
+		     and p.permit_id || '_' || r.role_id not in
+		         (select rp.permit_id || '_' || rp.role_id from T_P_SHIRO_role_permit rp)
+	</insert>
+	
+	<update id="RolePermit_update" >
+        UPDATE T_P_SHIRO_ROLE_PERMIT SET
+	        PERMIT_ID = #{permitId} ,
+	        ROLE_ID = #{roleId} 
+        WHERE 
+	        ROLE_PERMIT_ID = #{rolePermitId} 
+	</update>
+
+    <delete id="RolePermit_delete">
+        DELETE FROM T_P_SHIRO_ROLE_PERMIT WHERE ROLE_PERMIT_ID = #{id} 
+    </delete>
+    
+    <select id="RolePermit_getById" resultMap="RolePermit">
+		SELECT <include refid="RolePermit_columns" />  FROM T_P_SHIRO_ROLE_PERMIT  WHERE  ROLE_PERMIT_ID = #{id} 
+	</select>
+	
+	<sql id="RolePermit_findPage_where">
+		<where>	      				
+	       <if test="rolePermitId != null and rolePermitId !=''">
+				AND ROLE_PERMIT_ID = #{rolePermitId}
+			</if>
+	       <if test="permitId != null and permitId !=''">
+				AND PERMIT_ID = #{permitId}
+			</if>
+	       <if test="roleId != null and roleId !=''">
+				AND ROLE_ID = #{roleId}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="RolePermit_findCountByWhere" resultType="int">
+        SELECT count(*) FROM T_P_SHIRO_ROLE_PERMIT  <include refid="RolePermit_findPage_where"/>    
+    </select>
+   
+    <select id="RolePermit_findListByWhere" resultMap="RolePermit">
+    	SELECT <include refid="RolePermit_columns" /> FROM T_P_SHIRO_ROLE_PERMIT  <include refid="RolePermit_findPage_where"/>
+    </select>
+    
+    <sql id="deletePermitsRes_where">
+		<where>	      	
+			<if test="1==1">
+				P.PERMIT_ID = T.PERMIT_ID
+			</if>			
+	       <if test="resTypeId != null and resTypeId !=''">
+				AND RT.TYPE_ID = #{resTypeId}
+			</if>
+	       <if test="roleId != null and roleId !=''">
+				AND T.ROLE_ID = #{roleId}
+			</if>
+		</where>
+	</sql>
+    <delete id="deletePermitsRes">
+    	DELETE FROM T_P_SHIRO_ROLE_PERMIT T 
+		where exists(select 1 from  T_P_SHIRO_PERMIT P  
+		JOIN T_P_SHIRO_RES R ON P.MENU_RES_ID = R.MENU_RES_ID 
+		JOIN T_P_SHIRO_RES_TYPE RT ON RT.TYPE_ID = R.TYPE_ID
+		<include refid="deletePermitsRes_where"/> )
+    </delete>
+    
+    <sql id="deletePermitsResTree_where">
+		<where>
+			<if test="1==1">
+				P.PERMIT_ID = T.PERMIT_ID
+			</if>	
+			<if test="resTypeId != null and resTypeId !=''">
+				AND R.TYPE_ID = #{resTypeId}
+			</if>		
+	       	<if test="roleId != null and roleId !=''">
+				AND T.ROLE_ID = #{roleId}
+			</if>
+			<if test="pmenuResId != null and pmenuResId !=''">
+	       	<choose>
+	       		<!-- 主菜单ID=0 -->
+	       		<when test="menuResId != null and menuResId != '' and menuResId != 0">
+				AND R.MENU_RES_ID in (SELECT R2.menu_res_id FROM T_P_SHIRO_RES R2
+				START WITH R2.P_MENU_RES_ID = #{pmenuResId} and R2.menu_res_id= #{menuResId}
+   	 			CONNECT BY PRIOR R2.MENU_RES_ID=R2.P_MENU_RES_ID) 
+   	 			</when>
+   	 			<otherwise>
+   	 			AND R.MENU_RES_ID in (SELECT R2.menu_res_id FROM T_P_SHIRO_RES R2
+				START WITH R2.P_MENU_RES_ID = #{pmenuResId}
+   	 			CONNECT BY PRIOR R2.MENU_RES_ID=R2.P_MENU_RES_ID) 
+   	 			</otherwise>
+   	 		</choose>
+			</if>
+		</where>
+	</sql>
+    <delete id="deletePermitsResTree">
+    	DELETE FROM T_P_SHIRO_ROLE_PERMIT T 
+		where exists(select 1 from  T_P_SHIRO_PERMIT P  
+		JOIN T_P_SHIRO_RES R ON P.MENU_RES_ID = R.MENU_RES_ID 
+		<include refid="deletePermitsResTree_where"/> )
+    </delete>
+    
+    <delete id="deleteRolesByPermit">
+    	DELETE FROM T_P_SHIRO_ROLE_PERMIT T WHERE T.PERMIT_ID=#{permitId}
+    </delete>
+    
+    <insert id="permit2Role">
+    	INSERT INTO T_P_SHIRO_ROLE_PERMIT 
+			SELECT T_SEQ_P_SHIRO_ROLE_PERMIT.NEXTVAL, #{permitId} ,R.ROLE_ID, #{ordered,jdbcType=NUMERIC} FROM T_P_SHIRO_ROLE R 
+			WHERE R.ROLE_ID IN 
+				 <foreach item="item" index="index" collection="roles"
+			       open="(" separator="," close=")">
+			         #{item.roleId}
+			     </foreach>
+    </insert>
+    
+    <insert id="resources2Role">
+    	INSERT INTO T_P_SHIRO_ROLE_PERMIT (ROLE_PERMIT_ID, PERMIT_ID, ROLE_ID)
+			SELECT T_SEQ_P_SHIRO_ROLE_PERMIT.NEXTVAL, P.PERMIT_ID, #{roleId} FROM T_P_SHIRO_PERMIT P
+			WHERE P.PERMIT_ID IN
+				 <foreach item="item" index="index" collection="permits"
+			       open="(" separator="," close=")">
+			         #{item.permitId}
+			     </foreach>
+    </insert>
+    
+    <select id="findSortByRes" resultType="Long">
+    	SELECT DISTINCT T.SORT FROM T_P_SHIRO_ROLE_PERMIT T
+		JOIN T_P_SHIRO_PERMIT P ON P.PERMIT_ID=T.PERMIT_ID
+		JOIN T_P_SHIRO_RES R ON R.MENU_RES_ID=P.MENU_RES_ID
+		WHERE R.MENU_RES_ID=#{menuResId} AND T.SORT IS NOT NULL
+    </select>
+    
+    <delete id="deletePermitsByResId">
+    	DELETE FROM T_SHIRO_ROLE_PERMIT T WHERE T.PERMIT_ID IN (SELECT P.PERMIT_ID FROM T_SHIRO_PERMIT P WHERE P.MENU_RES_ID = #{menuResId})
+    </delete>
+    
+</mapper>
+

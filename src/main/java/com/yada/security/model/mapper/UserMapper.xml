@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.UserDao">
+
+	<resultMap id="User" type="com.yada.security.model.User">
+		<result property="userId" column="USER_ID" />
+		<result property="userGrpId" column="USER_GRP_ID" />
+		<result property="loginName" column="LOGIN_NAME" />
+		<result property="userName" column="USER_NAME" />
+		<result property="pwd" column="PWD" />
+		<result property="roleName" column="ROLE_NAME" />
+	</resultMap>
+	<!-- 一对一 一的标识 -->
+	<resultMap id="userUserGrp" type="com.yada.security.model.User" extends="User">
+		<association property="userGrp" javaType="com.yada.security.model.UserGrp">
+			<id property="userGrpId" column="USER_GRP_ID_" />
+			<result property="name" column="NAME" />
+		</association>
+	</resultMap>
+	
+	<!-- 用户信息,包括用户额外信息,用户分组信息 -->
+	<resultMap type="com.yada.security.model.User" id="userAllInfo" extends="userUserGrp">
+		<association property="userExt" javaType="com.yada.security.model.UserExt">
+			<id property="userId" column="EXT_USER_ID"/>
+			<result property="orgId" column="ORG_ID"/>
+			<result property="orgName" column="ORG_NAME"/>
+	        <result property="staffId" column="STAFF_ID"/>
+	        <result property="lastLoginIpAddr" column="LAST_LOGIN_IP_ADDR"/>
+	        <result property="lastLoginDateTime" column="LAST_LOGIN_DATE_TIME"/>
+	        <result property="lastLogoutDateTime" column="LAST_LOGOUT_DATE_TIME"/>
+	        <result property="loginCnt" column="LOGIN_CNT"/>
+	        <result property="lastChgPwdDateTime" column="LAST_CHG_PWD_DATE_TIME"/>
+	        <result property="createDateTime" column="CREATE_DATE_TIME"/>
+	        <result property="createUserId" column="CREATE_USER_ID"/>
+	        <result property="createUserName" column="CREATE_USER_NAME"/>
+	        <result property="status" column="STATUS"/>
+	        <result property="loginFailedCnt" column="LOGIN_FAILED_CNT"/>
+	        <result property="lastLoginFailedDateTime" column="LAST_LOGIN_FAILED_DATE_TIME"/>
+	        <result property="canMnged" column="CAN_MAGED"/>
+		</association>
+	</resultMap>
+	
+	<select id="User_findUserAllInfoByLoginName" resultMap="userAllInfo">
+		SELECT <include refid="User_columns"/>, <include refid="UserExt_columns"/>, <include refid="UserGrp_columns"/>
+		FROM T_P_SHIRO_USER T
+		inner  JOIN T_P_SHIRO_USER_EXT UE ON UE.USER_ID = T.USER_ID
+		inner JOIN T_P_SHIRO_USER_GRP UG ON UG.USER_GRP_ID = T.USER_GRP_ID
+		inner join t_p_shiro_user_grp_role_idx  x on UG.user_grp_id=x.user_grp_id
+		inner join t_p_shiro_role r on x.role_id= r.role_id
+		WHERE T.LOGIN_NAME = #{loginName}
+	</select>
+	
+	<sql id="User_columns">
+		T.USER_ID,T.USER_GRP_ID,T.LOGIN_NAME,T.PWD,T.USER_NAME
+	</sql>
+	<sql id="User_columns_R">
+		T.USER_ID,T.USER_GRP_ID,T.LOGIN_NAME,T.PWD,T.USER_NAME
+	</sql>
+	
+	<sql id="UserExt_columns">
+		UE.USER_ID AS EXT_USER_ID, UE.ORG_ID, UE.STAFF_ID, UE.LAST_LOGIN_IP_ADDR, UE.LAST_LOGIN_DATE_TIME, UE.LAST_LOGOUT_DATE_TIME, 
+		UE.LOGIN_CNT, UE.LAST_CHG_PWD_DATE_TIME, UE.CREATE_DATE_TIME, UE.CREATE_USER_ID, UE.STATUS, UE.LOGIN_FAILED_CNT, UE.LAST_LOGIN_FAILED_DATE_TIME 
+	</sql>
+	
+	<sql id="UserGrp_columns">
+		UG.USER_GRP_ID AS USER_GRP_ID_, UG.NAME
+	</sql>
+
+	<select id="User_selectKey" resultType="String">
+		SELECT T_SEQ_P_SHIRO_USER.NEXTVAL AS id FROM DUAL
+	</select>
+	
+	<insert id="User_insert"  parameterType="com.yada.security.model.User">
+           INSERT INTO T_P_SHIRO_USER (USER_ID ,USER_GRP_ID ,LOGIN_NAME ,PWD,USER_NAME  ) 
+           VALUES 
+           (#{userId} ,#{userGrpId,jdbcType=VARCHAR} ,#{loginName} ,#{pwd} ,#{userName} )
+	</insert>
+
+	<update id="User_update"  parameterType="com.yada.security.model.User">
+        UPDATE T_P_SHIRO_USER SET
+	        USER_GRP_ID = #{userGrpId,jdbcType=VARCHAR} ,
+	        LOGIN_NAME = #{loginName,jdbcType=VARCHAR} ,
+	        USER_NAME = #{userName,jdbcType=VARCHAR} ,
+	        PWD = <choose><when test="pwd != null and pwd !=''">#{pwd,jdbcType=VARCHAR}</when> <otherwise>T.PWD</otherwise> </choose> 
+        WHERE 
+	        USER_ID = #{userId} 
+	</update>
+	
+	<delete id="User_delete" >
+        DELETE FROM T_P_SHIRO_USER WHERE  USER_ID = #{id} 
+	</delete>
+
+	<select id="User_getById" resultMap="userAllInfo">
+		SELECT <include refid="User_columns"/>, <include refid="UserExt_columns"/>, <include refid="UserGrp_columns"/>, O.NAME AS ORG_NAME, U.LOGIN_NAME AS CREATE_USER_NAME 
+		FROM T_P_SHIRO_USER T
+		inner JOIN T_P_SHIRO_USER_EXT UE ON UE.USER_ID = T.USER_ID
+		inner JOIN T_P_SHIRO_USER U ON UE.CREATE_USER_ID = U.USER_ID
+		inner JOIN T_P_SHIRO_USER_GRP UG ON UG.USER_GRP_ID = T.USER_GRP_ID
+		inner JOIN T_B_ORG O ON O.ORG_ID = UE.ORG_ID
+		WHERE T.USER_ID = #{id}
+	</select>
+	
+	<select id="User_getById1" resultMap="userUserGrp">
+		SELECT <include refid="User_columns" />,  UG.USER_GRP_ID AS USER_GRP_ID_ ,UG.NAME AS NAME
+		FROM T_SHIRO_USER T
+		inner JOIN T_P_SHIRO_USER_GRP UG ON UG.USER_GRP_ID = T.USER_GRP_ID
+		inner join t_p_shiro_user_grp_role_idx  x on UG.user_grp_id=x.user_grp_id
+		inner join t_p_shiro_role r on x.role_id= r.role_id
+		WHERE   T.USER_ID = #{id}
+	</select>
+
+	<sql id="User_findPage_where">
+		<where>
+			<if test="userId != null and userId !=''">
+				AND T.USER_ID = #{userId}
+			</if>
+	       <if test="userGrpId != null and userGrpId !=''">
+				AND T.USER_GRP_ID = #{userGrpId}
+			</if>
+	       <if test="loginName != null and loginName !=''">
+				AND T.LOGIN_NAME = #{loginName,jdbcType=VARCHAR}
+			</if>
+	       <if test="userName != null and userName !=''">
+				AND T.USER_NAME = #{userName,jdbcType=VARCHAR}
+			</if>
+	       <if test="pwd != null and pwd !=''">
+				AND T.PWD = #{pwd,jdbcType=VARCHAR}
+			</if>
+	       <!--<if test="orgId != null and orgId !=''">
+				AND UE.ORG_ID LIKE #{orgId,jdbcType=VARCHAR}||'%'
+			</if>-->
+	       <if test="s_queryOrgId != null and s_queryOrgId !=''">
+	          <if test=" s_lowerOrgId ==null or s_lowerOrgId ==''">
+				AND UE.ORG_ID = #{s_queryOrgId,jdbcType=VARCHAR}
+			  </if>
+		   </if>
+	       <if test="s_lowerOrgId != null and s_lowerOrgId !=''">
+				AND UE.ORG_ID = #{s_lowerOrgId,jdbcType=VARCHAR}
+			</if>
+	       <if test="status != null and status !=''">
+				AND UE.STATUS = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="orgIdUser != null and orgIdUser != ''">
+			AND UE.ORG_ID in
+			<foreach item="orgIdUser" index="index" collection="orgIdUser" open="("
+					 separator="," close=")">
+				#{orgIdUser}
+			</foreach>
+			</if>
+		</where>
+	</sql>
+
+	<select id="User_findCountByWhere" resultType="int">
+		SELECT count(*) FROM T_P_SHIRO_USER T JOIN T_P_SHIRO_USER_EXT UE ON UE.USER_ID = T.USER_ID <include refid="User_findPage_where" />
+	</select>
+
+
+	<select id="User_findListByWhere" resultMap="userAllInfo">
+		SELECT <include refid="User_columns"/>, <include refid="UserExt_columns"/>, <include refid="UserGrp_columns"/>, O.NAME AS ORG_NAME,
+				 CASE WHEN UE.ORG_ID = #{selfOrgId} THEN '0' ELSE '1' END CAN_MAGED
+		FROM T_P_SHIRO_USER T
+		inner JOIN T_P_SHIRO_USER_EXT UE ON UE.USER_ID = T.USER_ID
+		inner JOIN T_P_SHIRO_USER_GRP UG ON UG.USER_GRP_ID = T.USER_GRP_ID
+		inner join t_p_shiro_user_grp_role_idx  x on UG.user_grp_id=x.user_grp_id
+		inner join t_p_shiro_role r on x.role_id= r.role_id
+		inner join T_B_ORG O ON O.ORG_ID = UE.ORG_ID
+		<include refid="User_findPage_where" />
+		<!-- AND T.USER_ID &lt;&gt; 1 -->
+		ORDER BY UE.ORG_ID
+	</select>
+
+	<select id="User_getByLoginName" resultMap="User" parameterType="java.lang.String">
+		SELECT <include refid="User_columns_R" />   FROM T_P_SHIRO_USER T
+		inner join t_p_shiro_user_grp g on t.user_grp_id = g.user_grp_id
+		inner join t_p_shiro_user_grp_role_idx  x on g.user_grp_id=x.user_grp_id
+		inner join t_p_shiro_role r on t.user_grp_id= g.user_grp_id where T.LOGIN_NAME = #{loginName}
+	</select>
+	
+    <select id="User_selectAll" resultMap="userUserGrp">
+    	SELECT * FROM T_P_SHIRO_USER U JOIN T_P_SHIRO_USER_GRP G ON U.USER_GRP_ID=G.USER_GRP_ID
+    </select>
+   
+	<select id="User_getByUserGrpId" resultType="int">
+		SELECT count(*) FROM T_P_SHIRO_USER u where u.USER_GRP_ID = #{userGrpId}
+	</select>
+	
+	<update id="User_resetUserPwd">
+		UPDATE T_P_SHIRO_USER T SET T.PWD = #{pwd} WHERE T.USER_ID = #{userId}
+	</update>
+	
+	<update id="User_assignUserGrp">
+		UPDATE T_P_SHIRO_USER T SET T.USER_GRP_ID = #{userGrpId} WHERE T.USER_ID = #{userId}
+	</update>
+	
+</mapper>
+

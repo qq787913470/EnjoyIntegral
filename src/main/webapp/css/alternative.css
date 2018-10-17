@@ -1,0 +1,166 @@
+/* alternative styles */
+table.its {
+margin-left:0px;
+	border: 1px none;
+	border-collapse: collapse;
+	width: 100%;
+	background-color:#d9d191;
+	
+}
+table.its tr{
+	border: 1px none;
+	border-collapse: collapse;
+	width: 100%;
+
+}
+table.its thead th {
+	background:url(../images/form_bg.jpg) repeat-x;	
+	height:30px;	
+	color: #88863b !important;
+	font-weight:bold; 
+	text-align:center;
+	border:1px solid #d9d191;
+    padding-top:5px;
+}
+
+
+table.its th {
+	border: 1px lightgrey dotted;
+	font-weight: normal;
+	font-size:12px;
+	word-wrap: break-word;
+	word-break: keep-all;
+}
+
+table.its td {
+	font-size: 9pt;
+	padding: 2px;
+	border: 1px lightgrey dotted;
+}
+
+table.its tr.altColor td {
+	background-color: #F7F7F7;
+}
+
+table.its tr.normalColor td {
+	background-color: white;
+}
+
+table.its th a {
+	text-decoration: none;
+	font-size: 10pt;
+	font-weight: bold;
+	padding: 3px;
+	color: gray;
+}
+
+table.its th a:link {
+	text-decoration: none;
+	font-size: 10pt;
+	padding: 3px;
+	color: gray;
+}
+
+table.its th a:visited {
+	text-decoration: none;
+	font-size: 10pt;
+	padding: 3px;
+	color: gray;
+}
+
+table.its th a:hover {
+	text-decoration: none;
+	color: red;
+	background-color: yellow;
+}
+
+table.its tr.hilite td {
+	background-color: #E3E4FA;
+	cursor: pointer;
+}
+
+table.its tr.even {
+	background-color: #E7E8C0;
+}
+
+table.its td a:link {text-decoration: none;color: 6b6917;}
+table.its td a:visited {text-decoration: none;color: 6b6917;}
+table.its td a:hover {text-decoration: none;color: red;}
+table.its td a:active {text-decoration: none;color: 6b6917;}
+
+table.mars thead tr {
+	background-color: #9c9;
+}
+
+table.mars tr.even {
+	background-color: #ccb;
+}
+
+table.mars tr.odd {
+	background-color: #eec;
+}
+
+table.simple thead tr th {
+	background-color: #eee;
+}
+
+table.simple tr.even {
+	background-color: #fff;
+}
+
+table.simple {
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+}
+
+table.simple td,table.simple th {
+	border: 1px solid #ccc;
+}
+
+table.nocol tbody td,table.nocol tbody th {
+	border-left: none;
+	border-right: none;
+}
+
+table.report td,table.report th {
+	font: menu;
+}
+
+table.report th {
+	background: buttonface;
+	border-width: 1px;
+	border-style: solid;
+	border-color: threedhighlight threedshadow threedshadow threedhighlight;
+	cursor: hand;
+}
+
+table.report idcol {
+	background: buttonface;
+}
+
+table.report tr.even {
+	background-color: #399;
+}
+
+table.report tbody {
+	height: 100px;
+	overflow: auto;
+}
+
+table.report {
+	height: 120px;
+	overflow: auto;
+}
+
+table.report tbody tr {
+	height: 10px;
+}
+
+table.mark td.tableCellError {
+	background-color: #d00;
+	color: #fff;
+}
+
+table.simple td.textRed {
+	color: #b11;
+}

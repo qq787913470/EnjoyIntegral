@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.UserGrpDao">
+
+	<resultMap id="UserGrp" type="com.yada.security.model.UserGrp">
+        <result property="userGrpId" column="USER_GRP_ID"/>
+        <result property="name" column="NAME"/>
+	</resultMap>
+	  <!-- 一对多   多的标识 -->
+	<resultMap id="usersUserGrp" type="com.yada.security.model.UserGrp" extends="UserGrp">
+		<collection property="users"   ofType="com.yada.security.model.User"   >
+				    <id property="userId" column="USER_ID" />
+				    <result property="userGrpId" column="USER_GRP_ID"/>
+				    <result property="loginName" column="LOGIN_NAME"/>
+				    <result property="pwd" column="PWD"/>
+		</collection>
+	</resultMap>
+	  <!-- N对多   多的标识 -->
+	<resultMap id="userRole" type="com.yada.security.model.UserGrp" extends="usersUserGrp">
+		<collection property="roles"   ofType="com.yada.security.model.Role"   >
+				    <id property="roleId" column="ROLE_ID" />
+				    <result property="roleName" column="ROLE_NAME"/>
+				    <result property="dsc" column="DSC"/>
+		</collection>
+	</resultMap>
+	
+	<resultMap type="com.yada.security.model.UserGrp" id="userGrpAndExt" extends="UserGrp">
+		<association property="userGrpExt" javaType="com.yada.security.model.UserGrpExt">
+			<id property="userGrpId" column="EXT_USER_GRP_ID"/>
+			<result property="orgName" column="ORG_NAME"/>
+			<result property="orgId" column="ORG_ID"/>
+			<result property="runtimeLimitFlag" column="RUNTIME_LIMIT_FLAG"/>
+			<result property="ihtFlag" column="IHT_FLAG"/>
+		</association>
+	</resultMap>
+	
+	<sql id="UserGrp_columns">
+		T.USER_GRP_ID,T.NAME
+	</sql>
+	
+	<sql id="UserGrpExt_columns">
+	    <![CDATA[
+		E.USER_GRP_ID AS EXT_USER_GRP_ID,E.ORG_ID,E.RUNTIME_LIMIT_FLAG,E.IHT_FLAG
+	    ]]>
+	</sql>
+	
+    <select id="UserGrp_selectKey" resultType="String">
+    	SELECT T_SEQ_P_SHIRO_USER_GRP.nextval AS id FROM DUAL
+    </select>
+	
+	<insert id="UserGrp_insert" >
+        INSERT INTO T_P_SHIRO_USER_GRP (USER_GRP_ID ,NAME  ) VALUES (#{userGrpId} ,#{name} )
+	</insert>
+    
+	<update id="UserGrp_update" >
+        UPDATE T_P_SHIRO_USER_GRP SET NAME = #{name}  WHERE  USER_GRP_ID = #{userGrpId} 
+	</update>
+
+    <delete id="UserGrp_delete">
+        DELETE FROM T_P_SHIRO_USER_GRP WHERE  USER_GRP_ID = #{id} 
+    </delete>
+    
+    <select id="UserGrp_getById" resultMap="UserGrp">
+		SELECT <include refid="UserGrp_columns" />  FROM T_P_SHIRO_USER_GRP T WHERE   USER_GRP_ID = #{id} 
+	</select>
+	
+	<sql id="UserGrp_findPage_where">
+		<where>	      				
+	      <if test="userGrpId != null and userGrpId !=''">
+				AND T.USER_GRP_ID = #{userGrpId}
+			</if>
+	       <if test="name != null and name !=''">
+				AND T.NAME = #{name}
+			</if>
+	       <if test="orgId != null and orgId !=''">
+				AND E.ORG_ID LIKE #{orgId} || '%'
+			</if>
+	       <if test="s_queryOrgId != null and s_queryOrgId !=''">
+				AND E.ORG_ID = #{s_queryOrgId}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="UserGrp_findCountByWhere" resultType="int">
+        SELECT count(*) FROM T_P_SHIRO_USER_GRP T  
+        JOIN T_P_SHIRO_USER_GRP_EXT E ON E.USER_GRP_ID=T.USER_GRP_ID
+        <include refid="UserGrp_findPage_where"/>
+    </select>
+    
+    <select id="UserGrp_findListByWhere" resultMap="userGrpAndExt" >
+    	SELECT <include refid="UserGrp_columns" />, <include refid="UserGrpExt_columns" />, O.NAME AS ORG_NAME  
+    	FROM T_P_SHIRO_USER_GRP T  
+		JOIN T_P_SHIRO_USER_GRP_EXT E ON E.USER_GRP_ID=T.USER_GRP_ID
+		JOIN T_B_ORG O ON O.ORG_ID=E.ORG_ID
+		<include refid="UserGrp_findPage_where"/>
+		ORDER BY E.ORG_ID
+    </select>
+    
+    <select id="UserGrp_findGrpByOrg" resultMap="UserGrp">
+    	SELECT T.USER_GRP_ID, T.NAME
+		  FROM T_P_SHIRO_USER_GRP T
+		  JOIN T_P_SHIRO_USER_GRP_EXT E ON E.USER_GRP_ID = T.USER_GRP_ID
+		 WHERE (E.ORG_ID = #{orgId}
+		 OR (E.ORG_ID = '00' AND E.IHT_FLAG = 1))
+		 AND t.user_grp_id &lt;&gt; '1'
+    </select>
+	<select id="UserGrp_findGrpByAll" resultMap="UserGrp">
+		SELECT T.USER_GRP_ID, T.NAME
+		FROM T_P_SHIRO_USER_GRP T
+	</select>
+    
+</mapper>
+

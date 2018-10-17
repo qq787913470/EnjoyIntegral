@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.yada.enjoyIntegral.dao.MerchantEnjoyDao">
+
+	<resultMap id="MerchantEnjoy" type="com.yada.enjoyIntegral.model.MerchantEnjoy">
+		<result property="merNo" column="MER_NO" />
+		<result property="merName" column="MER_NAME" />
+		<result property="accountNo" column="ACCOUNT_NO" />
+		<result property="accountName" column="ACCOUNT_NAME" />
+		<result property="openingBank" column="OPENING_BANK" />
+		<result property="openingBankNo" column="OPENING_BANK_NO" />
+		<result property="contacPerson" column="CONTAC_PERSON" />
+		<result property="contactAddr" column="CONTACT_ADDR" />
+		<result property="servicePhone" column="SERVICE_PHONE" />
+		<result property="orgId" column="ORG_ID"/>
+		<result property="reviewFlag" column="REVIEW_FLAG"/>
+		<result property="endServiceDate" column="END_SERVICE_DATE"/>
+		<result property="serviceStare" column="SERVICE_STARE"/>
+	</resultMap>
+
+	<sql id="MerchantEnjoy_columns">
+		T.MER_NO ,
+		T.MER_NAME ,
+		T.ACCOUNT_NO ,
+		T.ACCOUNT_NAME ,
+		T.OPENING_BANK ,
+		T.OPENING_BANK_NO ,
+		T.CONTAC_PERSON ,
+		T.CONTACT_ADDR ,
+		T.SERVICE_PHONE,
+		T.ORG_ID,
+		T.REVIEW_FLAG,
+		T.END_SERVICE_DATE,
+		T.SERVICE_STARE
+	</sql>
+
+	<insert id="MerchantEnjoy_insert" parameterType="com.yada.enjoyIntegral.model.MerchantEnjoy">
+		<selectKey resultType="java.lang.String" order="BEFORE"
+			keyProperty="id">
+			SELECT SEQ_MERCHANT_ENJOY.nextval AS ID FROM DUAL
+		</selectKey>
+    <![CDATA[
+		insert into MERCHANT_ENJOY
+		 (MER_NO,
+		 MER_NAME,
+		 ACCOUNT_NO,
+		 ACCOUNT_NAME,
+		 OPENING_BANK,
+		 OPENING_BANK_NO,
+		 CONTAC_PERSON,
+		 CONTACT_ADDR,
+		 SERVICE_PHONE,
+		 ORG_ID,
+		 REVIEW_FLAG,
+		 END_SERVICE_DATE,
+		 SERVICE_STARE
+		 )
+		   values 
+		 (#{merNo},
+		 #{merName},
+		 #{accountNo},
+		 #{accountName},
+		 #{openingBank},
+		 #{openingBankNo},
+		 #{contacPerson},
+		 #{contactAddr},
+		 #{servicePhone},
+		 #{orgId,jdbcType=VARCHAR},
+		 #{reviewFlag,jdbcType=VARCHAR},
+		 #{endServiceDate},
+		 #{serviceStare}
+		 )
+		]]>
+	</insert>
+	<update id="MerchantEnjoy_update_review" parameterType="Map">
+		UPDATE MERCHANT_ENJOY SET
+		REVIEW_FLAG=#{reviewFlag,jdbcType=VARCHAR}
+		WHERE
+		MER_NO IN
+		<foreach collection="merNo" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	<update id="MerchantEnjoy_update" parameterType="com.yada.enjoyIntegral.model.MerchantEnjoy">
+		UPDATE MERCHANT_ENJOY SET 
+			   MER_NAME=#{merName,jdbcType=VARCHAR},
+			   ACCOUNT_NO=#{accountNo,jdbcType=VARCHAR},
+			   ACCOUNT_NAME=#{accountName,jdbcType=VARCHAR},
+			   OPENING_BANK=#{openingBank,jdbcType=VARCHAR},
+			   OPENING_BANK_NO=#{openingBankNo,jdbcType=VARCHAR},
+			   CONTAC_PERSON=#{contacPerson,jdbcType=VARCHAR},
+			   CONTACT_ADDR=#{contactAddr,jdbcType=VARCHAR},
+			   SERVICE_PHONE=#{servicePhone,jdbcType=VARCHAR},
+			   ORG_ID=#{orgId,jdbcType=VARCHAR,jdbcType=VARCHAR},
+		       REVIEW_FLAG=#{reviewFlag,jdbcType=CHAR},
+			   END_SERVICE_DATE=#{endServiceDate,jdbcType=VARCHAR},
+		       SERVICE_STARE=#{serviceStare,jdbcType=CHAR}
+		  WHERE 
+		     MER_NO=#{merNo}
+	</update>
+
+	<delete id="MerchantEnjoy_delete">
+		delete from MERCHANT_ENJOY where MER_NO=#{merNo}
+	</delete>
+
+	<select id="MerchantEnjoy_getById" resultMap="MerchantEnjoy">
+		SELECT
+		<include refid="MerchantEnjoy_columns" />
+		FROM MERCHANT_ENJOY T
+		WHERE T.MER_NO = #{merNo}
+	</select>
+
+	<sql id="MerchantEnjoy_findPage_where">
+		<where>
+			<if test="endServiceDate != null and endServiceDate !=''">
+				AND T.END_SERVICE_DATE &gt;= #{endServiceDate}
+			</if>
+			<if test="serviceStare != null and serviceStare !=''">
+				AND T.SERVICE_STARE = #{serviceStare}
+			</if>
+			<if test="merNo != null and merNo !=''">
+				AND T.MER_NO = #{merNo}
+			</if>
+			<if test="merName != null and merName !=''">
+				AND T.MER_NAME like '%'||#{merName}||'%'
+			</if>
+			<if test="accountNo != null and accountNo !=''">
+				AND T.ACCOUNT_NO = #{accountNo}
+			</if>
+			<if test="accountName != null and accountName !=''">
+				AND T.ACCOUNT_NAME = #{accountName}
+			</if>
+			<if test="openingBank != null and openingBank !=''">
+				AND T.OPENING_BANK = #{openingBank}
+			</if>
+			<if test="openingBankNo != null and openingBankNo !=''">
+				AND T.OPENING_BANK_NO = #{openingBankNo}
+			</if>
+			<if test="contacPerson != null and contacPerson !=''">
+				AND T.CONTAC_PERSON = #{contacPerson}
+			</if>
+			<if test="contactAddr != null and contactAddr !=''">
+				AND T.CONTACT_ADDR = #{contactAddr}
+			</if>
+			<if test="servicePhone != null and servicePhone !=''">
+				AND T.SERVICE_PHONE = #{servicePhone}
+			</if>
+			<if test="reviewFlag != null and reviewFlag !=''">
+				AND T.REVIEW_FLAG = #{reviewFlag}
+			</if>
+			<if test="orgIdUser != null and orgIdUser != ''">
+				AND T.ORG_ID in
+				<foreach item="orgIdUser" index="index" collection="orgIdUser" open="("
+						 separator="," close=")">
+					#{orgIdUser}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+
+	<select id="MerchantEnjoy_findCountByWhere" resultType="int">
+		SELECT count(*) FROM MERCHANT_ENJOY T
+		<include refid="MerchantEnjoy_findPage_where" />
+	</select>
+
+
+	<select id="MerchantEnjoy_findListByWhere" resultMap="MerchantEnjoy">
+		SELECT
+		<include refid="MerchantEnjoy_columns" />
+		FROM MERCHANT_ENJOY T
+		<include refid="MerchantEnjoy_findPage_where" />
+		ORDER BY T.END_SERVICE_DATE DESC
+	</select>
+</mapper>

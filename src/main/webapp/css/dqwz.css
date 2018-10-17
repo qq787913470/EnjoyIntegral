@@ -1,0 +1,14 @@
+
+body{font-size:12px;color:#000;font-family:Î¢ÈíÑÅºÚ,Arial, "ËÎÌå", SimSun ,serif, sans-serif;text-align: left;}
+*{margin:0; padding:0;}
+
+#dqwz{text-align:left;margin-top:5px;}
+.line{width:100%;background: url(../images/line.jpg) repeat-x center;}
+
+#content{text-align:left;margin-top:10px;}
+.biaoti{width:150px;height:29px;background:url(../images/btn_bg.jpg) repeat-x center;text-align:center;margin-top:10px;border:1px solid #d9d191;border-bottom:0px;}
+.biaoti p{margin-top:5px;color:#7b792b;}
+.biao{width:100%;border:1px solid #d5d1b4;padding-top:10px;padding-bottom:5px;}
+.form{margin-top:10px;}
+
+table a{color:#7b792b;}

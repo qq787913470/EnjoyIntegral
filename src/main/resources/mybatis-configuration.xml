@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-config.dtd">
+
+<configuration>
+	<plugins>
+		<plugin interceptor="com.yada.mybatis.plugin.PaginationInterceptor">
+			<property name="dialectClass" value="com.yada.mybatis.dialect.OracleDialect"/>
+		</plugin>
+	</plugins>
+	<!--<settings>
+		&lt;!&ndash; 打印查询语句 &ndash;&gt;
+		<setting name="logImpl" value="STDOUT_LOGGING" />
+	</settings>-->
+
+</configuration>

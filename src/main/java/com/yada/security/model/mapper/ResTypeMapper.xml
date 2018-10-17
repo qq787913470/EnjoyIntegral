@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.ResTypeDao">
+
+	<resultMap id="ResType" type="com.yada.security.model.ResType">
+		<result property="typeId" column="TYPE_ID" />
+		<result property="typeName" column="TYPE_NAME" />
+		<result property="remark" column="REMARK" />
+	</resultMap>
+	<sql id="ResType_columns">
+		TYPE_ID,TYPE_NAME,REMARK
+	</sql>
+
+	<insert id="ResType_insert"  keyProperty="typeId" parameterType="com.yada.security.model.ResType" >
+		<selectKey  keyProperty="typeId" resultType="java.lang.Long" order="BEFORE" >
+			SELECT T_SEQ_P_SHIRO_RES_TYPE.NEXTVAL AS ID FROM DUAL
+		</selectKey>
+        INSERT INTO T_P_SHIRO_RES_TYPE (TYPE_ID ,TYPE_NAME ,REMARK ) VALUES (#{typeId} ,#{typeName} ,#{remark} )
+	</insert>
+
+	<update id="ResType_update" parameterType="com.yada.security.model.ResType">
+        UPDATE T_P_SHIRO_RES_TYPE SET TYPE_NAME = #{typeName} ,REMARK = #{remark}  WHERE  TYPE_ID = #{typeId} 
+	</update>
+
+	<delete id="ResType_delete">
+        DELETE FROM T_P_SHIRO_RES_TYPE WHERE TYPE_ID = #{id} 
+	</delete>
+
+	<select id="ResType_getById" resultMap="ResType">
+		SELECT <include refid="ResType_columns" /> FROM T_P_SHIRO_RES_TYPE  WHERE  TYPE_ID = #{id} 
+	</select>
+
+	<sql id="ResType_findPage_where">
+		<where>
+			 <if test="typeId != null and typeId !=''">
+				AND TYPE_ID = #{typeId}
+			</if>
+	       <if test="typeName != null and typeName !=''">
+				AND TYPE_NAME = #{typeName}
+			</if>
+	       <if test="remark != null and remark !=''">
+				AND REMARK = #{remark}
+			</if>
+		</where>
+	</sql>
+
+	<select id="ResType_findCountByWhere" resultType="int">
+		SELECT count(*) FROM T_P_SHIRO_RES_TYPE
+		<include refid="ResType_findPage_where" />
+	</select>
+
+	<select id="ResType_findListByWhere" resultMap="ResType">
+		SELECT <include refid="ResType_columns" /> FROM T_P_SHIRO_RES_TYPE <include refid="ResType_findPage_where" /> ORDER BY TYPE_ID
+	</select>
+</mapper>
+

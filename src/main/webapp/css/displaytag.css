@@ -1,0 +1,136 @@
+table {
+	border-top:1 solid #d5d1b4 ;
+	width: 100%;
+
+    margin-top:3px !important;
+}
+
+td {
+	padding: 2px 4px 2px 4px !important;
+	text-align: left;
+	white-space: nowrap;
+	height:26px;
+}
+
+thead tr {
+	background-color: #fc0;
+}
+
+th.sorted {
+	background-color: orange;
+}
+
+th a,th a:visited {
+	color: black;
+}
+
+th a:hover {
+	text-decoration: underline;
+	color: black;
+}
+
+th.sorted a,th.sortable a {
+	background-position: right;
+	display: block;
+	width: 100%;
+}
+
+th.sortable a {
+	background-image: url(../images/arrow_off.png);
+}
+
+th.order1 a {
+	background-image: url(../images/arrow_down.png);
+}
+
+th.order2 a {
+	background-image: url(../images/arrow_up.png);
+}
+
+tr.odd {
+	background-color: #fff
+}
+
+tr.tableRowEven,tr.even {
+	background-color: #fea
+}
+
+div.exportlinks {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	margin: 2px 0 10px 0;
+	width: 79%;
+}
+
+span.export {
+	padding: 0 4px 1px 20px;
+	display: inline;
+	display: inline-block;
+	cursor: pointer;
+}
+
+span.excel {
+	background-image: url(../images/ico_file_excel.png);
+}
+
+span.csv {
+	background-image: url(../images/ico_file_csv.png);
+}
+
+span.xml {
+	background-image: url(../images/ico_file_xml.png);
+}
+
+span.pdf {
+	background-image: url(../images/ico_file_pdf.png);
+}
+
+span.rtf {
+	background-image: url(../images/ico_file_rtf.png);
+}
+
+span.pagebanner {
+	
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 97%;
+	margin-top: 10px;
+	display: block;
+	border-bottom: none;
+	margin-left:10px;
+}
+
+span.pagelinks {
+	
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 97%;
+	display: block;
+	border-top: none;
+	margin-bottom: 5px;
+	margin-left:10px;
+}
+span.pagelinks a:link{color:#1D71C6}
+span.pagelinks a:visited{color:#1D71C6}
+span.pagelinks a:hover{color:#ff0000}
+
+span.pagelinks a:active{color:#1D71C6}
+
+/* highlight .table row onmouseover */
+tr.over {
+    border-bottom: 1px solid #C0C0C0;
+    border-top: 1px solid #C0C0C0;
+    color: #000;
+    background-color: #BFFFBF;
+    cursor:default;
+}
+tr a,tr a:visited {
+	color: blue;
+	text-decoration: blink;
+}
+
+tr a:hover {
+	text-decoration: underline;
+	color: black;
+}

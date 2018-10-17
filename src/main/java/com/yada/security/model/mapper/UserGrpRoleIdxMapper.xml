@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.UserGrpRoleIdxDao">
+
+	<resultMap id="UserGrpRoleIdx" type="com.yada.security.model.UserGrpRoleIdx">
+        <result property="roleId" column="ROLE_ID"/>
+        <result property="userGrpId" column="USER_GRP_ID"/>
+	</resultMap>
+	 <!-- 一对一   一的标识 -->
+	<resultMap  id="userGrpRoleIdxRole" type="com.yada.security.model.UserGrpRoleIdx" extends="UserGrpRoleIdx">
+	 <!-- 放入association -->
+	 
+	</resultMap>
+	 <!-- 一对一   一的标识 -->
+	<resultMap  id="userGrpRoleIdxUserGrp" type="com.yada.security.model.UserGrpRoleIdx" extends="UserGrpRoleIdx">
+	 <!-- 放入association -->
+	 
+	</resultMap>
+	<sql id="UserGrpRoleIdx_columns">
+		ROLE_ID,USER_GRP_ID
+	</sql>
+
+	
+	<insert id="UserGrpRoleIdx_insert"   parameterType="com.yada.security.model.UserGrpRoleIdx">
+        INSERT INTO T_P_SHIRO_USER_GRP_ROLE_IDX (
+        	ROLE_ID ,
+        	USER_GRP_ID 
+        ) VALUES (
+        	#{roleId} ,
+        	#{userGrpId} 
+        )
+	</insert>
+    
+	<update id="updateRoleId" >
+        UPDATE T_P_SHIRO_USER_GRP_ROLE_IDX SET  ROLE_ID = #{roleId}  WHERE  USER_GRP_ID = #{userGrpId} 
+	</update>
+
+	<update id="updateUserGrpId" >
+        UPDATE T_P_SHIRO_USER_GRP_ROLE_IDX SET  USER_GRP_ID = #{userGrpId}   WHERE ROLE_ID = #{roleId}
+	</update>
+	
+    <delete id="deleteByRoleId">
+        DELETE FROM T_P_SHIRO_USER_GRP_ROLE_IDX WHERE ROLE_ID = #{id}  
+    </delete>
+    
+    <delete id="deleteByUserGrpId">
+        DELETE FROM T_P_SHIRO_USER_GRP_ROLE_IDX WHERE USER_GRP_ID = #{id}  
+    </delete>
+    
+    <select id="selectByRoleId" resultMap="UserGrpRoleIdx">
+		SELECT <include refid="UserGrpRoleIdx_columns" />  FROM T_P_SHIRO_USER_GRP_ROLE_IDX   WHERE  ROLE_ID = #{id} 
+	</select>
+
+    <select id="selectByUserGrpId" resultMap="UserGrpRoleIdx">
+		SELECT <include refid="UserGrpRoleIdx_columns" />  FROM T_P_SHIRO_USER_GRP_ROLE_IDX   WHERE  USER_GRP_ID = #{id} 
+	</select>
+	
+	<sql id="UserGrpRoleIdx_findPage_where">
+		<where>	      				
+	       <if test="roleId != null and roleId !=''">
+				AND ROLE_ID = #{roleId}
+			</if>
+	       <if test="userGrpId != null and userGrpId !=''">
+				AND USER_GRP_ID = #{userGrpId}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="UserGrpRoleIdx_findCountByWhere" resultType="int">
+        SELECT count(*) FROM T_P_SHIRO_USER_GRP_ROLE_IDX 
+		<include refid="UserGrpRoleIdx_findPage_where"/>    
+    </select>
+    
+    <select id="UserGrpRoleIdx_findListByWhere" resultMap="UserGrpRoleIdx">
+    	SELECT <include refid="UserGrpRoleIdx_columns" /> FROM T_P_SHIRO_USER_GRP_ROLE_IDX  <include refid="UserGrpRoleIdx_findPage_where"/>
+    </select>
+    
+  </mapper>
+

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.OperationLoginfo">
+
+	<resultMap id="OperationLoginfo" type="com.yada.security.model.OperationLoginfo">
+        <result property="id" column="ID"/>
+        <result property="moduleName" column="MODULE_NAME"/>
+        <result property="methodDescription" column="METHOD_DESCRIPTION"/>
+        <result property="orgId" column="ORG_ID"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="operatorTime" column="OPERATOR_TIME"/>
+        <result property="sysflag" column="SYSFLAG"/>
+        <result property="merNo" column="MER_NO"/>
+        <result property="ip" column="IP"/>
+        <result property="merName" column="MER_NAME"/>
+        <result property="orgName" column="NAME"/>
+	</resultMap>
+	<!--一对多的标识 -->
+	<resultMap id="OperationLoginfoExt" type="com.yada.security.model.OperationLoginfo" extends="OperationLoginfo">
+		<collection property="operationLoginfoExts"   ofType="com.yada.security.model.OperationLoginfoExt"   >
+		    <id property="id" column="EXT_ID"/>
+	        <result property="operation" column="OPERATION"/>
+	        <result property="ovalues" column="O_VALUES"/>
+	        <result property="cvalues" column="C_VALUES"/>
+	        <result property="tableName" column="TABLE_NAME"/>
+	        <result property="loginfoId" column="ID"/>
+	        <result property="dec" column="DEC"/>
+		</collection>
+	</resultMap>
+	
+	<sql id="OperationLoginfo_columns">
+	    <![CDATA[
+		T.ID,T.MODULE_NAME,T.METHOD_DESCRIPTION,T.ORG_ID,T.USER_NAME,T.OPERATOR_TIME,T.SYSFLAG,T.MER_NO,IP
+	    ]]>
+	</sql>
+
+	 <select id="OperationLoginfo_selectKey" resultType="java.lang.String" >
+			SELECT SEQ_T_WEB_OPERTION_LOGINFO.nextval AS ID FROM DUAL
+     </select>
+        
+	<insert id="OperationLoginfo_insert" >
+		<selectKey resultType="java.lang.String" order="BEFORE" keyProperty="key-id">
+			SELECT SEQ_T_WEB_OPERTION_LOGINFO.nextval AS ID FROM DUAL
+        </selectKey>
+    <![CDATA[
+        INSERT INTO T_WEB_P_OPERATION_LOGINFO (
+        	ID ,
+        	MODULE_NAME ,
+        	METHOD_DESCRIPTION ,
+        	ORG_ID ,
+        	USER_NAME ,
+        	OPERATOR_TIME ,
+        	SYSFLAG ,
+        	MER_NO ,
+        	IP
+        ) VALUES (
+        	#{id} ,
+        	#{moduleName} ,
+        	#{methodDescription} ,
+        	#{orgId, jdbcType=VARCHAR} ,
+        	#{userName} ,
+        	#{operatorTime} ,
+        	#{sysflag} ,
+        	#{merNo} ,
+        	#{ip} 
+        	
+        )
+    ]]>
+		
+	</insert>
+    
+	<update id="OperationLoginfo_update" >
+    <![CDATA[
+        UPDATE T_WEB_P_OPERATION_LOGINFO SET
+	        MODULE_NAME = #{moduleName} ,
+	        METHOD_DESCRIPTION = #{methodDescription} ,
+	        ORG_ID = #{orgId, jdbcType=VARCHAR} ,
+	        USER_NAME = #{userName} ,
+	        OPERATOR_TIME = #{operatorTime} ,
+	        SYSFLAG = #{sysflag} ,
+	        MER_NO = #{merNo} ,
+	        IP = #{ip} 
+        WHERE 
+	        ID = #{id} 
+    ]]>
+	</update>
+
+    <delete id="OperationLoginfo_delete">
+    <![CDATA[
+        DELETE FROM T_WEB_P_OPERATION_LOGINFO WHERE
+        ID = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="OperationLoginfo_getById" resultMap="OperationLoginfoExt">
+		SELECT <include refid="OperationLoginfo_columns" />, E.*, M.MER_NAME, O.NAME
+	    <![CDATA[
+		      FROM T_WEB_P_OPERATION_LOGINFO T
+			  LEFT JOIN T_WEB_P_OPERATION_LOGINFO_EXT E ON E.LOGINFO_ID = T.ID
+			  LEFT JOIN T_B_ORG O ON O.ORG_ID = T.ORG_ID
+			  LEFT JOIN T_B_MERCHANT_BASE M ON M.MERCHANT_ID = T.MER_NO 
+	        WHERE 
+		        T.ID = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="OperationLoginfo_findHhap2Page_where">
+		<where>
+			<if test="1 == 1">
+				AND T.SYSFLAG = '0'
+			</if>
+			<include refid="OperationLoginfo_findPage_where"/>
+		</where>
+	</sql>
+	
+	<sql id="OperationLoginfo_findMerPage_where">
+		<where>
+			<if test="1 == 1">
+				AND T.SYSFLAG = '1'
+			</if>
+			<include refid="OperationLoginfo_findPage_where"/>
+		</where>
+	</sql>
+	
+	<sql id="OperationLoginfo_findPage_where">
+	       <if test="id != null and id !=''">
+				AND T.ID = #{id}
+			</if>
+	       <if test="moduleName != null and moduleName !=''">
+				AND T.MODULE_NAME = #{moduleName}
+			</if>
+	       <if test="methodDescription != null and methodDescription !=''">
+				AND T.METHOD_DESCRIPTION = #{methodDescription}
+			</if>
+	       <if test="orgId != null and orgId !=''">
+				AND T.ORG_ID = #{orgId} AND T.SYSFLAG = '0'
+			</if>
+	       <if test="userName != null and userName !=''">
+				AND T.USER_NAME = #{userName}
+			</if>
+	       <if test="operatorTimeBegin != null and operatorTimeBegin !=''">
+				AND T.OPERATOR_TIME &gt;= #{operatorTimeBegin} || '000000'
+			</if>
+			<if test="operatorTimeEnd != null and operatorTimeEnd !=''">
+				AND T.OPERATOR_TIME &lt;= #{operatorTimeEnd} || '235959'
+			</if>
+	       <if test="merNo != null and merNo !=''">
+				AND T.MER_NO = #{merNo} AND T.SYSFLAG = '1'
+			</if>
+	       <if test="ip != null and ip !=''">
+				AND T.IP = #{ip}
+			</if>
+	</sql>
+		
+    <select id="OperationLoginfo_findHhap2ListByWhere_count" resultType="int">
+        SELECT count(*) FROM T_WEB_P_OPERATION_LOGINFO T
+		<include refid="OperationLoginfo_findHhap2Page_where"/>    
+    </select>
+		
+    <select id="OperationLoginfo_findMerListByWhere_count" resultType="int">
+        SELECT count(*) FROM T_WEB_P_OPERATION_LOGINFO T
+		<include refid="OperationLoginfo_findMerPage_where"/>    
+    </select>
+   
+    <select id="OperationLoginfo_findHhap2ListByWhere" resultMap="OperationLoginfo">
+    	SELECT <include refid="OperationLoginfo_columns" />, O.NAME
+	    FROM T_WEB_P_OPERATION_LOGINFO T JOIN T_B_ORG O ON O.ORG_ID = T.ORG_ID
+		<include refid="OperationLoginfo_findHhap2Page_where"/>
+		ORDER BY T.OPERATOR_TIME DESC
+    </select>
+   
+    <select id="OperationLoginfo_findMerListByWhere" resultMap="OperationLoginfo">
+    	SELECT <include refid="OperationLoginfo_columns" />, M.MER_NAME
+	    FROM T_WEB_P_OPERATION_LOGINFO T JOIN T_B_MERCHANT_BASE M ON M.MERCHANT_ID = T.MER_NO
+		<include refid="OperationLoginfo_findMerPage_where"/>
+		ORDER BY T.OPERATOR_TIME DESC
+    </select>
+
+	
+</mapper>
+

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.FilterTypeDao">
+
+	<resultMap id="FilterType" type="com.yada.security.model.FilterType">
+        <result property="typeId" column="TYPE_ID"/>
+        <result property="typeName" column="TYPE_NAME"/>
+	</resultMap>
+	  <!-- 一对多   多的标识 -->
+	<resultMap id="PermitsFilterType" type="com.yada.security.model.FilterType" extends="FilterType">
+		<collection property="permits"   ofType="com.yada.security.model.Permit"   >
+				    <id property="permitId" column="PERMIT_ID" />
+				    <result property="menuResId" column="MENU_RES_ID"/>
+				    <result property="actionId" column="ACTION_ID"/>
+				    <result property="typeId" column="TYPE_ID"/>
+				    <result property="permitOrder" column="PERMIT_ORDER"/>
+		</collection>
+	</resultMap>
+	<sql id="FilterType_columns">
+		TYPE_ID,TYPE_NAME
+	</sql>
+
+	<insert id="FilterType_insert" keyProperty="typeId" parameterType="com.yada.security.model.FilterType">
+	   <selectKey resultType="long" order="BEFORE" keyProperty="typeId">
+			SELECT T_SEQ_P_SHIRO_FITLER_TYPE.nextval AS ID FROM DUAL 
+        </selectKey>
+        INSERT INTO T_P_SHIRO_FILTER_TYPE (
+        	TYPE_ID ,
+        	TYPE_NAME 
+        ) VALUES (
+        	#{typeId} ,
+        	#{typeName} 
+        )
+	</insert>
+    
+	<update id="FilterType_update" >
+        UPDATE T_P_SHIRO_FILTER_TYPE SET  TYPE_NAME = #{typeName}  WHERE  TYPE_ID = #{typeId} 
+	</update>
+
+    <delete id="FilterType_delete">
+        DELETE FROM T_P_SHIRO_FILTER_TYPE WHERE TYPE_ID = #{id} 
+    </delete>
+    
+    <select id="FilterType_getById" resultMap="FilterType">
+		SELECT <include refid="FilterType_columns" />  FROM T_P_SHIRO_FILTER_TYPE   WHERE  TYPE_ID = #{id} 
+	</select>
+	
+	<sql id="FilterType_findPage_where">
+		<where>	      				
+	       <if test="typeId != null and typeId !=''">
+				AND TYPE_ID = #{typeId}
+			</if>
+	       <if test="typeName != null and typeName !=''">
+				AND TYPE_NAME = #{typeName}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="FilterType_findCountByWhere" resultType="int">
+        SELECT count(*) FROM T_P_SHIRO_FILTER_TYPE 
+		<include refid="FilterType_findPage_where"/>    
+    </select>
+    
+    <select id="FilterType_findListByWhere" resultMap="FilterType">
+    	SELECT <include refid="FilterType_columns" />
+	    FROM T_P_SHIRO_FILTER_TYPE 
+		<include refid="FilterType_findPage_where"/>
+    </select>
+</mapper>
+

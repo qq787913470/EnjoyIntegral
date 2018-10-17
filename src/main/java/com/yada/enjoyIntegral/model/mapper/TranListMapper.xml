@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.yada.enjoyIntegral.dao.TranListDao">
+
+	<resultMap id="TranListFull" type="com.yada.enjoyIntegral.model.TranList">
+		<result property="tranId" column="TRAN_ID"/>
+		<result property="productId" column="PRODUCT_ID" />
+		<result property="productName" column="PRODUCT_NAME" />
+		<result property="merNo" column="MER_NO" />
+		<result property="merName" column="MER_NAME" />
+		<result property="activityId" column="ACTIVITY_ID" />
+		<result property="activityName" column="ACTIVITY_NAME" />
+		<result property="integralValue" column="INTEGRAL_VALUE" />
+		<result property="orgId" column="ORG_ID" />
+		<result property="porgId" column="P_ORG_ID" />
+		<result property="orgName" column="ORG_NAME" />
+		<result property="porgName" column="P_ORG_NAME" />
+		<result property="certificateType" column="CERTIFICATE_TYPE" />
+		<result property="certificateNo" column="CERTIFICATE_NO" />
+		<result property="customerName" column="CUSTOMER_NAME" />
+		<result property="customerPhone" column="CUSTOMER_PHONE" />
+		<result property="userId" column="USER_ID" />
+		<result property="userName" column="USER_NAME" />
+		<result property="customerCardNo" column="CUSTOMER_CARD_NO" />
+		<result property="merNoPos" column="MER_NO_POS" />
+		<result property="merNamePos" column="MER_NAME_POS" />
+		<result property="tranDate" column="TRAN_DATE" />
+		<result property="tranTime" column="TRAN_TIME" />
+		<result property="terminalNo" column="TERMINAL_NO" />
+		<result property="tranState" column="TRAN_STATE" />
+		<result property="bankName" column="BANK_NAME" />
+		<result property="cardType" column="CARD_TYPE" />
+		<result property="cartValidity" column="CART_VALIDITY" />
+		<result property="sysReference" column="SYS_REFERENCE" />
+		<result property="authNo" column="AUTH_NO" />
+		<result property="traceNo" column="TRACE_NO" />
+		<result property="billNo" column="BILL_NO" />
+		<result property="batchNo" column="BATCH_NO" />
+		<result property="tranWay" column="TRAN_WAY" />
+		<result property="cashNo" column="CASH_NO" />
+		<result property="state" column="STATE" />
+		<result property="tranCount" column="TRAN_COUNT" />
+		<result property="oldTranId" column="old_tran_id"/>
+	</resultMap>
+	<resultMap id="TranList" type="com.yada.enjoyIntegral.model.TranList">
+		<result property="tranId" column="TRAN_ID"/>
+		<result property="integralValue" column="INTEGRAL_VALUE" />
+		<result property="orgName" column="ORG_NAME" />
+		<result property="orgId" column="ORG_ID" />
+		<result property="porgName" column="P_ORG_NAME" />
+		<result property="certificateType" column="CERTIFICATE_TYPE" />
+		<result property="certificateNo" column="CERTIFICATE_NO" />
+		<result property="customerName" column="CUSTOMER_NAME" />
+		<result property="customerPhone" column="CUSTOMER_PHONE" />
+		<result property="userName" column="USER_NAME" />
+		<result property="customerCardNo" column="CUSTOMER_CARD_NO" />
+		<result property="tranDate" column="TRAN_DATE" />
+		<result property="tranTime" column="TRAN_TIME" />
+		<result property="terminalNo" column="TERMINAL_NO" />
+		<result property="tranState" column="TRAN_STATE" />
+		<result property="cardType" column="CARD_TYPE" />
+		<result property="sysReference" column="SYS_REFERENCE" />
+		<result property="authNo" column="AUTH_NO" />
+		<result property="traceNo" column="TRACE_NO" />
+		<result property="billNo" column="BILL_NO" />
+		<result property="batchNo" column="BATCH_NO" />
+		<result property="tranWay" column="TRAN_WAY" />
+		<result property="state" column="STATE" />
+	</resultMap>
+
+	<sql id="TranList_columns_all">
+		T.TRAN_ID,
+		T.PRODUCT_ID ,
+		T.PRODUCT_NAME ,
+		T.MER_NO ,
+		T.MER_NAME ,
+		T.ACTIVITY_ID ,
+		T.ACTIVITY_NAME ,
+		T.INTEGRAL_VALUE ,
+		T.ORG_ID ,
+		T.P_ORG_ID ,
+		T.ORG_NAME ,
+		T.P_ORG_NAME ,
+		T.CERTIFICATE_TYPE ,
+		T.CERTIFICATE_NO ,
+		T.CUSTOMER_NAME ,
+		T.CUSTOMER_PHONE ,
+		T.USER_ID ,
+		T.USER_NAME ,
+		T.CUSTOMER_CARD_NO ,
+		T.MER_NO_POS ,
+		T.MER_NAME_POS ,
+		T.TRAN_DATE ,
+		T.TRAN_TIME ,
+		T.TERMINAL_NO ,
+		T.TRAN_STATE ,
+		T.BANK_NAME ,
+		T.CARD_TYPE ,
+		T.CART_VALIDITY ,
+		T.SYS_REFERENCE ,
+		T.AUTH_NO ,
+		T.TRACE_NO ,
+		T.BILL_NO ,
+		T.BATCH_NO ,
+		T.TRAN_WAY ,
+		T.CASH_NO ,
+		T.TRAN_COUNT,
+		T.STATE,
+		T.old_tran_id
+	</sql>
+	<sql id="TranList_columns">
+		T.TRAN_ID,
+		T.ORG_NAME,
+		T.P_ORG_NAME,
+		T.ORG_ID ,
+		T.CERTIFICATE_TYPE ,
+		T.CERTIFICATE_NO ,
+		T.CUSTOMER_NAME,
+		T.CUSTOMER_PHONE,
+		T.USER_NAME,
+		T.CUSTOMER_CARD_NO,
+		T.TRAN_DATE,
+		T.TRAN_TIME,
+		T.TRAN_STATE,
+		T.CARD_TYPE,
+		T.SYS_REFERENCE,
+		T.AUTH_NO,
+		T.TRACE_NO,
+		T.BILL_NO,
+		T.BATCH_NO,
+		T.TRAN_WAY,
+		T.STATE,
+		SUM(T.INTEGRAL_VALUE) as INTEGRAL_VALUE
+	</sql>
+
+	<insert id="TranList_insert" parameterType="com.yada.enjoyIntegral.model.TranList">
+    <![CDATA[
+		insert into TRAN_LIST
+		 (TRAN_ID,PRODUCT_ID,PRODUCT_NAME,MER_NO,MER_NAME,ACTIVITY_ID,ACTIVITY_NAME,INTEGRAL_VALUE,ORG_ID,P_ORG_ID,ORG_NAME,P_ORG_NAME,CERTIFICATE_TYPE,CERTIFICATE_NO,CUSTOMER_NAME,CUSTOMER_PHONE,USER_ID,USER_NAME,CUSTOMER_CARD_NO,MER_NO_POS,MER_NAME_POS,TRAN_DATE,TRAN_TIME,TERMINAL_NO,TRAN_STATE,BANK_NAME,CARD_TYPE,CART_VALIDITY,SYS_REFERENCE,AUTH_NO,TRACE_NO,BILL_NO,BATCH_NO,TRAN_WAY,CASH_NO,STATE,TRAN_COUNT,old_tran_Id)
+		   values 
+		 (#{tranId,jdbcType=VARCHAR},#{productId,jdbcType=VARCHAR},#{productName,jdbcType=VARCHAR},#{merNo,jdbcType=VARCHAR},#{merName,jdbcType=VARCHAR},#{activityId,jdbcType=VARCHAR},#{activityName,jdbcType=VARCHAR},#{integralValue,jdbcType=NUMERIC},#{orgId,jdbcType=VARCHAR},#{porgId,jdbcType=VARCHAR},#{orgName,jdbcType=VARCHAR},#{porgName,jdbcType=VARCHAR},#{certificateType,jdbcType=VARCHAR},#{certificateNo,jdbcType=VARCHAR},#{customerName,jdbcType=VARCHAR},#{customerPhone,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},#{userName,jdbcType=VARCHAR},#{customerCardNo,jdbcType=VARCHAR},#{merNoPos,jdbcType=VARCHAR},#{merNamePos,jdbcType=VARCHAR},#{tranDate,jdbcType=VARCHAR},#{tranTime,jdbcType=VARCHAR},#{terminalNo,jdbcType=VARCHAR},#{tranState,jdbcType=VARCHAR},#{bankName,jdbcType=VARCHAR},#{cardType,jdbcType=VARCHAR},#{cartValidity,jdbcType=VARCHAR},#{sysReference,jdbcType=VARCHAR},#{authNo,jdbcType=VARCHAR},#{traceNo,jdbcType=VARCHAR},#{billNo,jdbcType=VARCHAR},#{batchNo,jdbcType=VARCHAR},#{tranWay,jdbcType=VARCHAR},#{cashNo,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR},#{tranCount,jdbcType=NUMERIC},#{oldTranId,jdbcType=VARCHAR})
+		]]>
+	</insert>
+
+	<update id="TranList_update">
+		update TRAN_LIST
+		<set>
+		<if test="productId!=null">PRODUCT_ID=#{productId,jdbcType=VARCHAR},</if>
+		<if test="productName!=null">PRODUCT_NAME=#{productName,jdbcType=VARCHAR},</if>
+		<if test="merNo!=null">MER_NO=#{merNo,jdbcType=VARCHAR},</if>
+		<if test="merName!=null">MER_NAME=#{merName,jdbcType=VARCHAR},</if>
+		<if test="activityId!=null">ACTIVITY_ID=#{activityId,jdbcType=VARCHAR},</if>
+		<if test="activityName!=null">ACTIVITY_NAME=#{activityName,jdbcType=VARCHAR},</if>
+		<if test="integralValue!=null">INTEGRAL_VALUE=#{integralValue,jdbcType=NUMERIC},</if>
+		<if test="orgId!=null">ORG_ID=#{orgId,jdbcType=VARCHAR},</if>
+		<if test="porgId!=null">P_ORG_ID=#{porgId,jdbcType=VARCHAR},</if>
+		<if test="orgName!=null">ORG_NAME=#{orgName,jdbcType=VARCHAR},</if>
+		<if test="porgName!=null">P_ORG_NAME=#{porgName,jdbcType=VARCHAR},</if>
+		<if test="certificateType!=null">CERTIFICATE_TYPE=#{certificateType,jdbcType=VARCHAR},</if>
+		<if test="certificateNo!=null">CERTIFICATE_NO=#{certificateNo,jdbcType=VARCHAR},</if>
+		<if test="customerName!=null">CUSTOMER_NAME=#{customerName,jdbcType=VARCHAR},</if>
+		<if test="customerPhone!=null">CUSTOMER_PHONE=#{customerPhone,jdbcType=VARCHAR},</if>
+		<if test="userId!=null">USER_ID=#{userId,jdbcType=VARCHAR},</if>
+		<if test="userName!=null">USER_NAME=#{userName,jdbcType=VARCHAR},</if>
+		<if test="customerCardNo!=null">CUSTOMER_CARD_NO=#{customerCardNo,jdbcType=VARCHAR},</if>
+		<if test="merNoPos!=null">MER_NO_POS=#{merNoPos,jdbcType=VARCHAR},</if>
+		<if test="merNamePos!=null">MER_NAME_POS=#{merNamePos,jdbcType=VARCHAR},</if>
+		<if test="tranDate!=null">TRAN_DATE=#{tranDate,jdbcType=VARCHAR},</if>
+		<if test="tranTime!=null">TRAN_TIME=#{tranTime,jdbcType=VARCHAR},</if>
+		<if test="terminalNo!=null">TERMINAL_NO=#{terminalNo,jdbcType=VARCHAR},</if>
+		<if test="tranState!=null">TRAN_STATE=#{tranState,jdbcType=VARCHAR},</if>
+		<if test="bankName!=null">BANK_NAME=#{bankName,jdbcType=VARCHAR},</if>
+		<if test="cardType!=null">CARD_TYPE=#{cardType,jdbcType=VARCHAR},</if>
+		<if test="tranCount!=null">TRAN_COUNT=#{tranCount,jdbcType=NUMERIC},</if>
+		<if test="cartValidity!=null">CART_VALIDITY=#{cartValidity,jdbcType=VARCHAR},</if>
+		<if test="sysReference!=null">SYS_REFERENCE=#{sysReference,jdbcType=VARCHAR},</if>
+		<if test="authNo!=null">AUTH_NO=#{authNo,jdbcType=VARCHAR},</if>
+		<if test="billNo!=null">BILL_NO=#{billNo,jdbcType=VARCHAR},</if>
+		<if test="batchNo!=null">BATCH_NO=#{batchNo,jdbcType=VARCHAR},</if>
+		<if test="traceNo!=null">TRACE_NO=#{traceNo,jdbcType=VARCHAR},</if>
+		<if test="tranWay!=null">TRAN_WAY=#{tranWay,jdbcType=VARCHAR},</if>
+		<if test="cashNo!=null">CASH_NO=#{cashNo,jdbcType=VARCHAR},</if>
+		<if test="state!=null">STATE=#{state,jdbcType=VARCHAR},</if>
+		</set>
+		where TRAN_ID=#{tranId}
+		<if test="productId != null">
+			AND PRODUCT_ID=#{productId}
+		</if>
+	</update>
+
+	<delete id="TranList_delete">
+		delete from TRAN_LIST where tran_id=#{tranId}
+	</delete>
+
+	<select id="TranList_getByTraceNo" resultMap="TranListFull">
+		SELECT
+		<include refid="TranList_columns_all" />
+		FROM TRAN_LIST T
+		WHERE T.TRACE_NO = #{traceNo} and
+		T.BILL_NO = #{billNo}
+		and
+		T.BATCH_NO = #{batchNo}
+	</select>
+
+	<sql id="TranList_findPage_where">
+		<where>
+			<if test="productId != null and productId !=''">
+				AND T.PRODUCT_ID = #{productId}
+			</if>
+			<if test="productName != null and productName !=''">
+				AND T.PRODUCT_NAME = #{productName}
+			</if>
+			<if test="merNo != null and merNo !=''">
+				AND T.MER_NO = #{merNo}
+			</if>
+			<if test="merName != null and merName !=''">
+				AND T.MER_NAME = #{merName}
+			</if>
+			<if test="activityId != null and activityId !=''">
+				AND T.ACTIVITY_ID = #{activityId}
+			</if>
+			<if test="activityName != null and activityName !=''">
+				AND T.ACTIVITY_NAME = #{activityName}
+			</if>
+			<if test="integralValue != null and integralValue !=''">
+				AND T.INTEGRAL_VALUE = #{integralValue}
+			</if>
+			<if test="orgId != null and orgId !=''">
+				AND T.ORG_ID = #{orgId}
+			</if>
+			<if test="porgId != null and porgId !=''">
+				AND T.P_ORG_ID = #{porgId}
+			</if>
+			<if test="orgName != null and orgName !=''">
+				AND T.ORG_NAME like '%'||#{orgName}||'%'
+			</if>
+			<if test="porgName != null and porgName !=''">
+				AND T.P_ORG_NAME = #{porgName}
+			</if>
+			<if test="certificateType != null and certificateType !=''">
+				AND T.CERTIFICATE_TYPE = #{certificateType}
+			</if>
+			<if test="certificateNo != null and certificateNo !=''">
+				AND T.CERTIFICATE_NO = #{certificateNo}
+			</if>
+			<if test="customerName != null and customerName !=''">
+				AND T.CUSTOMER_NAME like '%'||#{customerName}||'%' 
+			</if>
+			<if test="customerPhone != null and customerPhone !=''">
+				AND T.CUSTOMER_PHONE = #{customerPhone}
+			</if>
+			<if test="userId != null and userId !=''">
+				AND T.USER_ID = #{userId}
+			</if>
+			<if test="userName != null and userName !=''">
+				AND T.USER_NAME = #{userName}
+			</if>
+			<if test="customerCardNo != null and customerCardNo !=''">
+				AND T.CUSTOMER_CARD_NO = #{customerCardNo}
+			</if>
+			<if test="merNoPos != null and merNoPos !=''">
+				AND T.MER_NO_POS = #{merNoPos}
+			</if>
+			<if test="merNamePos != null and merNamePos !=''">
+				AND T.MER_NAME_POS = #{merNamePos}
+			</if>
+			<if test="tranDate != null and tranDate !=''">
+				AND T.TRAN_DATE = #{tranDate}
+			</if>
+			<if test="tranTime != null and tranTime !=''">
+				AND T.TRAN_TIME = #{tranTime}
+			</if>
+			<if test="terminalNo != null and terminalNo !=''">
+				AND T.TERMINAL_NO = #{terminalNo}
+			</if>
+			<if test="tranState != null and tranState !=''">
+				AND T.TRAN_STATE = #{tranState}
+			</if>
+			<if test="bankName != null and bankName !=''">
+				AND T.BANK_NAME = #{bankName}
+			</if>
+			<if test="cardType != null and cardType !=''">
+				AND T.CARD_TYPE = #{cardType}
+			</if>
+			<if test="cartValidity != null and cartValidity !=''">
+				AND T.CART_VALIDITY = #{cartValidity}
+			</if>
+			<if test="sysReference != null and sysReference !=''">
+				AND T.SYS_REFERENCE = #{sysReference}
+			</if>
+			<if test="authNo != null and authNo !=''">
+				AND T.AUTH_NO = #{authNo}
+			</if>
+			<if test="traceNo != null and traceNo !=''">
+				AND T.TRACE_NO = #{traceNo}
+			</if>
+			<if test="billNo != null and billNo !=''">
+				AND T.BILL_NO = #{billNo}
+			</if>
+			<if test="batchNo != null and batchNo !=''">
+				AND T.BATCH_NO = #{batchNo}
+			</if>
+			<if test="tranWay != null and tranWay !=''">
+				AND T.TRAN_WAY = #{tranWay}
+			</if>
+			<if test="cashNo != null and cashNo !=''">
+				AND T.CASH_NO = #{cashNo}
+			</if>
+			<if test="state != null and state !=''">
+				AND T.STATE = #{state}
+			</if>
+			<if test="checkTranState == true">
+				AND T.TRAN_STATE is NULL
+			</if>
+		</where>
+	</sql>
+
+	<select id="TranList_findCountByWhere" resultType="int">
+		SELECT count(*) FROM (
+		 SELECT
+		<include refid="TranList_columns" />
+		FROM TRAN_LIST T
+		<include refid="TranList_findPage_where" />
+		GROUP BY T.TRAN_ID,T.ORG_NAME, T.P_ORG_NAME,T.ORG_ID, T.CERTIFICATE_NO,T.CERTIFICATE_TYPE, T.CUSTOMER_NAME,
+		T.CUSTOMER_PHONE, T.USER_NAME, T.CUSTOMER_CARD_NO, T.TRAN_DATE,
+		T.TRAN_TIME,T.TRAN_STATE, T.CARD_TYPE,T.SYS_REFERENCE, T.AUTH_NO,
+		T.TRACE_NO, T.BILL_NO, T.BATCH_NO, T.TRAN_WAY,T.STATE
+		ORDER BY
+		(T.TRAN_DATE+T.TRAN_TIME) DESC
+		)
+		
+	</select>
+
+
+	<select id="TranList_findListByWhere" resultMap="TranList">
+		SELECT
+		<include refid="TranList_columns" />
+		FROM TRAN_LIST T
+		<include refid="TranList_findPage_where" />
+		GROUP BY T.TRAN_ID,T.ORG_NAME, T.P_ORG_NAME,T.ORG_ID, T.CERTIFICATE_NO,T.CERTIFICATE_TYPE, T.CUSTOMER_NAME,
+		T.CUSTOMER_PHONE, T.USER_NAME, T.CUSTOMER_CARD_NO, T.TRAN_DATE,
+		T.TRAN_TIME,T.TRAN_STATE, T.CARD_TYPE,T.SYS_REFERENCE, T.AUTH_NO,
+		T.TRACE_NO, T.BILL_NO, T.BATCH_NO, T.TRAN_WAY,T.STATE
+		ORDER BY
+		(T.TRAN_DATE+T.TRAN_TIME) DESC
+	</select>
+
+
+	<select id="TranList_findListByTranId" resultMap="TranListFull">
+		SELECT
+		<include refid="TranList_columns_all" />
+		FROM TRAN_LIST T
+		WHERE t.TRAN_ID=#{tranId}
+	</select>
+</mapper>
+

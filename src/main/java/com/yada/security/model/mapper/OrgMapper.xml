@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.Org">
+
+	<resultMap id="Org" type="com.yada.security.model.Org">
+        <result property="orgId" column="ORG_ID"/>
+        <result property="porgId" column="P_ORG_ID"/>
+        <result property="orgLev" column="ORG_LEV"/>
+        <result property="cupId" column="CUP_ID"/>
+        <result property="zoneCode" column="ZONE_CODE"/>
+        <result property="bankNo" column="BANK_NO"/>
+        <result property="name" column="NAME"/>
+        <result property="contact" column="CONTACT"/>
+        <result property="tel" column="TEL"/>
+        <result property="fax" column="FAX"/>
+        <result property="addr" column="ADDR"/>
+        <result property="status" column="STATUS"/>
+        <result property="onlineFlag" column="ONLINE_FLAG"/>
+        <result property="acqOrgId" column="ACQ_ORG_ID"/>
+        <result property="acqBankNo" column="ACQ_BANK_NO"/>
+        <result property="eacqOrgId" column="EACQ_ORG_ID"/>
+	</resultMap>
+	
+	<resultMap type="com.yada.security.model.TreeObject" id="OrgTree">
+		<result property="treeId" column="TREE_ID"/>
+        <result property="treeName" column="TREE_NAME"/>
+        <result property="treeParentId" column="TREE_PARENTID"/>
+        <result property="isLeaf" column="ISLEAF"/>
+	</resultMap>
+	
+	<sql id="Org_columns">
+	    <![CDATA[
+		T.ORG_ID,T.P_ORG_ID,T.ORG_LEV,T.CUP_ID,T.ZONE_CODE,T.BANK_NO,T.NAME,T.CONTACT,T.TEL,T.FAX,T.ADDR,T.STATUS,T.ONLINE_FLAG,T.ACQ_ORG_ID,T.ACQ_BANK_NO,T.EACQ_ORG_ID
+	    ]]>
+	</sql>
+
+	
+	<insert id="Org_insert" >
+	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="key-id">
+			SELECT SEQname.nextval AS ID FROM DUAL 
+        </selectKey>
+    <![CDATA[
+        INSERT INTO T_B_ORG (
+        	ORG_ID ,
+        	P_ORG_ID ,
+        	ORG_LEV ,
+        	CUP_ID ,
+        	ZONE_CODE ,
+        	BANK_NO ,
+        	NAME ,
+        	CONTACT ,
+        	TEL ,
+        	FAX ,
+        	ADDR ,
+        	STATUS ,
+        	ONLINE_FLAG ,
+        	ACQ_ORG_ID ,
+        	ACQ_BANK_NO ,
+        	EACQ_ORG_ID
+         ) VALUES (
+        	#{orgId} ,
+        	#{porgId, jdbcType=VARCHAR} ,
+        	#{orgLev} ,
+        	#{cupId jdbcType=VARCHAR} ,
+        	#{zoneCode jdbcType=CHAR} ,
+        	#{bankNo jdbcType=CHAR} ,
+        	#{name jdbcType=VARCHAR} ,
+        	#{contact, jdbcType=VARCHAR} ,
+        	#{tel, jdbcType=VARCHAR} ,
+        	#{fax, jdbcType=VARCHAR} ,
+        	#{addr, jdbcType=VARCHAR} ,
+        	#{status} ,
+        	#{onlineFlag} ,
+        	#{acqOrgId, jdbcType=VARCHAR} ,
+        	#{acqBankNo, jdbcType=VARCHAR} ,
+        	#{eacqOrgId, jdbcType=VARCHAR}
+        )
+    ]]>
+		
+	</insert>
+    
+	<update id="Org_update" >
+    <![CDATA[
+        UPDATE T_B_ORG SET
+	        P_ORG_ID = #{porgId, jdbcType=VARCHAR} ,
+	        ORG_LEV = #{orgLev} ,
+	        CUP_ID = #{cupId jdbcType=VARCHAR} ,
+	        ZONE_CODE = #{zoneCode jdbcType=CHAR} ,
+	        BANK_NO = #{bankNo jdbcType=CHAR} ,
+	        NAME = #{name jdbcType=VARCHAR} ,
+	        CONTACT = #{contact, jdbcType=VARCHAR} ,
+	        TEL = #{tel, jdbcType=VARCHAR} ,
+	        FAX = #{fax, jdbcType=VARCHAR} ,
+	        ADDR = #{addr, jdbcType=VARCHAR} ,
+	        STATUS = #{status} ,
+	        ONLINE_FLAG = #{onlineFlag} ,
+	        ACQ_ORG_ID = #{acqOrgId, jdbcType=VARCHAR} ,
+	        ACQ_BANK_NO = #{acqBankNo, jdbcType=VARCHAR} ,
+	        EACQ_ORG_ID = #{eacqOrgId, jdbcType=VARCHAR}
+        WHERE 
+	        ORG_ID = #{orgId} 
+    ]]>
+	</update>
+
+    <delete id="Org_delete">
+    <![CDATA[
+        DELETE FROM T_B_ORG WHERE
+        ORG_ID = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="Org_getById" resultMap="Org">
+		SELECT <include refid="Org_columns" />
+	    <![CDATA[
+		    FROM T_B_ORG T
+	        WHERE 
+		        T.ORG_ID = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="Org_findPage_where">
+		
+		<where>	      				
+	       <if test="orgId != null and orgId !=''">
+				AND T.ORG_ID = #{orgId}
+			</if>
+	       <if test="porgId != null and porgId !=''">
+				AND T.P_ORG_ID = #{porgId}
+			</if>
+	       <if test="orgLev != null and orgLev !=''">
+				AND T.ORG_LEV = #{orgLev}
+			</if>
+	       <if test="cupId != null and cupId !=''">
+				AND T.CUP_ID = #{cupId}
+			</if>
+	       <if test="zoneCode != null and zoneCode !=''">
+				AND T.ZONE_CODE = #{zoneCode}
+			</if>
+	       <if test="bankNo != null and bankNo !=''">
+				AND T.BANK_NO = #{bankNo}
+			</if>
+	       <if test="name != null and name !=''">
+				AND T.NAME = #{name}
+			</if>
+	       <if test="contact != null and contact !=''">
+				AND T.CONTACT = #{contact}
+			</if>
+	       <if test="tel != null and tel !=''">
+				AND T.TEL = #{tel}
+			</if>
+	       <if test="fax != null and fax !=''">
+				AND T.FAX = #{fax}
+			</if>
+	       <if test="addr != null and addr !=''">
+				AND T.ADDR = #{addr}
+			</if>
+	       <if test="status != null and status !=''">
+				AND T.STATUS = #{status}
+			</if>
+	       <if test="onlineFlag != null and onlineFlag !=''">
+				AND T.ONLINE_FLAG = #{onlineFlag}
+			</if>
+	       <if test="acqOrgId != null and acqOrgId !=''">
+				AND T.ACQ_ORG_ID = #{acqOrgId}
+			</if>
+	       <if test="acqBankNo != null and acqBankNo !=''">
+				AND T.ACQ_BANK_NO = #{acqBankNo}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="Org_findCountByWhere" resultType="int">
+        SELECT count(*) FROM T_B_ORG T
+		<include refid="Org_findPage_where"/>    
+    </select>
+    
+     <select id="Org_findEacqOrgByOrgId" resultType="java.lang.String">
+        select t.eacq_org_id from t_b_org t where t.org_id=#{orgId} order by t.p_org_id ,t.org_lev
+    </select>
+    
+   
+    <select id="Org_findListByWhere" resultMap="Org">
+    	SELECT <include refid="Org_columns" />
+	    FROM T_B_ORG T
+		<include refid="Org_findPage_where"/>
+		order by t.p_org_id ,t.org_lev
+    </select>
+    
+    <select id="Org_findLowerPrvcOrg" resultMap="Org">
+    	SELECT T.ORG_ID, T.NAME FROM T_B_ORG T WHERE T.ORG_ID IN (select o.org_id from t_b_org o start with o.org_id=#{orgId, jdbcType=VARCHAR} connect by o.p_org_id=prior o.org_id) and t.org_id!=#{orgId}  ORDER BY T.ORG_LEV
+    </select>
+
+	<select id="Org_IDANDNAME_findLowerPrvcOrg" resultMap="Org">
+		select T.ORG_ID, T.NAME from t_b_org T start with T.org_id=#{orgId, jdbcType=VARCHAR} connect by T.p_org_id=prior T.org_id order by t.p_org_id ,t.org_lev
+	</select>
+	<select id="Org_ID_findLowerPrvcOrg" resultType="java.lang.String">
+		select T.ORG_ID from t_b_org T start with T.org_id=#{orgId, jdbcType=VARCHAR} connect by T.p_org_id=prior T.org_id order by t.p_org_id ,t.org_lev
+	</select>
+	<select id="Org_tow_findLowerPrvcOrg" resultMap="Org">
+		select T.ORG_ID, T.NAME from t_b_org T WHERE T.ORG_LEV in ('1','2') start with T.org_id=#{orgId, jdbcType=VARCHAR} connect by T.p_org_id=prior T.org_id order by t.p_org_id ,t.org_lev
+	</select>
+
+
+	<select id="Org_findZbankList" resultMap="Org">
+    	SELECT T.ORG_ID, T.NAME FROM T_B_ORG T WHERE T.ORG_ID IN (select o.org_id from t_b_org o start with o.org_id=#{orgId} connect by o.p_org_id=prior o.org_id) and t.org_id!=#{orgId} and t.ORG_LEV = #{orgLev} ORDER BY T.ORG_LEV
+    </select>
+    
+    <select id="Org_findMerBranchOrg" resultMap="Org">
+    	SELECT T.ORG_ID, T.NAME FROM T_B_ORG T 
+		 WHERE T.ORG_ID LIKE (SELECT M.ZONE_ORG_ID || '%'
+                        FROM T_B_MERCHANT_BASE M
+                       WHERE M.MER_ID = #{merId} )
+   		AND LENGTHB(T.ORG_ID) = 9 order by t.p_org_id ,t.org_lev
+    </select>
+    
+    <select id="Org_getNextLevOrgListByOrgId" resultMap="Org">
+    	SELECT T.ORG_ID, T.NAME ||' - '|| T.EACQ_ORG_ID AS NAME FROM T_B_ORG T
+		WHERE T.ORG_ID LIKE #{orgId,jdbcType=VARCHAR} || '%'
+   		AND LENGTHB(T.ORG_ID) = #{orgIdLen,jdbcType=VARCHAR}
+   		order by t.p_org_id ,t.org_lev
+    </select>
+    
+    <select id="Org_findSubOrgsByPorgId" resultMap="OrgTree">
+		SELECT DISTINCT T.ORG_ID TREE_ID,
+	       T.NAME||'-'||T.EACQ_ORG_ID TREE_NAME,
+	       T.P_ORG_ID TREE_PARENTID,
+	       CASE
+	         WHEN O.P_ORG_ID IS NULL THEN
+	          'Y'
+	         ELSE
+	          'N'
+	       END ISLEAF
+	  FROM T_B_ORG T
+	  LEFT JOIN T_B_ORG O ON T.ORG_ID = O.P_ORG_ID
+	 WHERE T.P_ORG_ID = #{pTreeId}
+	 order by t.p_org_id ,t.org_lev
+    </select>
+    
+    <select id="Org_maxSubOrgIdByPid" resultType="String">
+		SELECT MAX(T.ORG_ID) + 1
+		  FROM T_B_ORG T
+		 WHERE T.P_ORG_ID = #{orgId}
+		 GROUP BY T.P_ORG_ID
+    </select>
+    
+</mapper>
+

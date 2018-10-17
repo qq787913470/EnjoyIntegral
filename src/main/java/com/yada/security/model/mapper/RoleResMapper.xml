@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.RoleResDao">
+
+	<resultMap id="RoleRes" type="com.yada.security.model.RoleRes">
+        <result property="resRoleId" column="RES_ROLE_ID"/>
+        <result property="roleId" column="ROLE_ID"/>
+        <result property="menuResId" column="MENU_RES_ID"/>
+	</resultMap>
+	 <!-- 一对一   一的标识 -->
+	<resultMap  id="RoleRoleRes" type="com.yada.security.model.RoleRes"  extends="RoleRes">
+	 <!-- 放入association -->
+	</resultMap>
+	 <!-- 一对一   一的标识 -->
+	<resultMap  id="ResRoleRes" type="com.yada.security.model.RoleRes"  extends="RoleRes">
+	 <!-- 放入association -->
+	</resultMap>
+	
+	<sql id="RoleRes_columns">
+		RES_ROLE_ID,ROLE_ID,MENU_RES_ID
+	</sql>
+
+	
+	<insert id="RoleRes_insert" parameterType="com.yada.security.model.RoleRes" >
+	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="id">
+			SELECT SEQname.nextval AS ID FROM DUAL 
+        </selectKey>
+        INSERT INTO T_P_SHIRO_ROLE_RES (
+        	RES_ROLE_ID ,
+        	ROLE_ID ,
+        	MENU_RES_ID 
+        ) VALUES (
+	          #{menuResId},
+	          #{roleId} ,
+	          #{menuResId} 
+        )	
+	</insert>
+    
+	<update id="RoleRes_update" >
+        UPDATE T_P_SHIRO_ROLE_RES SET
+	        ROLE_ID = #{roleId} ,
+	        MENU_RES_ID = #{menuResId} 
+         WHERE 
+	        RES_ROLE_ID = #{resRoleId} 
+	</update>
+
+    <delete id="RoleRes_delete">
+        DELETE FROM T_P_SHIRO_ROLE_RES WHERE
+        RES_ROLE_ID = #{id} 
+    </delete>
+    
+    <select id="RoleRes_getById" resultMap="RoleRes">
+		SELECT <include refid="RoleRes_columns" />
+		    FROM T_P_SHIRO_ROLE_RES 
+	        WHERE 
+		        RES_ROLE_ID = #{id} 
+	</select>
+	
+	<sql id="RoleRes_findPage_where">
+		
+		<where>	      				
+	       <if test="resRoleId != null and resRoleId !=''">
+				AND RES_ROLE_ID = #{resRoleId}
+			</if>
+	       <if test="roleId != null and roleId !=''">
+				AND ROLE_ID = #{roleId}
+			</if>
+	       <if test="menuResId != null and menuResId !=''">
+				AND MENU_RES_ID = #{menuResId}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="RoleRes_findCountByWhere" resultType="long">
+        SELECT count(*) FROM T_P_SHIRO_ROLE_RES 
+		<include refid="RoleRes_findPage_where"/>    
+    </select>
+    
+   
+    <select id="RoleRes_findListByWhere" resultMap="RoleRes">
+    	SELECT <include refid="RoleRes_columns" />
+	    FROM T_P_SHIRO_ROLE_RES 
+		<include refid="RoleRes_findPage_where"/>
+    </select>
+
+	
+</mapper>
+

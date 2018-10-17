@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.yada.enjoyIntegral.dao.SupplierChangeReportDao">
+
+	<resultMap id="SupplierChangeReport" type="com.yada.enjoyIntegral.model.SupplierChangeReport">
+		<result property="merNo" column="MER_NO" />
+		<result property="merName" column="MER_NAME" />
+		<result property="customerName" column="CUSTOMER_NAME" />
+		<result property="customerPhone" column="CUSTOMER_PHONE" />
+		<result property="customerCardNo" column="CUSTOMER_CARD_NO" />
+		<result property="producrName" column="PRODUCT_NAME" />
+		<result property="integralvalue" column="INTEGRAL_VALUE" />
+		<result property="orgId" column="ORG_ID" />
+		<result property="orgName" column="ORG_NAME" />
+		<result property="tranDate" column="TRAN_DATE" />
+		<result property="tranTime" column="TRAN_TIME" />
+	</resultMap>
+
+	<sql id="SupplierChangeReport_columns">
+		T.MER_NO,
+		T.MER_NAME,
+		T.CUSTOMER_NAME,
+		T.CUSTOMER_PHONE,
+		T.CUSTOMER_CARD_NO,
+		T.PRODUCT_NAME,
+		T.INTEGRAL_VALUE,
+		T.ORG_ID,
+		T.ORG_NAME,
+		T.TRAN_DATE,
+		T.TRAN_TIME
+	</sql>
+
+	<sql id="SupplierChangeReport_findPage_where">
+		<where>
+			<if test="customerName != null and customerName !=''">
+				AND T.CUSTOMER_NAME like '%'||#{customerName}||'%'
+			</if>
+			<if test="customerPhone != null and customerPhone !=''">
+				AND T.CUSTOMER_PHONE like '%'||#{customerPhone}||'%'
+			</if>
+			<if test="merNo != null and merNo !=''">
+				AND T.MER_NO = #{merNo}
+			</if>
+			<if test="endDate != null and endDate !=''">
+				AND T.TRAN_DATE &lt;= #{endDate}
+			</if>
+			<if test="startDate != null and startDate !=''">
+				AND T.TRAN_DATE &gt;= #{startDate}
+			</if>
+
+			<if test="merName != null and merName !=''">
+				AND T.MER_NAME like '%'||#{merName}||'%'
+			</if>
+
+			<if test="orgIdUser != null and orgIdUser != ''">
+				AND T.ORG_ID in
+				<foreach item="orgIdUser" index="index" collection="orgIdUser" open="("
+						 separator="," close=")">
+					#{orgIdUser}
+				</foreach>
+			</if>
+			<if test="integralValuestart != null and integralValuestart !=''">
+				AND T.INTEGRAL_VALUE &gt;= TO_NUMBER(#{integralValuestart})
+			</if>
+			<if test="integralValueend != null and integralValueend !=''">
+				AND T.INTEGRAL_VALUE &lt;= TO_NUMBER(#{integralValueend})
+			</if>
+		</where>
+	</sql>
+
+	<select id="SupplierChangeReport_findCountByWhere" resultType="int">
+		SELECT count(*) FROM (select
+		t.mer_no,
+		t.mer_name,
+		t.CUSTOMER_NAME,
+		t.CUSTOMER_PHONE,
+		t.CUSTOMER_CARD_NO,
+		t.PRODUCT_NAME,
+		t.INTEGRAL_VALUE,
+		t.ORG_ID,
+		t.org_name,
+		t.TRAN_DATE,
+		t.TRAN_TIME
+		from TRAN_LIST t where t.tran_state='00' and t.state = '00' )T
+		<include refid="SupplierChangeReport_findPage_where" /> 
+	</select>
+
+
+	<select id="SupplierChangeReport_findListByWhere" resultMap="SupplierChangeReport">
+		SELECT
+		<include refid="SupplierChangeReport_columns" />
+		FROM (select
+		t.mer_no,
+		t.mer_name,
+		t.CUSTOMER_NAME,
+		t.CUSTOMER_PHONE,
+		t.CUSTOMER_CARD_NO,
+		t.PRODUCT_NAME,
+		t.INTEGRAL_VALUE,
+		t.ORG_ID,
+		t.org_name,
+		t.TRAN_DATE,
+		t.TRAN_TIME
+		from TRAN_LIST t where t.tran_state='00' and t.state = '00') T
+		<include refid="SupplierChangeReport_findPage_where" />
+		ORDER BY (T.tran_date+T.tran_time) DESC
+	</select>
+</mapper>
+

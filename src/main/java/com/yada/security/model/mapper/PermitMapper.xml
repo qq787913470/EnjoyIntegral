@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.PermitDao">
+
+	<resultMap id="Permit" type="com.yada.security.model.Permit">
+		<result property="permitId" column="PERMIT_ID" />
+		<result property="menuResId" column="MENU_RES_ID" />
+		<result property="actionId" column="ACTION_ID" />
+		<result property="typeId" column="TYPE_ID" />
+		<result property="permitOrder" column="PERMIT_ORDER" />
+		<result property="actionName" column="ACTION_NAME" />
+		<result property="typeName" column="TYPE_NAME" />
+		<result property="menuName" column="menu_name" />
+	</resultMap>
+
+	<resultMap id="permit_join" extends="Permit"
+		type="com.yada.security.model.Permit">
+		<result property="restypeName" column="RES_TYPE_NAME" />
+		<result property="restypeId" column="RES_TYPE_ID" />
+	</resultMap>
+
+	<!-- 一对多 多的标识 -->
+	<resultMap id="RolesPermit" type="com.yada.security.model.Permit"
+		extends="Permit">
+		<collection property="roles" ofType="com.yada.security.model.Role">
+			<id property="roleId" column="ROLE_ID" />
+			<result property="roleName" column="ROLE_NAME" />
+			<result property="dsc" column="DSC" />
+			<result property="checked" column="ASSIGNED" />
+		</collection>
+	</resultMap>
+	<!-- 一对一 一的标识 -->
+	<resultMap id="ResPermit" type="com.yada.security.model.Permit"
+		extends="Permit">
+		<association property="res" javaType="com.yada.security.model.Res">
+			<id property="menuResId" column="MENU_RES_ID" />
+			<result property="menuName" column="MENU_NAME" />
+			<result property="actionName" column="ACTION_NAME" />
+			<result property="pmenuResId" column="P_MENU_RES_ID" />
+			<result property="typeId" column="TYPE_ID" />
+			<result property="orderId" column="ORDER_ID" />
+			<result property="dsc" column="DSC" />
+		</association>
+	</resultMap>
+	<!-- 一对一 一的标识 -->
+	<resultMap id="FilterTypePermit" type="com.yada.security.model.Permit"
+		extends="Permit">
+		<association property="filterType" javaType="com.yada.security.model.FilterType">
+			<id property="typeId" column="TYPE_ID" />
+			<result property="typeName" column="TYPE_NAME" />
+		</association>
+	</resultMap>
+	<!-- 一对一 一的标识 -->
+	<resultMap id="ActionPermit" type="com.yada.security.model.Permit"
+		extends="Permit">
+		<association property="action" javaType="com.yada.security.model.Action">
+			<id property="actionId" column="ACTION_ID" />
+			<result property="actionName" column="ACTION_NAME" />
+			<result property="actionValue" column="ACTION_VALUE" />
+			<result property="actionOrder" column="ACTION_ORDER" />
+			<result property="remark" column="REMARK" />
+		</association>
+	</resultMap>
+
+	<sql id="Permit_columns">
+		PERMIT_ID,MENU_RES_ID,ACTION_ID,TYPE_ID,PERMIT_ORDER
+	</sql>
+
+	<insert id="Permit_insert" keyProperty="permitId"
+		parameterType="com.yada.security.model.Permit">
+		<selectKey resultType="Long" order="BEFORE" keyProperty="permitId">
+			SELECT T_SEQ_P_SHIRO_PERMIT.nextval AS ID FROM DUAL
+		</selectKey>
+		INSERT INTO T_P_SHIRO_PERMIT (
+		PERMIT_ID ,
+		MENU_RES_ID ,
+		ACTION_ID ,
+		TYPE_ID ,
+		PERMIT_ORDER
+		) VALUES (
+		#{permitId} ,
+		#{menuResId} ,
+		#{actionId} ,
+		#{typeId} ,
+		#{permitOrder jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="Permit_update">
+		UPDATE T_P_SHIRO_PERMIT SET
+		MENU_RES_ID = #{menuResId} ,
+		ACTION_ID = #{actionId} ,
+		TYPE_ID = #{typeId} ,
+		PERMIT_ORDER = #{permitOrder}
+		WHERE
+		PERMIT_ID = #{permitId}
+	</update>
+
+	<delete id="Permit_delete">
+		DELETE FROM T_P_SHIRO_PERMIT WHERE PERMIT_ID = #{id}
+	</delete>
+	
+	<delete id="deleteByResId" parameterType="Long">
+		DELETE FROM T_P_SHIRO_PERMIT WHERE MENU_RES_ID = #{menuResId}
+	</delete>
+
+	<select id="Permit_getById" resultMap="permit_join">
+		SELECT t.*
+		,a.action_name,r.menu_name,rt.type_name, r.TYPE_ID AS RES_TYPE_ID,
+		rtp.TYPE_NAME AS RES_TYPE_NAME
+		FROM T_P_SHIRO_PERMIT t join T_P_SHIRO_action a on a.action_id = t.action_id
+		join
+		T_P_SHIRO_res r on r.menu_res_id = t.menu_res_id
+		join T_P_SHIRO_res_type rtp on
+		rtp.TYPE_ID = r.TYPE_ID
+		join T_P_SHIRO_FILTER_TYPE rt on rt.type_id =
+		t.type_id
+		WHERE PERMIT_ID = #{id}
+	</select>
+
+	<sql id="Permit_findPage_where">
+		<where>
+			<if test="permitId != null and permitId !=''">
+				AND PERMIT_ID = #{permitId}
+			</if>
+			<if test="menuResId != null and menuResId !=''">
+				AND T.MENU_RES_ID = #{menuResId}
+			</if>
+			<if test="actionId != null and actionId !=''">
+				AND T.ACTION_ID = #{actionId}
+			</if>
+			<if test="typeId != null and typeId !=''">
+				AND TYPE_ID = #{typeId}
+			</if>
+			<if test="permitOrder != null and permitOrder !=''">
+				AND PERMIT_ORDER = #{permitOrder}
+			</if>
+			<if test="restypeId != null and restypeId !=''">
+				AND R.TYPE_ID = #{restypeId}
+			</if>
+		</where>
+	</sql>
+
+	<select id="Permit_findCountByWhere" resultType="int">
+		SELECT count(*) FROM T_P_SHIRO_PERMIT T
+		<include refid="Permit_findPage_where" />
+	</select>
+	<select id="getMaxPermitOrder" resultType="java.lang.String">
+		SELECT MAX(T.PERMIT_ORDER)
+  FROM T_P_SHIRO_PERMIT T
+ WHERE  t.menu_res_id =#{resId}
+	</select>
+
+
+	<select id="Permit_findListByWhere" resultMap="Permit">
+		SELECT t.* ,a.action_name,r.menu_name,rt.type_name
+		FROM T_P_SHIRO_PERMIT t join T_P_SHIRO_action a on a.action_id = t.action_id
+		join
+		T_P_SHIRO_res r on r.menu_res_id = t.menu_res_id
+		join T_P_SHIRO_FILTER_TYPE rt on
+		rt.type_id = t.type_id
+		<include refid="Permit_findPage_where" />
+	</select>
+
+	<select id="permitsByRes" resultMap="Permit">
+		SELECT T.* ,A.ACTION_NAME,R.MENU_NAME,RT.TYPE_NAME, R.TYPE_ID AS
+		RES_TYPE_ID, RTP.TYPE_NAME AS RES_TYPE_NAME, A.ACTION_NAME
+		FROM T_P_SHIRO_PERMIT T
+		JOIN T_P_SHIRO_ACTION A ON A.ACTION_ID = T.ACTION_ID
+		JOIN T_P_SHIRO_RES R ON R.MENU_RES_ID = T.MENU_RES_ID
+		JOIN T_P_SHIRO_RES_TYPE RTP ON RTP.TYPE_ID = R.TYPE_ID
+		JOIN T_P_SHIRO_FILTER_TYPE RT ON RT.TYPE_ID = T.TYPE_ID
+		WHERE T.MENU_RES_ID = #{MENURESID}
+		ORDER BY T.PERMIT_ORDER
+	</select>
+	<select id="getMenuLevel" resultType="java.lang.String">
+		SELECT COUNT(*) FROM(SELECT DISTINCT T.P_MENU_RES_ID 
+        FROM T_P_SHIRO_RES T  START WITH T.MENU_RES_ID = #{resId}
+        CONNECT BY   T.MENU_RES_ID = PRIOR T.P_MENU_RES_ID)
+	</select>
+	<update id="updateOrder" >
+		update T_P_SHIRO_permit t set t.permit_order =#{orderIndex} where t.permit_id=#{permitId}
+	</update>
+
+</mapper>
+

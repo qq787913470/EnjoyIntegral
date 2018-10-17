@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.yada.enjoyIntegral.dao.CustomerInfoDao">
+
+	<resultMap id="CustomerInfo" type="com.yada.enjoyIntegral.model.CustomerInfo">
+		<result property="customerNo" column="CUSTOMER_NO" />
+		<result property="name" column="NAME" />
+		<result property="certificateNo" column="CERTIFICATE_NO" />
+		<result property="certificateType" column="CERTIFICATE_TYPE" />
+	</resultMap>
+
+	<sql id="CustomerInfo_columns">
+		T.CUSTOMER_NO ,
+		T.NAME ,
+		T.CERTIFICATE_NO ,
+		T.CERTIFICATE_TYPE 
+	</sql>
+
+	<insert id="CustomerInfo_insert" parameterType="com.yada.enjoyIntegral.model.CustomerInfo">
+		<selectKey resultType="java.lang.String" order="BEFORE"
+			keyProperty="id">
+			SELECT T_SEQ_CUSTOMER_INFO.nextval AS ID FROM DUAL
+		</selectKey>
+    <![CDATA[
+		insert into CUSTOMER_INFO
+		 (CUSTOMER_NO,NAME,CERTIFICATE_NO,CERTIFICATE_TYPE)  
+		   values 
+		 (#{customerNo,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{certificateNo,jdbcType=VARCHAR},#{certificateType,jdbcType=VARCHAR})
+		]]>
+	</insert>
+
+	<update id="CustomerInfo_update" parameterType="com.yada.enjoyIntegral.model.CustomerInfo">
+		update CUSTOMER_INFO set 
+			   NAME=#{name,jdbcType=VARCHAR},
+			   CERTIFICATE_NO=#{certificateNo,jdbcType=VARCHAR},
+			   CERTIFICATE_TYPE=#{certificateType,jdbcType=VARCHAR}
+		where CERTIFICATE_NO = #{certificateNo,jdbcType=VARCHAR} and CERTIFICATE_TYPE = #{certificateType,jdbcType=VARCHAR}
+	</update>
+
+	<delete id="CustomerInfo_delete">
+		delete from CUSTOMER_INFO where T.CERTIFICATE_NO = #{certificateNo,jdbcType=VARCHAR} and T.CERTIFICATE_TYPE = #{certificateType,jdbcType=VARCHAR}
+	</delete>
+
+	<select id="CustomerInfo_getById" resultMap="CustomerInfo">
+		SELECT
+		<include refid="CustomerInfo_columns" />
+		FROM CUSTOMER_INFO T
+		WHERE T.CERTIFICATE_NO = #{certificateNo,jdbcType=VARCHAR} and T.CERTIFICATE_TYPE = #{certificateType,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="CustomerInfo_getByUnionId" resultMap="CustomerInfo">
+		SELECT
+		<include refid="CustomerInfo_columns" />
+		FROM CUSTOMER_INFO T
+		WHERE T.CERTIFICATE_NO = #{certificateNo,jdbcType=VARCHAR} and T.CERTIFICATE_TYPE = #{certificateType,jdbcType=VARCHAR} 
+	</select>
+
+	<sql id="CustomerInfo_findPage_where">
+		<where>
+			<if test="customerNo != null and customerNo !=''">
+				AND T.CUSTOMER_NO = #{customerNo,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null and name !=''">
+				AND T.NAME like '%'||#{name}||'%'
+			</if>
+			<if test="certificateNo != null and certificateNo !=''">
+				AND T.CERTIFICATE_NO = #{certificateNo}
+			</if>
+			<if test="certificateType != null and certificateType !=''">
+				AND T.CERTIFICATE_TYPE = #{certificateType}
+			</if>
+		</where>
+	</sql>
+
+	<select id="CustomerInfo_findCountByWhere" resultType="int">
+		SELECT count(*) FROM CUSTOMER_INFO T
+		<include refid="CustomerInfo_findPage_where" />
+	</select>
+
+
+	<select id="CustomerInfo_findListByWhere" resultMap="CustomerInfo">
+		SELECT
+		<include refid="CustomerInfo_columns" />
+		FROM CUSTOMER_INFO T
+		<include refid="CustomerInfo_findPage_where" />
+		ORDER BY T.CUSTOMER_NO DESC
+	</select>
+	
+	<sql id="CustomerInfo_findListByWhereLinkActivity_findPage_where">
+		<where>
+			<if test="customerNo != null and customerNo !=''">
+				AND T.CUSTOMER_NO = #{customerNo}
+			</if>
+			<if test="name != null and name !=''">
+				AND T.NAME like '%'||#{name}||'%'
+			</if>
+			<if test="certificateNo != null and certificateNo !=''">
+				AND T.CERTIFICATE_NO = #{certificateNo}
+			</if>
+			<if test="certificateType != null and certificateType !=''">
+				AND T.CERTIFICATE_TYPE = #{certificateType}
+			</if>
+			<if test="activityId != null and activityId !=''">
+				AND C.ACTIVITY_ID = #{activityId}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="CustomerInfo_findListByWhereLinkActivity_count" resultType="int">
+		SELECT count(*) FROM CUSTOMER_INFO T left join CUSTOMER_ACTIVITY C ON C.CERTIFICATE_NO = T.CERTIFICATE_NO AND C.CERTIFICATE_TYPE = T.CERTIFICATE_TYPE
+		<include refid="CustomerInfo_findListByWhereLinkActivity_findPage_where" />
+	</select>
+
+
+	<select id="CustomerInfo_findListByWhereLinkActivity" resultMap="CustomerInfo">
+		SELECT
+		<include refid="CustomerInfo_columns" />
+		FROM CUSTOMER_INFO T left join CUSTOMER_ACTIVITY C ON C.CERTIFICATE_NO = T.CERTIFICATE_NO AND C.CERTIFICATE_TYPE = T.CERTIFICATE_TYPE
+		<include refid="CustomerInfo_findListByWhereLinkActivity_findPage_where" />
+		ORDER BY T.CUSTOMER_NO DESC
+	</select>
+</mapper>
+

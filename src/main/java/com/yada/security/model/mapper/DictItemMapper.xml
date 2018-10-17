@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="DictItem">
+
+	<resultMap id="RM_DictItem" type="com.yada.security.model.DictItem">
+        <result property="dicttype" column="DICTTYPE"/>
+        <result property="dictcode" column="DICTCODE"/>
+        <result property="dictcodename" column="DICTCODENAME"/>
+        <result property="dictpinyin" column="DICTPINYIN"/>
+        <result property="dictorder" column="DICTORDER"/>
+        <result property="dictflag" column="DICTFLAG"/>
+        <result property="dictcodeParent" column="DICTCODE_PARENT"/>
+	</resultMap>
+	
+	
+	<sql id="DictItem_columns">
+	    <![CDATA[
+		T.DICTTYPE,T.DICTCODE,T.DICTCODENAME,T.DICTPINYIN,T.DICTORDER,T.DICTFLAG,T.DICTCODE_PARENT
+	    ]]>
+	</sql>
+
+	
+	<insert id="DictItem_insert" >
+	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="key-id">
+			SELECT SEQname.nextval AS ID FROM DUAL 
+        </selectKey>
+    <![CDATA[
+        INSERT INTO t_p_s_dict_item (
+        	DICTTYPE ,
+        	DICTCODE ,
+        	DICTCODENAME ,
+        	DICTPINYIN ,
+        	DICTORDER ,
+        	DICTFLAG ,
+        	DICTCODE_PARENT 
+        ) VALUES (
+        	#{dicttype} ,
+        	#{dictcode} ,
+        	#{dictcodename} ,
+        	#{dictpinyin} ,
+        	#{dictorder} ,
+        	#{dictflag} ,
+        	#{dictcodeParent} 
+        )
+    ]]>
+		
+	</insert>
+    
+	<update id="DictItem_update" >
+    <![CDATA[
+        UPDATE t_p_s_dict_item SET
+	        DICTCODENAME = #{dictcodename} ,
+	        DICTPINYIN = #{dictpinyin} ,
+	        DICTORDER = #{dictorder} ,
+	        DICTFLAG = #{dictflag} ,
+	        DICTCODE_PARENT = #{dictcodeParent} 
+        WHERE 
+	        DICTTYPE = #{dicttype}  AND 
+	        DICTCODE = #{dictcode} 
+    ]]>
+	</update>
+
+    <delete id="DictItem_delete">
+    <![CDATA[
+        DELETE FROM t_p_s_dict_item WHERE
+        DICTTYPE = #{id}  AND 
+        DICTCODE = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="DictItem_getById" resultMap="RM_DictItem">
+		SELECT <include refid="DictItem_columns" />
+	    <![CDATA[
+		    FROM t_p_s_dict_item T
+	        WHERE 
+		        T.DICTTYPE = #{id}  AND 
+		        T.DICTCODE = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="DictItem_findPage_where">
+		
+		<where>	      				
+			<if test="dicttype != null and dicttype !=''">
+				AND T.DICTTYPE = #{dicttype}
+			</if>
+			<if test="dictcode != null and dictcode !=''">
+				AND T.DICTCODE = #{dictcode}
+			</if>
+			<if test="dictcodename != null and dictcodename !=''">
+				AND T.DICTCODENAME = #{dictcodename}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="DictItem_findCountByWhere" resultType="long">
+        SELECT count(*) FROM t_p_s_dict_item T
+		<include refid="DictItem_findPage_where"/>    
+    </select>
+    
+   
+    <select id="DictItem_findListByWhere" resultMap="RM_DictItem">
+    	SELECT <include refid="DictItem_columns" />
+	    FROM t_p_s_dict_item T
+		<include refid="DictItem_findPage_where"/>
+		
+    </select>
+
+	
+</mapper>
+

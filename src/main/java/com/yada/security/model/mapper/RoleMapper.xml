@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.RoleDao">
+
+	<resultMap id="Role" type="com.yada.security.model.Role">
+        <result property="roleId" column="ROLE_ID"/>
+        <result property="roleName" column="ROLE_NAME"/>
+        <result property="dsc" column="DSC"/>
+	</resultMap>
+
+	<!-- 某个许可哪些角色已分配  -->
+	<resultMap id="permt2role" type="com.yada.security.model.Role" extends="Role">
+        <result property="checked" column="CHECKED"/>
+	</resultMap>
+	
+	  <!-- 一对多   多的标识 -->
+	<resultMap id="userGroupsRole" type="com.yada.security.model.Role" extends="Role">
+		<collection property="userGrps"   ofType="com.yada.security.model.UserGrp"   >
+		    <id property="userGrpId" column="USER_GRP_ID" />
+		    <result property="name" column="NAME"/>
+		</collection>
+	</resultMap>
+	  <!-- 一对多   多的标识 -->
+	<resultMap id="permitsRole" type="com.yada.security.model.Role" extends="Role">
+		<collection property="permits"   ofType="com.yada.security.model.Permit"   >
+		    <id property="permitId" column="PERMIT_ID" />
+		    <result property="menuResId" column="MENU_RES_ID"/>
+		    <result property="actionId" column="ACTION_ID"/>
+		    <result property="actionName" column="ACTION_NAME"/>
+		    <result property="actionValue" column="ACTION_VALUE"/>
+		    <result property="typeId" column="TYPE_ID"/>
+		    <result property="permitOrder" column="PERMIT_ORDER"/>
+		    <result property="checked" column="ASSIGNED"/>
+		    <result property="disabled" column="DISABLED"/>
+		</collection>
+	</resultMap>
+	<sql id="Role_columns">
+		ROLE_ID,ROLE_NAME,DSC
+	</sql>
+	
+	<insert id="Role_insert"  keyProperty="roleId" parameterType="com.yada.security.model.Role">
+	   <selectKey resultType="Long" order="BEFORE" keyProperty="roleId">
+			SELECT T_SEQ_P_SHIRO_ROLE.nextval AS ID FROM DUAL 
+        </selectKey>
+        INSERT INTO T_P_SHIRO_ROLE (
+        	ROLE_ID ,
+        	ROLE_NAME ,
+        	DSC 
+        ) VALUES (
+        	#{roleId} ,
+        	#{roleName,jdbcType=VARCHAR} ,
+        	#{dsc,jdbcType=VARCHAR} 
+        )
+	</insert>
+    
+	<update id="Role_update" >
+        UPDATE T_P_SHIRO_ROLE SET ROLE_NAME = #{roleName,jdbcType=VARCHAR} ,  DSC = #{dsc,jdbcType=VARCHAR}  WHERE  ROLE_ID = #{roleId} 
+	</update>
+
+    <delete id="Role_delete">
+        DELETE FROM T_P_SHIRO_ROLE WHERE ROLE_ID = #{id} 
+    </delete>
+    
+    <select id="Role_getById" resultMap="Role">
+		SELECT <include refid="Role_columns" /> FROM T_P_SHIRO_ROLE  WHERE  ROLE_ID = #{id} 
+	</select>
+	
+	<sql id="Role_findPage_where">
+		<where>	      				
+	       <if test="roleId != null and roleId !=''">
+				AND ROLE_ID = #{roleId}
+			</if>
+	       <if test="roleName != null and roleName !=''">
+				AND ROLE_NAME = #{roleName}
+			</if>
+	       <if test="dsc != null and dsc !=''">
+				AND DSC = #{dsc}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="Role_findCountByWhere" resultType="int">
+        SELECT count(*) FROM T_P_SHIRO_ROLE 
+		<include refid="Role_findPage_where"/>    
+    </select>
+    
+    <select id="Role_findListByWhere" resultMap="Role">
+    	SELECT <include refid="Role_columns" /> FROM T_P_SHIRO_ROLE  <include refid="Role_findPage_where"/>
+    </select>
+    
+    <select id="rolesByPermit" resultMap="permt2role">
+    	SELECT T.*,CASE WHEN T.ROLE_ID IN (SELECT T.ROLE_ID FROM T_P_SHIRO_ROLE_PERMIT T WHERE T.PERMIT_ID=#{permitId}) THEN 'TRUE' ELSE 'FALSE' END CHECKED  FROM T_P_SHIRO_ROLE T
+    </select>
+    
+     <!-- 权限分配多角色,追加已分配标志 -->
+    <sql id="roleAllResPermits_where">
+    	<where>
+    		<if test="menuResId != null and menuResId !=''">
+    			AND P.MENU_RES_ID=#{ menuResId }
+    		</if>
+    	</where>
+    </sql>
+    
+    <select id="roleAllResPermits" resultMap="permitsRole">
+    	SELECT R.ROLE_ID,R.ROLE_NAME, P.* ,CASE WHEN P.PERMIT_ID IN (SELECT RP.PERMIT_ID FROM T_P_SHIRO_ROLE_PERMIT RP WHERE RP.ROLE_ID=R.ROLE_ID) THEN 'TRUE' ELSE 'FALSE' END ASSIGNED,
+    	CASE WHEN 2 IN (SELECT P.ACTION_ID FROM T_P_SHIRO_ROLE_PERMIT RP JOIN T_P_SHIRO_PERMIT P ON P.PERMIT_ID=RP.PERMIT_ID  WHERE RP.ROLE_ID=R.ROLE_ID AND P.MENU_RES_ID=#{ menuResId }) THEN 'TRUE' ELSE 'FALSE' END DISABLED
+		 FROM
+		(SELECT P.PERMIT_ID,A.ACTION_NAME,P.MENU_RES_ID,A.ACTION_VALUE,A.ACTION_ORDER,A.ACTION_ID FROM T_P_SHIRO_PERMIT P JOIN T_P_SHIRO_ACTION A ON A.ACTION_ID=P.ACTION_ID <include refid="roleAllResPermits_where"/> ) P,
+		T_P_SHIRO_ROLE R ORDER BY R.ROLE_ID,P.ACTION_ORDER
+    </select>
+    
+</mapper>
+

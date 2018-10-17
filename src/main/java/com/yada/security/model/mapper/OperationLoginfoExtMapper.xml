@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.OperationLoginfoExt">
+
+	<resultMap id="OperationLoginfoExt" type="com.yada.security.model.OperationLoginfoExt">
+        <result property="id" column="ID"/>
+        <result property="operation" column="OPERATION"/>
+        <result property="ovalues" column="O_VALUES"/>
+        <result property="cvalues" column="C_VALUES"/>
+        <result property="tableName" column="TABLE_NAME"/>
+        <result property="loginfoId" column="LOGINFO_ID"/>
+        <result property="dec" column="DEC"/>
+	</resultMap>
+	
+	
+	<sql id="OperationLoginfoExt_columns">
+	    <![CDATA[
+		T.ID,T.OPERATION,T.O_VALUES,T.C_VALUES,T.TABLE_NAME,T.LOGINFO_ID,T.DEC
+	    ]]>
+	</sql>
+
+	
+	<insert id="OperationLoginfoExt_insert" >
+	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="id">
+			SELECT SEQ_T_WEB_OPERTION_LOGINFO_EXT .nextval AS ID FROM dual
+        </selectKey>
+    <![CDATA[
+        INSERT INTO T_WEB_P_OPERATION_LOGINFO_EXT (
+        	ID ,
+        	OPERATION ,
+        	O_VALUES ,
+        	C_VALUES ,
+        	TABLE_NAME ,
+        	LOGINFO_ID ,
+        	DEC
+        ) VALUES (
+        	#{id} ,
+        	#{operation} ,
+        	#{ovalues jdbcType=VARCHAR} ,
+        	#{cvalues jdbcType=VARCHAR} ,
+        	#{tableName jdbcType=VARCHAR} ,
+        	#{loginfoId} ,
+        	#{dec jdbcType=VARCHAR}
+        )
+    ]]>
+		
+	</insert>
+    
+	<update id="OperationLoginfoExt_update" >
+    <![CDATA[
+        UPDATE T_WEB_P_OPERATION_LOGINFO_EXT SET
+	        OPERATION = #{operation} ,
+	        O_VALUES = #{ovalues} ,
+	        C_VALUES = #{cvalues} ,
+	        TABLE_NAME = #{tableName} ,
+	        LOGINFO_ID = #{loginfoId} ,
+	         DEC= #{dec}
+        WHERE 
+	        ID = #{id} 
+    ]]>
+	</update>
+
+    <delete id="OperationLoginfoExt_delete">
+    <![CDATA[
+        DELETE FROM T_WEB_P_OPERATION_LOGINFO_EXT WHERE
+        ID = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="OperationLoginfoExt_getById" resultMap="OperationLoginfoExt">
+		SELECT <include refid="OperationLoginfoExt_columns" />
+	    <![CDATA[
+		    FROM T_WEB_P_OPERATION_LOGINFO_EXT T
+	        WHERE 
+		        T.ID = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="OperationLoginfoExt_findPage_where">
+		
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND T.ID = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(operation)">
+				AND T.OPERATION = #{operation}
+			</if>
+	       <if test="@Ognl@isNotEmpty(ovalues)">
+				AND T.O_VALUES = #{ovalues}
+			</if>
+	       <if test="@Ognl@isNotEmpty(cvalues)">
+				AND T.C_VALUES = #{cvalues}
+			</if>
+	       <if test="@Ognl@isNotEmpty(tableName)">
+				AND T.TABLE_NAME = #{tableName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(loginfoId)">
+				AND T.LOGINFO_ID = #{loginfoId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(dec)">
+				AND T.DEC= #{dec}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="OperationLoginfoExt_findCountByWhere" resultType="int">
+        SELECT count(*) FROM T_WEB_P_OPERATION_LOGINFO_EXT T
+		<include refid="OperationLoginfoExt_findPage_where"/>    
+    </select>
+    
+   
+    <select id="OperationLoginfoExt_findListByWhere" resultMap="OperationLoginfoExt">
+    	SELECT <include refid="OperationLoginfoExt_columns" />
+	    FROM T_WEB_P_OPERATION_LOGINFO_EXT T
+		<include refid="OperationLoginfoExt_findPage_where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+
+	
+</mapper>
+

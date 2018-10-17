@@ -1,0 +1,26 @@
+#toolbar{
+	width:80px;
+	padding:5px;
+	border: 1px solid #bcbcbc;
+}
+.plane,.focus {
+	padding: 3px;
+	cursor: pointer;
+	text-align: center;
+	width: 70px;
+	font-size: 9pt;
+	font-weight: normal;
+	margin-bottom: 1em;
+}
+
+.focus {
+	border: 1px solid #bcbcbc;
+	background-color: #92CEE6;
+}
+
+.plane .label,.focus .label {
+	display: block;
+}
+
+
+

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="UserExt">
+
+	<resultMap id="RM_UserExt" type="com.yada.security.model.UserExt">
+        <result property="userId" column="USER_ID"/>
+        <result property="orgId" column="ORG_ID"/>
+        <result property="staffId" column="STAFF_ID"/>
+        <result property="lastLoginIpAddr" column="LAST_LOGIN_IP_ADDR"/>
+        <result property="lastLoginDateTime" column="LAST_LOGIN_DATE_TIME"/>
+        <result property="lastLogoutDateTime" column="LAST_LOGOUT_DATE_TIME"/>
+        <result property="loginCnt" column="LOGIN_CNT"/>
+        <result property="lastChgPwdDateTime" column="LAST_CHG_PWD_DATE_TIME"/>
+        <result property="createDateTime" column="CREATE_DATE_TIME"/>
+        <result property="createUserId" column="CREATE_USER_ID"/>
+        <result property="status" column="STATUS"/>
+        <result property="loginFailedCnt" column="LOGIN_FAILED_CNT"/>
+        <result property="lastLoginFailedDateTime" column="LAST_LOGIN_FAILED_DATE_TIME"/>
+	</resultMap>
+	
+	
+	<sql id="UserExt_columns">
+	    <![CDATA[
+		T.USER_ID,T.ORG_ID,T.STAFF_ID,T.LAST_LOGIN_IP_ADDR,T.LAST_LOGIN_DATE_TIME,T.LAST_LOGOUT_DATE_TIME,T.LOGIN_CNT,T.LAST_CHG_PWD_DATE_TIME,T.CREATE_DATE_TIME,T.CREATE_USER_ID,T.STATUS,T.LOGIN_FAILED_CNT,T.LAST_LOGIN_FAILED_DATE_TIME
+	    ]]>
+	</sql>
+
+	
+	<insert id="UserExt_insert" >
+	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="key-id">
+			SELECT SEQname.nextval AS ID FROM DUAL 
+        </selectKey>
+    <![CDATA[
+        INSERT INTO T_P_SHIRO_USER_EXT (
+        	USER_ID ,
+        	ORG_ID ,
+        	STAFF_ID ,
+        	LAST_LOGIN_IP_ADDR ,
+        	LAST_LOGIN_DATE_TIME ,
+        	LAST_LOGOUT_DATE_TIME ,
+        	LOGIN_CNT ,
+        	LAST_CHG_PWD_DATE_TIME ,
+        	CREATE_DATE_TIME ,
+        	CREATE_USER_ID ,
+        	STATUS ,
+        	LOGIN_FAILED_CNT ,
+        	LAST_LOGIN_FAILED_DATE_TIME 
+        ) VALUES (
+        	#{userId} ,
+        	#{orgId} ,
+        	#{staffId, jdbcType=VARCHAR} ,
+        	#{lastLoginIpAddr, jdbcType=VARCHAR} ,
+        	#{lastLoginDateTime, jdbcType=VARCHAR} ,
+        	#{lastLogoutDateTime, jdbcType=VARCHAR} ,
+        	#{loginCnt, jdbcType=VARCHAR} ,
+        	#{lastChgPwdDateTime, jdbcType=VARCHAR} ,
+        	#{createDateTime, jdbcType=VARCHAR} ,
+        	#{createUserId, jdbcType=VARCHAR} ,
+        	#{status, jdbcType=VARCHAR} ,
+        	#{loginFailedCnt, jdbcType=VARCHAR} ,
+        	#{lastLoginFailedDateTime, jdbcType=VARCHAR} 
+        )
+    ]]>
+		
+	</insert>
+    
+	<update id="UserExt_update" >
+    <![CDATA[
+        UPDATE T_P_SHIRO_USER_EXT SET
+	        ORG_ID = #{orgId} ,
+	        STAFF_ID = #{staffId} ,
+	        LAST_LOGIN_IP_ADDR = #{lastLoginIpAddr} ,
+	        LAST_LOGIN_DATE_TIME = #{lastLoginDateTime} ,
+	        LAST_LOGOUT_DATE_TIME = #{lastLogoutDateTime} ,
+	        LOGIN_CNT = #{loginCnt} ,
+	        LAST_CHG_PWD_DATE_TIME = #{lastChgPwdDateTime} ,
+	        CREATE_DATE_TIME = #{createDateTime} ,
+	        CREATE_USER_ID = #{createUserId} ,
+	        STATUS = #{status} ,
+	        LOGIN_FAILED_CNT = #{loginFailedCnt} ,
+	        LAST_LOGIN_FAILED_DATE_TIME = #{lastLoginFailedDateTime} 
+        WHERE 
+	        USER_ID = #{userId} 
+    ]]>
+	</update>
+
+    <delete id="UserExt_delete">
+    <![CDATA[
+        DELETE FROM T_P_SHIRO_USER_EXT WHERE
+        USER_ID = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="UserExt_getById" resultMap="RM_UserExt">
+		SELECT <include refid="UserExt_columns" />
+	    <![CDATA[
+		    FROM T_P_SHIRO_USER_EXT T
+	        WHERE 
+		        T.USER_ID = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="UserExt_findPage_where">
+		
+		<where>	      				
+	       <if test="userId != null and userId !=''">
+				AND T.USER_ID = #{userId}
+			</if>
+	       <if test="orgId != null and orgId !=''">
+				AND T.ORG_ID = #{orgId}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="UserExt_findCountByWhere" resultType="int">
+        SELECT count(*) FROM T_P_SHIRO_USER_EXT T
+		<include refid="UserExt_findPage_where"/>    
+    </select>
+    
+    <select id="UserExt_findListByWhere" resultMap="RM_UserExt">
+    	SELECT <include refid="UserExt_columns" />
+	    FROM T_P_SHIRO_USER_EXT T
+		<include refid="UserExt_findPage_where"/>
+    </select>
+    
+    <update id="UserExt_closeUser">
+    	UPDATE T_P_SHIRO_USER_EXT T SET T.STATUS = 0 WHERE T.USER_ID = #{userId}
+    </update>
+
+    <update id="UserExt_openUser">
+    	UPDATE T_P_SHIRO_USER_EXT T SET T.STATUS = 1 WHERE T.USER_ID = #{userId}
+    </update>
+    
+    <update id="UserExt_batchCloseUser">
+    	UPDATE T_P_SHIRO_USER_EXT T SET T.STATUS = 1
+    	WHERE T.USER_ID IN 
+    	<foreach collection="array" item="item" open="(" close=")" separator=",">
+    		#{item}
+    	</foreach>
+    </update>
+    
+    <update id="UserExt_batchOpenUser">
+    	UPDATE T_P_SHIRO_USER_EXT T SET T.STATUS = 0
+    	WHERE T.USER_ID IN 
+    	<foreach collection="array" item="item" open="(" close=")" separator=",">
+    		#{item}
+    	</foreach>
+    </update>
+	
+	<update id="UserExt_updateUserExtOnLoginSucc">
+    	UPDATE T_P_SHIRO_USER_EXT T SET 
+	   		LAST_LOGIN_IP_ADDR = #{lastLoginIpAddr} ,
+	        LAST_LOGIN_DATE_TIME = #{lastLoginDateTime} ,
+	        LOGIN_CNT = #{loginCnt} ,
+	        LOGIN_FAILED_CNT = 0
+    	WHERE T.USER_ID = #{userId}
+    </update>
+	
+	<update id="UserExt_updateUserExtOnLoginFail">
+    	UPDATE T_P_SHIRO_USER_EXT T SET 
+	        LOGIN_FAILED_CNT = #{loginFailedCnt} ,
+	        LAST_LOGIN_FAILED_DATE_TIME = #{lastLoginFailedDateTime} ,
+	        LOGIN_CNT = #{loginCnt}
+        WHERE T.USER_ID = #{userId}
+    </update>
+	
+	<update id="UserExt_updateUserExtOnLoginOut">
+    	UPDATE T_P_SHIRO_USER_EXT T SET T.LAST_LOGOUT_DATE_TIME = #{lastLogoutDateTime} WHERE T.USER_ID = #{userId}
+    </update>
+	
+	<update id="UserExt_updateUserExtOnPwdChg">
+    	UPDATE T_P_SHIRO_USER_EXT T SET T.LAST_CHG_PWD_DATE_TIME = #{lastChgPwdDateTime} WHERE T.USER_ID = #{userId}
+    </update>
+    
+	<update id="UserExt_updateUserOrg">
+    	UPDATE T_P_SHIRO_USER_EXT T SET T.ORG_ID = #{orgId} WHERE T.USER_ID = #{userId}
+    </update>
+	
+</mapper>
+

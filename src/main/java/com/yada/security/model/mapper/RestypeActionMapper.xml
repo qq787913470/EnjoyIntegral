@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.RestypeActionDao">
+
+	<resultMap id="RestypeAction" type="com.yada.security.model.RestypeAction">
+        <result property="typeId" column="TYPE_ID"/>
+        <result property="actionId" column="ACTION_ID"/>
+        <result property="actionName" column="ACTION_NAME"/>
+	</resultMap>
+	 <!-- 一对一   一的标识 -->
+	<resultMap  id="ResTypeRestypeAction" type="com.yada.security.model.RestypeAction"  extends="RestypeAction">
+	 <!-- 放入association -->
+	</resultMap>
+	 <!-- 一对一   一的标识 -->
+	<resultMap  id="ActionRestypeAction" type="com.yada.security.model.RestypeAction"  extends="RestypeAction">
+	 <!-- 放入association -->
+	</resultMap>
+	<sql id="RestypeAction_columns">
+		TYPE_ID,ACTION_ID
+	</sql>
+
+	
+		<insert id="RestypeAction_insert" >
+	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="key-id">
+			SELECT SEQname.nextval AS ID FROM DUAL 
+        </selectKey>
+        INSERT INTO T_P_SHIRO_RESTYPE_ACTION (
+        	TYPE_ID ,
+        	ACTION_ID 
+        ) VALUES (
+        	#{typeId} ,
+        	#{actionId} 
+        )
+	</insert>
+    
+	<update id="RestypeAction_update" >
+        UPDATE T_P_SHIRO_RESTYPE_ACTION SET TYPE_ID = #{typeId}
+         WHERE ACTION_ID = #{actionId} 
+	</update>
+
+    <delete id="RestypeAction_delete">
+        DELETE FROM T_P_SHIRO_RESTYPE_ACTION WHERE
+        TYPE_ID = #{id}
+    </delete>
+    
+    <select id="RestypeAction_getById" resultMap="RestypeAction" parameterType="int">
+		SELECT <include refid="RestypeAction_columns" />
+		    FROM T_P_SHIRO_RESTYPE_ACTION 
+	        WHERE 
+		        TYPE_ID = #{id}  
+	</select>
+	
+	<sql id="RestypeAction_findPage_where">
+		
+		<where>	      				
+	       <if test="typeId != null and typeId !=''">
+				AND TYPE_ID = #{typeId}
+			</if>
+	       <if test="actionId != null and actionId !=''">
+				AND ACTION_ID = #{actionId}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="RestypeAction_findCountByWhere" resultType="long">
+        SELECT count(*) FROM T_P_SHIRO_RESTYPE_ACTION 
+		<include refid="RestypeAction_findPage_where"/>    
+    </select>
+    
+   
+    <select id="RestypeAction_findListByWhere" resultMap="RestypeAction">
+    	SELECT T.TYPE_ID,T.ACTION_ID,A.ACTION_NAME
+	    FROM T_P_SHIRO_RESTYPE_ACTION T  JOIN T_P_SHIRO_ACTION A ON A.ACTION_ID = T.ACTION_ID
+		<include refid="RestypeAction_findPage_where"/>
+    </select>
+
+	<select id="findRestypeActionListByTypeId" resultMap="RestypeAction" parameterType="int">
+	   	SELECT <include refid="RestypeAction_columns" />  FROM T_P_SHIRO_RESTYPE_ACTION   WHERE  TYPE_ID = #{typeId}
+	</select>
+	
+	<delete id="deleteByActionId">
+        DELETE FROM T_P_SHIRO_RESTYPE_ACTION WHERE
+        ACTION_ID = #{actionId}
+    </delete>
+</mapper>
+

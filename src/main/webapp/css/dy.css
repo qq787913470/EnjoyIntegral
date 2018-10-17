@@ -1,0 +1,91 @@
+@CHARSET "UTF-8";
+
+.dy {
+	position: relative;
+	z-index: 10;
+	width: 550px;
+	font-size: 14px;
+}
+
+.dy .top {
+	margin-left: -20px;
+	padding: 0;
+	height: 80px;
+}
+
+.dy .top img {
+	width: 280px;
+	height: 80px;
+}
+
+.dy h1 {
+	text-align: center;
+	font-size: 24px;
+	margin-bottom: 20px;
+	margin-top: 20px;
+}
+
+.dy h3 {
+	font-size: 14px;
+	margin-bottom: 20px;
+	margin-top: 0;
+}
+
+.dy table, tr {
+	width: 550px;
+}
+
+.dy td {
+	text-align: center;
+	width: auto;
+	font-size: 14px;
+}
+
+.dy p {
+	margin: 0;
+	margin-bottom: 40px;
+}
+
+.dy .bit {
+	margin-bottom: 10px;
+	margin-top: 20px;
+}
+
+.dy .line {
+	border-bottom: 1px #000 dashed;
+	margin-bottom: 20px;
+}
+
+.dy .tab {
+	border-collapse: collapse;
+	margin-top: 15px;
+}
+
+.dy .tab tr:first-child {
+	background-color: #E5E5E5;
+}
+
+.dy .tab td {
+	border: 1px #333 solid;
+	text-align: center;
+	line-height: 20px;
+	height: 30px;
+}
+
+.dy .write {
+	text-align: right;
+	margin-top: 25px;
+	padding-right: 50px;
+}
+
+.dy .nothing {
+	height: 20px;
+}
+
+.dy .tfoot {
+	text-align: left;
+	width: 540px;
+	padding-bottom:20px;
+	word-wrap: break-word;
+	word-break: break-all;
+}

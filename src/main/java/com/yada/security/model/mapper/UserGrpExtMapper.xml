@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="UserGrpExt">
+
+	<resultMap id="RM_UserGrpExt" type="com.yada.security.model.UserGrpExt">
+        <result property="userGrpId" column="USER_GRP_ID"/>
+        <result property="orgId" column="ORG_ID"/>
+        <result property="runtimeLimitFlag" column="RUNTIME_LIMIT_FLAG"/>
+        <result property="ihtFlag" column="IHT_FLAG"/>
+	</resultMap>
+	
+	
+	<sql id="UserGrpExt_columns">
+	    <![CDATA[
+		T.USER_GRP_ID,T.ORG_ID,T.RUNTIME_LIMIT_FLAG,T.IHT_FLAG
+	    ]]>
+	</sql>
+
+	
+	<insert id="UserGrpExt_insert" >
+	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="key-id">
+			SELECT SEQname.nextval AS ID FROM DUAL 
+        </selectKey>
+    <![CDATA[
+        INSERT INTO T_P_SHIRO_USER_GRP_EXT (
+        	USER_GRP_ID ,
+        	ORG_ID ,
+        	RUNTIME_LIMIT_FLAG ,
+        	IHT_FLAG 
+        ) VALUES (
+        	#{userGrpId} ,
+        	#{orgId} ,
+        	#{runtimeLimitFlag} ,
+        	#{ihtFlag} 
+        )
+    ]]>
+		
+	</insert>
+    
+	<update id="UserGrpExt_update" >
+    <![CDATA[
+        UPDATE T_P_SHIRO_USER_GRP_EXT SET
+	        ORG_ID = #{orgId} ,
+	        RUNTIME_LIMIT_FLAG = #{runtimeLimitFlag} ,
+	        IHT_FLAG = #{ihtFlag} 
+        WHERE 
+	        USER_GRP_ID = #{userGrpId} 
+    ]]>
+	</update>
+
+    <delete id="UserGrpExt_delete">
+    <![CDATA[
+        DELETE FROM T_P_SHIRO_USER_GRP_EXT WHERE
+        USER_GRP_ID = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="UserGrpExt_getById" resultMap="RM_UserGrpExt">
+		SELECT <include refid="UserGrpExt_columns" />
+	    <![CDATA[
+		    FROM T_P_SHIRO_USER_GRP_EXT T
+	        WHERE 
+		        T.USER_GRP_ID = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="UserGrpExt_findPage_where">
+		
+		<where>	      				
+	       <if test="userGrpId != null and userGrpId !=''">
+				AND T.USER_GRP_ID = #{userGrpId}
+			</if>
+
+			<if test="orgIdUser != null and orgIdUser != ''">
+				AND T.ORG_ID in
+				<foreach item="orgIdUser" index="index" collection="orgIdUser" open="("
+						 separator="," close=")">
+					#{orgIdUser}
+				</foreach>
+			</if>
+	       <!--<if test="orgId != null and orgId !=''">
+				AND T.ORG_ID = #{orgId}
+			</if>-->
+	       <if test="runtimeLimitFlag != null and runtimeLimitFlag !=''">
+				AND T.RUNTIME_LIMIT_FLAG = #{runtimeLimitFlag}
+			</if>
+	       <if test="ihtFlag != null and ihtFlag !=''">
+				AND T.IHT_FLAG = #{ihtFlag}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="UserGrpExt_findCountByWhere" resultType="int">
+        SELECT count(*) FROM T_P_SHIRO_USER_GRP_EXT T
+		<include refid="UserGrpExt_findPage_where"/>    
+    </select>
+    
+   
+    <select id="UserGrpExt_findListByWhere" resultMap="RM_UserGrpExt">
+    	SELECT <include refid="UserGrpExt_columns" />
+	    FROM T_P_SHIRO_USER_GRP_EXT T
+		<include refid="UserGrpExt_findPage_where"/>
+		
+    </select>
+
+	
+</mapper>
+

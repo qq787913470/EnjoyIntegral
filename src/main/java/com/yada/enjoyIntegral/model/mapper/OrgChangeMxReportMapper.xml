@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.yada.enjoyIntegral.dao.OrgChangeMxReportDao">
+
+	<resultMap id="OrgChangeMxReport" type="com.yada.enjoyIntegral.model.OrgChangeMxReport">
+		<result property="merNo" column="MER_NO" />
+		<result property="merName" column="MER_NAME" />
+		<result property="integralValue" column="INTEGRAL_VALUE" />
+		<result property="orgName" column="ORG_NAME" />
+		<result property="orgId" column="ORG_ID" />
+		<result property="pOrgId" column="P_ORG_ID" />
+		<result property="pOrgName" column="P_ORG_NAME" />
+		<result property="customerName" column="CUSTOMER_NAME" />
+		<result property="customerPhone" column="CUSTOMER_PHONE" />
+		<result property="customerCardNo" column="CUSTOMER_CARD_NO" />
+		<result property="certificateNo" column="CERTIFICATE_NO" />
+		<result property="terminalNo" column="TERMINAL_NO" />
+		<result property="traceNo" column="TRACE_NO" />
+		<result property="tranState" column="TRAN_STATE" />
+		<result property="tranDate" column="TRAN_DATE" />
+		<result property="tranTime" column="TRAN_TIME" />
+		<result property="userId" column="USER_ID" />
+		<result property="userName" column="USER_NAME" />
+		<result property="state" column="state" />
+
+	</resultMap>
+
+	<sql id="OrgChangeMxReport_columns">
+		T.MER_NO,
+		T.MER_NAME,
+		T.INTEGRAL_VALUE,
+		T.ORG_NAME,
+		T.ORG_ID,
+		T.P_ORG_ID,
+		T.P_ORG_NAME,
+		T.CUSTOMER_NAME,
+		T.CUSTOMER_PHONE,
+		T.CUSTOMER_CARD_NO,
+		T.CERTIFICATE_NO,
+		T.TERMINAL_NO,
+		T.TRACE_NO,
+		T.TRAN_STATE,
+		T.TRAN_DATE,
+		T.TRAN_TIME,
+		T.USER_ID,
+		T.USER_NAME,
+		t.state
+	</sql>
+
+	<sql id="OrgChangeMxReport_findPage_where">
+		<where>
+
+			<if test="customerName != null and customerName !=''">
+				AND T.CUSTOMER_NAME like '%'||#{customerName}||'%'
+			</if>
+			<if test="customerPhone != null and customerPhone !=''">
+				AND T.CUSTOMER_PHONE like '%'||#{customerPhone}||'%'
+			</if>
+			<if test="merNo != null and merNo !=''">
+				AND T.MER_NO = #{merNo}
+			</if>
+
+			<if test="merName != null and merName !=''">
+				AND T.MER_NAME like '%'||#{merName}||'%'
+			</if>
+			<if test="endDate != null and endDate !=''">
+				AND T.TRAN_DATE &lt;= #{endDate}
+			</if>
+			<if test="startDate != null and startDate !=''">
+				AND T.TRAN_DATE &gt;= #{startDate}
+			</if>
+			<if test="merName != null and merName !=''">
+				AND T.MER_NAME like '%'||#{merName}||'%'
+			</if>
+
+			<if test="orgIdUser != null and orgIdUser != ''">
+				AND T.ORG_ID in
+				<foreach item="orgIdUser" index="index" collection="orgIdUser" open="("
+						 separator="," close=")">
+					#{orgIdUser}
+				</foreach>
+			</if>
+			<if test="integralValuestart != null and integralValuestart !=''">
+				AND T.INTEGRAL_VALUE &gt;= TO_NUMBER(#{integralValuestart})
+			</if>
+			<if test="integralValueend != null and integralValueend !=''">
+				AND T.INTEGRAL_VALUE &lt;= TO_NUMBER(#{integralValueend})
+			</if>
+			and t.tran_state='00'
+			and t.state = '00'
+		</where>
+	</sql>
+
+	<select id="OrgChangeMxReport_findCountByWhere" resultType="int">
+		SELECT count(*) FROM (select
+		t.mer_no,
+		t.mer_name,
+		t.INTEGRAL_VALUE,
+		t.ORG_NAME,
+		t.ORG_ID,
+		t.P_ORG_ID,
+		t.p_org_name,
+		t.CUSTOMER_NAME,
+		t.CUSTOMER_PHONE,
+		t.customer_card_no,
+		t.CERTIFICATE_NO,
+		t.TERMINAL_NO,
+		t.TRACE_NO,
+		t.TRAN_STATE,
+		t.tran_date,
+		t.tran_time,
+		t.USER_ID,
+		t.user_name,
+		t.state
+		from TRAN_LIST t )T
+		<include refid="OrgChangeMxReport_findPage_where" /> 
+	</select>
+
+
+	<select id="OrgChangeMxReport_findListByWhere" resultMap="OrgChangeMxReport">
+		SELECT
+		<include refid="OrgChangeMxReport_columns" />
+		FROM (select
+		t.mer_no,
+		t.mer_name,
+		t.INTEGRAL_VALUE,
+		t.ORG_NAME,
+		t.ORG_ID,
+		t.P_ORG_ID,
+		t.p_org_name,
+		t.CUSTOMER_NAME,
+		t.CUSTOMER_PHONE,
+		t.customer_card_no,
+		t.CERTIFICATE_NO,
+		t.TERMINAL_NO,
+		t.TRACE_NO,
+		t.TRAN_STATE,
+		t.tran_date,
+		t.tran_time,
+		t.USER_ID,
+		t.user_name,
+		t.state
+		from TRAN_LIST t  ) T
+		<include refid="OrgChangeMxReport_findPage_where" />
+		ORDER BY (T.tran_date+T.tran_time) DESC
+	</select>
+</mapper>
+

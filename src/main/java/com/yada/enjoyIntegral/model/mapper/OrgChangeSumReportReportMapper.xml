@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.yada.enjoyIntegral.dao.OrgChangeSumReportDao">
+
+	<resultMap id="OrgChangeSumReport" type="com.yada.enjoyIntegral.model.OrgChangeSumReport">
+		<result property="tranDate" column="TRAN_DATE" />
+		<result property="merNo" column="MER_NO" />
+		<result property="merName" column="MER_NAME" />
+		<result property="allAmt" column="ALLAMT" />
+		<result property="allCount" column="ALLCOUNT" />
+		<result property="orgName" column="ORG_NAME" />
+		<result property="orgId" column="ORG_ID" />
+		<result property="pOrgId" column="P_ORG_ID" />
+		<result property="pOrgName" column="P_ORG_NAME" />
+	</resultMap>
+
+	<sql id="OrgChangeSumReport_columns">
+		T.TRAN_DATE,
+		T.MER_NO,
+		T.MER_NAME,
+		sum(t.INTEGRAL_VALUE) as ALLAMT,
+		count(0) as ALLCOUNT,
+		T.ORG_NAME,
+		T.ORG_ID,
+		T.P_ORG_ID,
+		T.P_ORG_NAME
+	</sql>
+
+	<sql id="OrgChangeSumReport_findPage_where">
+		<where>
+
+			<if test="merNo != null and merNo !=''">
+				AND T.MER_NO = #{merNo}
+			</if>
+			<if test="endDate != null and endDate !=''">
+				AND T.TRAN_DATE &lt;= #{endDate}
+			</if>
+			<if test="startDate != null and startDate !=''">
+				AND T.TRAN_DATE &gt;= #{startDate}
+			</if>
+
+			<if test="merName != null and merName !=''">
+				AND T.MER_NAME like '%'||#{merName}||'%'
+			</if>
+
+			<if test="orgIdUser != null and orgIdUser != ''">
+				AND T.ORG_ID in
+				<foreach item="orgIdUser" index="index" collection="orgIdUser" open="("
+						 separator="," close=")">
+					#{orgIdUser}
+				</foreach>
+			</if>
+			<if test="integralValuestart != null and integralValuestart !=''">
+				AND T.INTEGRAL_VALUE &gt;= TO_NUMBER(#{integralValuestart})
+			</if>
+			<if test="integralValueend != null and integralValueend !=''">
+				AND T.INTEGRAL_VALUE &lt;= TO_NUMBER(#{integralValueend})
+			</if>
+			and t.tran_state='00'
+			and t.state = '00'
+		</where>
+	</sql>
+
+	<select id="OrgChangeSumReport_findCountByWhere" resultType="int">
+		SELECT count(*) FROM (select T.TRAN_DATE,
+		T.MER_NO,
+		T.MER_NAME,
+		sum(t.INTEGRAL_VALUE) as ALLAMT,
+		count(0) as ALLCOUNT,
+		T.ORG_NAME,
+		T.ORG_ID,
+		T.P_ORG_ID,
+		T.P_ORG_NAME from
+		TRAN_LIST T
+		<include refid="OrgChangeSumReport_findPage_where"/>
+		group by t.tran_date,t.mer_no,t.mer_name,t.ORG_NAME,t.ORG_ID,t.P_ORG_ID,t.P_ORG_NAME
+		)
+	</select>
+
+	<select id="OrgChangeSumReport_findListByWhere" resultMap="OrgChangeSumReport">
+		SELECT
+		<include refid="OrgChangeSumReport_columns" />
+		FROM  TRAN_LIST T
+		<include refid="OrgChangeSumReport_findPage_where" />
+		group by t.tran_date,t.mer_no,t.mer_name,t.ORG_NAME,t.ORG_ID,t.P_ORG_ID,t.P_ORG_NAME
+		ORDER BY t.tran_date
+	</select>
+</mapper>
+

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- shiro -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+	<bean id="shiroFilter" class="com.yada.security.shiro.JdbcShiroFilterFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 设置为true，才能用sql去查询并加载过滤地址链 -->
+		<property name="jdbcModelFlag" value="true" />
+		<property name="queryUrlFilter" value="select substr(res.action_name,3) , r.role_name , p.permit_order from T_P_SHIRO_role r left join T_P_SHIRO_role_permit rp on rp.role_id = r.role_id left join T_P_SHIRO_permit p on p.permit_id = rp.permit_id left join T_P_SHIRO_res res on res.menu_res_id = p.menu_res_id where res.action_name is not null and res.type_id = '2' order by p.permit_order"/>
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/login/validate.do" />
+		<property name="successUrl" value="/login/frame.do" />
+		<property name="unauthorizedUrl" value="/login/unauthorized.do" />
+		<!-- 配置过滤地址链 -->
+		<property name="filterChainDefinitions">
+			<value>
+				#anon是匿名过滤器，用户不必登录即可访问的地址，必须放在其他过滤器前面
+				#logout是登出过滤器，当地址被logout过滤器捕获时则会执行登出操作
+				/login/logout.do = logout
+				/login/validate.do = anon
+				/** = authc
+				#anon匿名过滤器，登录方法为大家公用。不可再给该URL配置其他过滤器。
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 自定义的登录过滤器，可以返回登录失败信息 -->
+	<bean id="needLogin" class="com.yada.security.filter.LoginFilter" />
+	<bean id="myRoles" class="com.yada.security.filter.MyRolesAuthorizationFilter" />
+
+	<!-- shiro安全核心 -->
+	<bean id="securityManager" class="com.yada.security.shiro.ForceLoginWebSecurityManager">
+		<!-- 配置验证用户的realm，当有多个验证realm时有属性realms -->
+		<property name="realm" ref="sampleRealm" />
+		<!-- 配置缓存管理 -->
+		<property name="cacheManager" ref="cacheManager" />
+
+		<property name="openForceLogin" value="false" />
+		<property name="rememberMeManager" ref="cookieRememberMeManager" />
+	</bean>
+
+	<bean id="cookieRememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+		<property name="cookie" ref="simpleCookie"/>
+	</bean>
+	<bean id="simpleCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<property name="name" value="ourRememberMe"/>
+		<property name="httpOnly" value="true"/>
+		<property name="maxAge" value="86400"/>
+	</bean>
+
+	<!-- EhCacheManager是shiro官方实现并推荐的缓存管理 -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager" />
+
+	<!-- 通过数据库方式获得用户和权限 -->
+	<bean id="sampleRealm" class="com.yada.security.shiro.MyRealm">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 验证用户登录的sql -->
+		<property name="authenticationQuery"
+			value="select t.pwd from T_P_SHIRO_user t where t.login_name = ?" />
+		<!-- 查询用户拥有的角色的SQL -->
+		<property name="userRolesQuery"
+			value="SELECT c.role_name FROM T_P_SHIRO_user T LEFT JOIN T_P_SHIRO_user_grp A ON t.user_grp_id = a.user_grp_id LEFT JOIN T_P_SHIRO_user_grp_role_idx B ON b.user_grp_id = a.user_grp_id LEFT JOIN T_P_SHIRO_ROLE C ON c.role_id = b.role_id WHERE t.login_name = ?" />
+		<!-- 查询用户拥有的权限资源的sql -->
+		<property name="permissionsQuery"
+			value="SELECT c.action_name || d.action_value FROM T_P_SHIRO_role T LEFT JOIN T_P_SHIRO_role_permit A ON t.role_id = a.role_id LEFT JOIN T_P_SHIRO_permit B ON b.permit_id = a.permit_id  LEFT JOIN T_P_SHIRO_RES c on c.menu_res_id = b.menu_res_id left join T_P_SHIRO_action d on d.action_id = b.action_id where c.action_name is not null and d.action_value is not null and t.role_name = ?" />
+		<!-- 是否查询用户权限资源，false时属性permissionsQuery无效 -->
+		<property name="permissionsLookupEnabled" value="true" />
+		<!-- 密码是否有盐值 -->
+		<property name="saltStyle" value="NO_SALT" />
+		<!-- 密码验证匹配规则 -->
+		<property name="credentialsMatcher" ref="hashedCredentialsMatcher" />
+	</bean>
+
+	<!-- 密码匹配规则 -->
+	<bean id="hashedCredentialsMatcher"
+		class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+		<!-- 密码加密类型 -->
+		<property name="hashAlgorithmName" value="MD5" />
+		<!-- 当为true时使用hex编码，false时使用base64编码 -->
+		<property name="storedCredentialsHexEncoded" value="true" />
+		<!-- 加密迭代次数 -->
+		<property name="hashIterations" value="1" />
+	</bean>
+
+</beans>

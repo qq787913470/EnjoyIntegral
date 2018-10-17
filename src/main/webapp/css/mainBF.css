@@ -1,0 +1,91 @@
+@charset "utf-8";
+/* CSS Document */
+div{
+	padding:0;
+	margin:0;
+}
+body{
+	width:100%;
+	background-color:#F2F2F2;
+	margin:auto;
+}
+.head{
+	width:70%;
+	margin:auto;
+	margin-top:90px;
+}
+	.head span{
+		font-family:"黑体";
+		color:#333;
+		margin-left:20px;
+		position:relative;
+		top:-10px;
+		font-size:24px;
+		font-weight:700;
+	}
+.body{
+	width:1198px;
+	height:312px;
+	margin:auto;
+	margin-top:2px;
+	background:url(../images/bg.jpg);
+	background-repeat:no-repeat;
+}
+	.body .login{
+		margin:auto;
+		width:395px;
+		padding-left:15px;
+		padding-top:60px;
+		}
+			.body .login .h3{	
+				font-family:"黑体";
+				color:#fff;
+				font-size:24px;
+				font-weight:700;
+				margin:0;
+				padding:0;
+				margin-left:63px;
+				margin-bottom:5px;
+			}
+			.body .login form{
+				margin:0;
+				padding:0;
+			}
+			.body .login input{
+				line-height:28px;
+				width:375px;
+				height:36px;
+				border:1px #CCCCCC solid;
+				color:#333;
+				font-size:14px;
+				font-weight:normal;
+				margin-bottom:5px;
+			}
+			.body .login button{
+				width:378px;
+				height:36px;
+				background-color:#E52828;
+				border:1px #E52828 solid;
+				color:#FFF;
+				font-weight:700;
+				font-size:16px;
+				border:none;
+				margin-top:5px;
+				margin-bottom:15px;
+			}
+			.body .login #mess{
+				margin-bottom:5px;
+				height:14px;
+				font-weight:700;
+				font-size:14px;
+				color:#f00;
+				display:block;
+			}
+	.line{
+		width:1198px;
+		margin:auto;
+		height:10px;
+		background-color:#E52828;
+		margin-top:2px;
+	}
+					

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	    				http://www.springframework.org/schema/beans/spring-beans.xsd
+	         			http://www.springframework.org/schema/aop
+	              		http://www.springframework.org/schema/aop/spring-aop.xsd
+	              		http://www.springframework.org/schema/tx      
+	              		http://www.springframework.org/schema/tx/spring-tx.xsd ">
+
+	<!-- 以AspectJ方式 定义 AOP -->
+	<aop:config proxy-target-class="false">
+		<aop:advisor pointcut="execution(* com.yada.*.base.BaseService.*(..))"
+			advice-ref="txAdviceSecurity" />
+		<aop:advisor pointcut="execution(* com.yada.*.service.*Manager.*(..))"
+			advice-ref="txAdviceSecurity" />
+	</aop:config>
+	<!-- mybatis/jdbc的事务 -->
+	<tx:advice id="txAdviceSecurity" transaction-manager="transactionManagerDataSource">
+		<tx:attributes>
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="query*" read-only="true" />
+			<tx:method name="*" read-only="false" rollback-for="java.lang.Exception" />
+		</tx:attributes>
+	</tx:advice>
+	<bean id="transactionManagerDataSource"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+</beans>

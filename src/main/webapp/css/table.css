@@ -1,0 +1,129 @@
+/* grid */
+.grid {
+	border: 1px none;
+	border-collapse: collapse;
+	width: 98%;
+	background: #dad295;
+	margin-top:3px;
+	margin-left:10px;
+	margin-right:10px;
+}
+
+.grid tr{
+	background-color:#FFFFFF;
+	padding-left: 5px;
+	padding-right: 5px;
+	COLOR: #7F7F7F;
+	height: 22px;
+	text-align:left;
+	FONT-SIZE: 12px;
+	
+}
+/* 头部标题样式 */
+.lgridtr33{
+	background: url(../images/listmate_thbg.gif);
+	padding-left: 5px;
+	padding-right: 5px;
+	COLOR: #02449A;
+	font-weight: bold;
+	height: 25px;
+	text-align:left;
+	FONT-SIZE: 12px;
+	
+}
+/* LIST查询 */
+.lgridlist{
+	background: url(../images/biaonei_bg.jpg);
+	padding-left: 5px;
+	padding-right: 5px;
+	COLOR: #949236;
+	font-weight: bold;
+	height: 25px;
+	text-align:center;
+	FONT-SIZE: 12px;
+	
+}
+/* 左扁标题样式 */
+.lgridbiaoti{
+	background: url(../images/biaonei_bg.jpg);
+	padding-left: 5px;
+	padding-right: 5px;
+	background-color: #f3f3cd;
+	font-weight: bold;
+	text-align:right;
+	FONT-SIZE: 12px;
+	width: 150px;
+	
+}
+.grid thead th {
+	background-image: url(images/form_bg.jpg) repeat-x;
+	font-size: 10pt;
+	padding: 3px;
+	border: 1px lightgrey solid;
+	color: #f3f3cd !important;
+	
+}
+.grid th{
+	background-color: #f3f3cd;
+	border: 1px lightgrey dotted;
+	font-weight: normal;	
+}
+.grid td {
+	font-size: 9pt;
+	padding: 2px;
+	border: 1px lightgrey dotted;
+	
+}
+
+.grid tr.altColor td {
+	background-color: #f3f3cd;
+}
+
+.grid tr.normalColor td {
+	background-color: white;
+}
+
+.grid th a {
+	text-decoration: none;
+	font-size: 10pt;
+	font-weight: bold;
+	padding: 3px;
+	color: gray;
+}
+
+.grid th a:link {
+	text-decoration: none;
+	font-size: 10pt;
+	padding: 3px;
+	color: gray;
+}
+
+.grid th a:visited {
+	text-decoration: none;
+	font-size: 10pt;
+	padding: 3px;
+	color: gray;
+}
+
+.grid th a:hover {
+	text-decoration: none;
+	color: red;
+	background-color: yellow;
+}
+.sizhou
+{
+	background-color: #E3E4FA;
+	cursor: pointer;
+}
+.grid tr.hilite td {
+	background-color: #E3E4FA;
+	cursor: pointer;
+}
+
+.trover {
+	background-color: #BFFFBF;
+}
+
+.trout {
+	background-color: #FFFFFF;
+}

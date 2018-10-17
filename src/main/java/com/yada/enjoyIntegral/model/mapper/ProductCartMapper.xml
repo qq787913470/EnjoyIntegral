@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.yada.enjoyIntegral.dao.ProductCartDao">
+
+	<resultMap id="ProductCart" type="com.yada.enjoyIntegral.model.ProductCart">
+		<result property="productCartId" column="PRODUCT_CART_ID" />
+		<result property="certificateType" column="CERTIFICATE_TYPE" />
+		<result property="certificateNo" column="CERTIFICATE_NO" />
+		<result property="productId" column="PRODUCT_ID" />
+		<result property="count" column="COUNT" />
+		<result property="integralValue" column="INTEGRAL_VALUE" />
+		<result property="productName" column="PRODUCT_NAME" />
+		<result property="isPrint" column="IS_PRINT" />
+		<result property="price" column="PRICE" />
+		<result property="activityName" column="ACTIVITY_NAME" />
+		<result property="activityId" column="ACTIVITY_ID" />
+		<result property="productRemark" column="PRODUCT_REMARK" />
+		<result property="activityRemark" column="ACTIVITY_REMARK" />
+		<result property="merNo" column="MER_NO" />
+		<result property="merName" column="MER_NAME" />
+		<result property="productDetail" column="PRODUCT_DETAIL" />
+		<result property="activityDetail" column="ACTIVITY_DETAIL" />
+		<result property="productType" column="product_type"/>
+	</resultMap>
+
+	<sql id="ProductCart_columns">
+		T.PRODUCT_CART_ID ,
+		T.CERTIFICATE_TYPE ,
+		T.CERTIFICATE_NO ,
+		T.PRODUCT_ID ,
+		T.COUNT ,
+		T.INTEGRAL_VALUE ,
+		T.PRODUCT_NAME ,
+		T.IS_PRINT ,
+		T.PRICE ,
+		T.ACTIVITY_NAME ,
+		T.ACTIVITY_ID ,
+		T.PRODUCT_REMARK ,
+		T.ACTIVITY_REMARK ,
+		T.MER_NO ,
+		T.MER_NAME ,
+		T.PRODUCT_DETAIL ,
+		T.ACTIVITY_DETAIL ,
+		T.PRODUCT_TYPE
+	</sql>
+
+	<insert id="ProductCart_insert" parameterType="com.yada.enjoyIntegral.model.ProductCart">
+		<selectKey resultType="java.lang.String" order="BEFORE"
+			keyProperty="id">
+			SELECT T_SEQ_PRODUCT_CART.nextval AS ID FROM DUAL
+		</selectKey>
+    <![CDATA[
+		insert into PRODUCT_CART
+		 (PRODUCT_CART_ID,CERTIFICATE_TYPE,CERTIFICATE_NO,PRODUCT_ID,COUNT,INTEGRAL_VALUE,PRODUCT_NAME,IS_PRINT,PRICE,ACTIVITY_NAME,ACTIVITY_ID,PRODUCT_REMARK,ACTIVITY_REMARK,MER_NO,MER_NAME,PRODUCT_DETAIL,ACTIVITY_DETAIL,PRODUCT_TYPE)
+		   values 
+		 (#{productCartId},#{certificateType},#{certificateNo},#{productId},#{count},#{integralValue},#{productName},#{isPrint},#{price},#{activityName},#{activityId},#{productRemark,jdbcType=VARCHAR},#{activityRemark,jdbcType=VARCHAR},#{merNo},#{merName},#{productDetail,jdbcType=BLOB},#{activityDetail,jdbcType=BLOB},#{productType})
+		]]>
+	</insert>
+
+	<update id="ProductCart_update" parameterType="com.yada.enjoyIntegral.model.ProductCart">
+		update PRODUCT_CART set 
+			   CERTIFICATE_TYPE=#{certificateType},
+			   CERTIFICATE_NO=#{certificateNo},
+			   PRODUCT_ID=#{productId},
+			   COUNT=#{count},
+			   INTEGRAL_VALUE=#{integralValue},
+			   PRODUCT_NAME=#{productName},
+			   IS_PRINT=#{isPrint},
+			   PRICE=#{price},
+			   ACTIVITY_NAME=#{activityName},
+			   ACTIVITY_ID=#{activityId},
+			   PRODUCT_REMARK=#{productRemark},
+			   ACTIVITY_REMARK=#{activityRemark},
+			   MER_NO=#{merNo},
+			   MER_NAME=#{merName},
+			   PRODUCT_DETAIL=#{productDetail},
+			   ACTIVITY_DETAIL=#{activityDetail},
+			   PRODUCT_TYPE = #{productType}
+		where PRODUCT_CART_ID=#{productCartId}
+	</update>
+
+	<delete id="ProductCart_delete">
+		delete from PRODUCT_CART where PRODUCT_CART_ID=#{productCartId}
+	</delete>
+
+	<select id="ProductCart_getById" resultMap="ProductCart">
+		SELECT
+		<include refid="ProductCart_columns" />
+		FROM PRODUCT_CART T
+		WHERE T.PRODUCT_CART_ID = #{productCartId}
+	</select>
+	
+	<select id="ProductCart_getProductsByProductCartId" resultMap="ProductCart">
+		SELECT
+		<include refid="ProductCart_columns" />
+		FROM PRODUCT_CART T
+		WHERE T.PRODUCT_CART_ID = #{productCartId}
+	</select>
+	
+	<select id="ProductCart_getProductsByCustomerNo" resultMap="ProductCart">
+		SELECT
+		<include refid="ProductCart_columns" />
+		FROM PRODUCT_CART T
+		WHERE T.CUSTOMER_NO = #{customerNoHidden} AND T.IS_PRINT='0'
+	</select>
+
+	<sql id="ProductCart_findPage_where">
+		<where>
+			<if test="productCartId != null and productCartId !=''">
+				AND T.PRODUCT_CART_ID = #{productCartId}
+			</if>
+			<if test="certificateType != null and certificateType !=''">
+				AND T.CERTIFICATE_TYPE = #{certificateType}
+			</if>
+			<if test="certificateNo != null and certificateNo !=''">
+				AND T.CERTIFICATE_NO = #{certificateNo}
+			</if>
+			<if test="productId != null and productId !=''">
+				AND T.PRODUCT_ID = #{productId}
+			</if>
+			<if test="count != null and count !=''">
+				AND T.COUNT = #{count}
+			</if>
+			<if test="integralValue != null and integralValue !=''">
+				AND T.INTEGRAL_VALUE = #{integralValue}
+			</if>
+			<if test="productName != null and productName !=''">
+				AND T.PRODUCT_NAME = #{productName}
+			</if>
+			<if test="isPrint != null and isPrint !=''">
+				AND T.IS_PRINT = #{isPrint}
+			</if>
+			<if test="price != null and price !=''">
+				AND T.PRICE = #{price}
+			</if>
+			<if test="activityName != null and activityName !=''">
+				AND T.ACTIVITY_NAME = #{activityName}
+			</if>
+			<if test="activityId != null and activityId !=''">
+				AND T.ACTIVITY_ID = #{activityId}
+			</if>
+			<if test="productRemark != null and productRemark !=''">
+				AND T.PRODUCT_REMARK = #{productRemark}
+			</if>
+			<if test="activityRemark != null and activityRemark !=''">
+				AND T.ACTIVITY_REMARK = #{activityRemark}
+			</if>
+			<if test="merNo != null and merNo !=''">
+				AND T.MER_NO = #{merNo}
+			</if>
+			<if test="merName != null and merName !=''">
+				AND T.MER_NAME = #{merName}
+			</if>
+			<if test="productDetail != null and productDetail !=''">
+				AND T.PRODUCT_DETAIL = #{productDetail}
+			</if>
+			<if test="activityDetail != null and activityDetail !=''">
+				AND T.ACTIVITY_DETAIL = #{activityDetail}
+			</if>
+		</where>
+	</sql>
+
+	<select id="ProductCart_findCountByWhere" resultType="int">
+		SELECT count(*) FROM PRODUCT_CART T
+		<include refid="ProductCart_findPage_where" />
+	</select>
+
+
+	<select id="ProductCart_findListByWhere" resultMap="ProductCart">
+		SELECT
+		<include refid="ProductCart_columns" />
+		FROM PRODUCT_CART T
+		<include refid="ProductCart_findPage_where" />
+		ORDER BY T.PRODUCT_CART_ID DESC
+	</select>
+</mapper>

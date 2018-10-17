@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.ResDao">
+
+	<resultMap id="Res" type="com.yada.security.model.Res">
+        <result property="menuResId" column="MENU_RES_ID"/>
+        <result property="menuName" column="MENU_NAME"/>
+        <result property="actionName" column="ACTION_NAME"/>
+        <result property="pmenuResId" column="P_MENU_RES_ID"/>
+        <result property="pmenuResName" column="P_MENU_RES_NAME"/>
+        <result property="typeId" column="TYPE_ID"/>
+        <result property="typeName" column="TYPE_NAME"/>
+        <result property="orderId" column="ORDER_ID"/>
+        <result property="dsc" column="DSC"/>
+        <result property="isExecution" column="IS_EXECUTION"/>
+        <result property="ordered" column="ORDERED"/>
+	</resultMap>
+	<resultMap type="com.yada.security.model.Res"  id="childrenRes" extends="Res">
+	   <collection property="children" ofType="com.yada.security.model.Res">
+	        <result property="menuResId" column="MENU_RES_ID"/>
+	        <result property="menuName" column="MENU_NAME"/>
+	        <result property="actionName" column="ACTION_NAME"/>
+	        <result property="pmenuResId" column="P_MENU_RES_ID"/>
+	        <result property="typeId" column="TYPE_ID"/>
+	        <result property="orderId" column="ORDER_ID"/>
+	        <result property="dsc" column="DSC"/>
+	   </collection>
+	</resultMap>
+	  <!-- 一对多   多的标识 -->
+	<resultMap id="permitsRes" type="com.yada.security.model.Res" extends="Res">
+		<collection property="permits"   ofType="com.yada.security.model.Permit"   >
+				    <id property="permitId" column="PERMIT_ID" />
+				    <result property="menuResId" column="MENU_RES_ID"/>
+				    <result property="actionId" column="ACTION_ID"/>
+				    <result property="actionValue" column="ACTION_VALUE"/>
+				    <result property="typeId" column="TYPE_ID"/>
+				    <result property="permitOrder" column="PERMIT_ORDER"/>
+				    <result property="checked" column="CHECKED"/>
+				    <result property="actionName" column="actionName"/>
+		</collection>
+	</resultMap>
+	 <!-- 一对一   一的标识 -->
+	<resultMap  id="resResType" type="com.yada.security.model.Res" extends="Res">
+		<association property="resType"   javaType="com.yada.security.model.ResType"   >
+				    <id property="typeId" column="TYPE_ID" />
+				    <result property="typeName" column="TYPE_NAME"/>
+				    <result property="remark" column="REMARK"/>
+		</association>
+	</resultMap>
+	<sql id="Res_columns">
+		t.MENU_RES_ID,t.MENU_NAME,t.ACTION_NAME,t.P_MENU_RES_ID,t.TYPE_ID,p.TYPE_NAME,t1.menu_name as P_MENU_RES_NAME, t.ORDER_ID,t.DSC
+	</sql>
+
+	<insert id="Res_insert"  keyProperty="menuResId" parameterType="com.yada.security.model.Res">
+	   <selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="menuResId">
+			SELECT T_SEQ_P_SHIRO_RES.nextval AS ID FROM DUAL 
+        </selectKey>
+        INSERT INTO T_P_SHIRO_RES (
+        	MENU_RES_ID ,
+        	MENU_NAME ,
+        	ACTION_NAME ,
+        	P_MENU_RES_ID ,
+        	TYPE_ID ,
+        	ORDER_ID ,
+        	DSC 
+        ) VALUES (
+        	#{menuResId} ,
+        	#{menuName,jdbcType=VARCHAR} ,
+        	#{actionName,jdbcType=VARCHAR} ,
+        	#{pmenuResId,jdbcType=VARCHAR} ,
+        	#{typeId,jdbcType=VARCHAR} ,
+        	#{orderId,jdbcType=VARCHAR} ,
+        	#{dsc,jdbcType=VARCHAR} 
+        )
+	</insert>
+	
+	<insert id="Res_insertWithPK" parameterType="com.yada.security.model.Res">
+        INSERT INTO T_P_SHIRO_RES (
+        	MENU_RES_ID ,
+        	MENU_NAME ,
+        	ACTION_NAME ,
+        	P_MENU_RES_ID ,
+        	TYPE_ID ,
+        	ORDER_ID ,
+        	DSC 
+        ) VALUES (
+        	#{menuResId} ,
+        	#{menuName,jdbcType=VARCHAR} ,
+        	#{actionName,jdbcType=VARCHAR} ,
+        	#{pmenuResId,jdbcType=VARCHAR} ,
+        	#{typeId,jdbcType=VARCHAR} ,
+        	#{orderId,jdbcType=VARCHAR} ,
+        	#{dsc,jdbcType=VARCHAR} 
+        )
+	</insert>
+    
+	<update id="Res_update" >
+        UPDATE T_P_SHIRO_RES SET
+	        MENU_NAME = #{menuName,jdbcType=VARCHAR} ,
+	        ACTION_NAME = #{actionName,jdbcType=VARCHAR} ,
+	        P_MENU_RES_ID = #{pmenuResId,jdbcType=VARCHAR} ,
+	        TYPE_ID = #{typeId,jdbcType=VARCHAR} ,
+	        ORDER_ID = #{orderId,jdbcType=VARCHAR} ,
+	        DSC = #{dsc,jdbcType=VARCHAR} 
+        WHERE 
+	        MENU_RES_ID = #{menuResId} 
+	</update>
+	
+	<update id="updateOrderId" parameterType="java.lang.Long">
+        UPDATE T_P_SHIRO_RES SET
+	        ORDER_ID = #{orderId}
+        WHERE 
+	        MENU_RES_ID = #{menuResId} 
+	</update>
+
+    <delete id="Res_delete">
+        DELETE FROM T_P_SHIRO_RES WHERE MENU_RES_ID = #{id} 
+    </delete>
+    
+    <select id="Res_getById" resultMap="Res">
+		SELECT <include refid="Res_columns" /> FROM T_P_SHIRO_RES T 
+		LEFT JOIN T_P_SHIRO_RES_TYPE P ON P.TYPE_ID=T.TYPE_ID
+        LEFT JOIN T_P_SHIRO_RES T1 ON T1.MENU_RES_ID = T.P_MENU_RES_ID    
+        WHERE  t.MENU_RES_ID = #{id} 
+	</select>
+	
+	<sql id="Res_findPage_where">
+		<where>	      				
+	      <if test="menuResId != null and menuResId !=''">
+				AND t.MENU_RES_ID = #{menuResId}
+			</if>
+	       <if test="menuName != null and menuName !=''">
+				AND t.MENU_NAME = #{menuName} 
+			</if>
+	       <if test="actionName != null and actionName !=''">
+				AND t.ACTION_NAME = #{actionName}
+			</if>
+	       <if test="pmenuResId != null and pmenuResId !=''">
+				AND t.P_MENU_RES_ID = #{pmenuResId}
+			</if>
+	       <if test="typeId != null and typeId !=''">
+				AND t.TYPE_ID = #{typeId}
+			</if>
+	       <if test="orderId != null and orderId !=''">
+				AND t.ORDER_ID = #{orderId}
+			</if>
+	       <if test="dsc != null and dsc !=''">
+				AND t.DSC = #{dsc}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="resPermits" resultMap="permitsRes">
+    	SELECT T.*,P.PERMIT_ID, A.ACTION_NAME AS actionName, RT.TYPE_NAME,
+    		CASE WHEN T.TYPE_ID=2 AND T.P_MENU_RES_ID=0 THEN '1' ELSE '0' END ORDERED
+		FROM T_P_SHIRO_RES T 
+        LEFT JOIN T_P_SHIRO_PERMIT P ON P.MENU_RES_ID=T.MENU_RES_ID
+        LEFT JOIN T_P_SHIRO_ACTION A ON A.ACTION_ID=P.ACTION_ID
+        LEFT JOIN T_P_SHIRO_RES_TYPE RT ON RT.TYPE_ID=T.TYPE_ID
+		<include refid="Res_findPage_where"/>
+		ORDER BY A.ACTION_ORDER 
+    </select>
+		
+    <select id="Res_findCountByWhere" resultType="int">
+        SELECT count(*) 
+        FROM T_P_SHIRO_RES T LEFT JOIN T_P_SHIRO_RES_TYPE P ON P.TYPE_ID=T.TYPE_ID
+        LEFT JOIN T_P_SHIRO_RES T1 ON T1.MENU_RES_ID = T.P_MENU_RES_ID 
+        <include refid="Res_findPage_where"/>    
+    </select>
+    
+    <select id="Res_findListByWhere" resultMap="Res">
+    	SELECT <include refid="Res_columns" />  
+    	FROM T_P_SHIRO_RES T LEFT JOIN T_P_SHIRO_RES_TYPE P ON P.TYPE_ID=T.TYPE_ID  
+    	LEFT JOIN T_P_SHIRO_RES T1 ON T1.MENU_RES_ID = T.P_MENU_RES_ID
+    	<include refid="Res_findPage_where"/>
+    	ORDER BY T.ORDER_ID
+    </select>
+    <select id="getPMenuRes" resultMap="Res">
+    	 SELECT T.MENU_RES_ID,T.MENU_NAME FROM T_P_SHIRO_RES T WHERE T.ACTION_NAME IS NULL AND T.MENU_RES_ID != #{menuId}
+    </select>
+    <select id="findMenusByUserId"  resultMap="Res" parameterType="Long">
+    WITH USER_ROLE AS(
+		SELECT  DISTINCT RES.MENU_RES_ID, RES.MENU_NAME, RES.ACTION_NAME||A.ACTION_VALUE ACTION_NAME, RES.P_MENU_RES_ID, RES.TYPE_ID, RES.ORDER_ID, RES.DSC FROM T_P_SHIRO_USER U 
+		JOIN T_P_SHIRO_USER_GRP UG ON U.USER_GRP_ID=UG.USER_GRP_ID
+		JOIN T_P_SHIRO_USER_GRP_ROLE_IDX RGI ON RGI.USER_GRP_ID=UG.USER_GRP_ID
+		JOIN T_P_SHIRO_ROLE R ON R.ROLE_ID=RGI.ROLE_ID
+	   JOIN T_P_SHIRO_ROLE_PERMIT RP ON RP.ROLE_ID=R.ROLE_ID
+	   JOIN T_P_SHIRO_PERMIT P ON P.PERMIT_ID=RP.PERMIT_ID
+		JOIN T_P_SHIRO_RES RES ON RES.MENU_RES_ID=P.MENU_RES_ID
+	    JOIN T_P_SHIRO_RES_TYPE RT ON RT.TYPE_ID=RES.TYPE_ID
+	   JOIN T_P_SHIRO_ACTION A ON A.ACTION_ID=P.ACTION_ID
+	   WHERE  RT.TYPE_ID=1  AND U.USER_ID=#{userId} ORDER BY RES.ORDER_ID )
+		SELECT * FROM USER_ROLE R
+		START WITH R.P_MENU_RES_ID =0  CONNECT BY PRIOR R.MENU_RES_ID=R.P_MENU_RES_ID
+    </select>
+    <sql id="findPermitsResList_roleId">
+		<where>	      				
+	      	<if test="roleId != null and roleId !=''">
+				AND T.ROLE_ID=#{roleId}
+			</if>
+		</where>
+	</sql>
+    <sql id="findPermitsResList_where">
+		<where>	      				
+	      	<if test="resTypeId != null and resTypeId !=''">
+				AND RT.TYPE_ID=#{resTypeId}
+			</if>
+		</where>
+	</sql>
+	<sql id="findPermitsResList_menuResId">
+      	<if test="menuResId != null and menuResId !=''">
+			AND R.MENU_RES_ID=#{menuResId}
+		</if>
+	</sql>
+     <select id="findPermitsResList" resultMap="permitsRes">
+		WITH RES AS( SELECT R.*,P.PERMIT_ID,  P.ACTION_ID, P.PERMIT_ORDER ,A.ACTION_VALUE ,
+	       CASE WHEN P.PERMIT_ID IN (SELECT T.PERMIT_ID FROM T_P_SHIRO_ROLE_PERMIT T <include refid="findPermitsResList_roleId"/>) THEN 'TRUE' ELSE 'FALSE' END CHECKED,
+	       A.ACTION_NAME AS ACTIONNAME
+			FROM T_P_SHIRO_PERMIT P 
+			JOIN T_P_SHIRO_RES R ON P.MENU_RES_ID = R.MENU_RES_ID
+			JOIN T_P_SHIRO_ACTION A ON A.ACTION_ID=P.ACTION_ID
+			JOIN T_P_SHIRO_RES_TYPE RT ON RT.TYPE_ID=R.TYPE_ID
+			<include refid="findPermitsResList_where"/>	ORDER BY R.ORDER_ID ,A.ACTION_ORDER  
+	    )	 
+	    SELECT * FROM RES R
+			CONNECT BY PRIOR R.MENU_RES_ID=R.P_MENU_RES_ID AND PRIOR R.ACTION_ID = R.ACTION_ID
+			START WITH R.P_MENU_RES_ID =#{pmenuResId} <include refid="findPermitsResList_menuResId"/> 
+			ORDER SIBLINGS BY R.ACTION_VALUE
+    </select>
+     <select id="findPermitsResTypeList" resultMap="permitsRes">
+		WITH RES AS( SELECT R.*,P.PERMIT_ID,  P.ACTION_ID, P.PERMIT_ORDER ,
+			       CASE WHEN P.PERMIT_ID IN (SELECT T.PERMIT_ID FROM T_P_SHIRO_ROLE_PERMIT T WHERE T.ROLE_ID=#{roleId}) THEN 'TRUE' ELSE 'FALSE' END CHECKED,
+			       A.ACTION_NAME AS ACTIONNAME
+			FROM T_P_SHIRO_PERMIT P 
+			JOIN T_P_SHIRO_RES R ON P.MENU_RES_ID = R.MENU_RES_ID
+			JOIN T_P_SHIRO_ACTION A ON A.ACTION_ID=P.ACTION_ID
+	    JOIN T_P_SHIRO_RES_TYPE RT ON RT.TYPE_ID=R.TYPE_ID
+	    WHERE RT.TYPE_ID=#{resTypeId}			ORDER BY R.ORDER_ID ,A.ACTION_ORDER  
+	    )	 
+	    SELECT * FROM RES R
+		START WITH R.P_MENU_RES_ID =0  CONNECT BY PRIOR R.MENU_RES_ID=R.P_MENU_RES_ID            
+    </select>
+    <select id="findMenusByLoginName"  resultMap="permitsRes" parameterType="String">
+
+	     WITH USER_ROLE AS(
+			SELECT  P.ACTION_ID,RES.MENU_RES_ID, RES.MENU_NAME, RES.ACTION_NAME ACTION_NAME, RES.P_MENU_RES_ID, RES.TYPE_ID, RES.ORDER_ID, RES.DSC 
+			FROM T_P_SHIRO_USER U 
+			JOIN T_P_SHIRO_USER_GRP UG ON U.USER_GRP_ID=UG.USER_GRP_ID
+			JOIN T_P_SHIRO_USER_GRP_ROLE_IDX RGI ON RGI.USER_GRP_ID=UG.USER_GRP_ID
+		  	JOIN T_P_SHIRO_ROLE_PERMIT RP ON RP.ROLE_ID=RGI.ROLE_ID
+		  	JOIN T_P_SHIRO_PERMIT P ON P.PERMIT_ID=RP.PERMIT_ID
+			JOIN T_P_SHIRO_RES RES ON RES.MENU_RES_ID=P.MENU_RES_ID
+		  	WHERE  RES.TYPE_ID=1  AND U.LOGIN_NAME=#{loginName}  
+	    	ORDER BY RES.ORDER_ID 
+	    )
+		SELECT * FROM USER_ROLE R
+		START WITH R.P_MENU_RES_ID =0  CONNECT BY PRIOR R.MENU_RES_ID=R.P_MENU_RES_ID AND PRIOR R.ACTION_ID = R.ACTION_ID
+		
+    </select>
+    
+    <select id="RES_SELECTKEY" resultType="java.lang.Long" >
+			SELECT T_SEQ_P_SHIRO_RES.nextval AS ID FROM DUAL 
+    </select>
+    
+    <select id="findMenuResList" resultMap="Res">
+    	SELECT T.* FROM T_P_SHIRO_RES T WHERE T.TYPE_ID=1
+    </select>
+    
+    <select id="findUrlResList" resultMap="Res">
+    	SELECT T.* FROM T_P_SHIRO_RES T WHERE T.TYPE_ID=2
+    </select>
+    <select id="findPMenuIdbyRes" resultMap="Res">
+    	SELECT T.* FROM T_P_SHIRO_RES T WHERE T.P_MENU_RES_ID=#{pMenuId} and T.TYPE_ID=#{typeId} order by t.order_id
+    </select>
+    
+    <select id="findResIsLeaf" resultType="java.lang.Long" parameterType="java.lang.Long">
+        SELECT COUNT(*) FROM T_P_SHIRO_RES T START WITH T.P_MENU_RES_ID=#{pmenuResId} 
+        CONNECT BY PRIOR T.MENU_RES_ID=T.P_MENU_RES_ID
+    </select>
+        
+    <select id="findListByPmenu" resultMap="Res" parameterType="Long">
+    	SELECT t.MENU_RES_ID,
+		       t.MENU_NAME,
+		       t.ACTION_NAME,
+		       t.P_MENU_RES_ID,
+		       t.TYPE_ID,
+		       p.TYPE_NAME,
+		       t1.menu_name as P_MENU_RES_NAME,
+		       t.ORDER_ID,
+		       t.DSC
+		  FROM T_P_SHIRO_RES T
+		  LEFT JOIN T_P_SHIRO_RES_TYPE P
+		    ON P.TYPE_ID = T.TYPE_ID
+		  LEFT JOIN T_P_SHIRO_RES T1
+		    ON T1.MENU_RES_ID = T.P_MENU_RES_ID
+		 WHERE t.P_MENU_RES_ID = #{pmenuResId}
+		 AND t.TYPE_ID = #{typeId}
+		 ORDER BY T.ORDER_ID
+    </select>
+    
+    <select id="findOrderMax" resultType="java.lang.Long" parameterType="java.lang.Long">
+        SELECT NVL(MAX(T.ORDER_ID), 0) FROM T_P_SHIRO_RES T WHERE T.P_MENU_RES_ID=#{pmenuResId} 
+    </select>
+    
+    <select id="findByOrder" resultMap="Res" parameterType="java.lang.Long">
+        SELECT t.MENU_RES_ID,t.MENU_NAME,T.ORDER_ID
+        FROM T_P_SHIRO_RES T WHERE T.P_MENU_RES_ID=#{pmenuResId} and t.type_id=#{typeId}
+        ORDER BY T.ORDER_ID
+    </select>
+    
+    <!-- flag=x.do改为flag=x -->
+    <update id="Res_init_updLikeFlagAct">
+    	update t_p_shiro_res t set t.action_name = substr(t.action_name, 1, 25) where t.action_name like '%flag%'
+    </update>
+    
+    <!-- 超级管理员角色权限分配 -->
+    <insert id="Res_init_allotAdminPmt">
+    	insert into t_p_shiro_role_permit t
+		  select t_seq_p_shiro_role_permit.nextval, p.permit_id, 1, null
+		    from t_p_shiro_permit p join t_p_shiro_res r on r.menu_res_id=p.menu_res_id
+		     where (p.action_id not in (2,4) and r.type_id=1) or p.menu_res_id=1 
+    </insert>
+    
+    <!-- IC卡参数管理角色权限分配 -->
+    <insert id="Res_init_allotIcCSPmt">
+    	insert into t_p_shiro_role_permit t
+		  select t_seq_p_shiro_role_permit.nextval, p.permit_id, 4, null
+		    from t_p_shiro_permit p
+		    join t_p_shiro_res r on r.menu_res_id = p.menu_res_id
+			 where p.action_id not in (2, 4)
+			   and ((r.menu_name in
+			       ('IC卡管理', '企业代码管理', '优惠参数管理', '园区信息维护') and
+			       r.type_id = 1)
+			    or (r.menu_name in
+			       ('企业代码管理', '优惠参数管理', '园区信息管理', '登录管理') and
+			       r.p_menu_res_id = 1))
+    </insert>
+    
+    <!-- IC卡商户管理角色权限分配 -->
+    <insert id="Res_init_allotIcSHPmt">
+    	insert into t_p_shiro_role_permit t
+		  select t_seq_p_shiro_role_permit.nextval, p.permit_id, 5, null
+		    from t_p_shiro_permit p
+		    join t_p_shiro_res r on r.menu_res_id = p.menu_res_id
+			 where p.action_id not in (2, 4)
+			   and ((r.menu_name in
+			       ('IC卡管理', '商户关联园区', 'IC卡商户参数管理', '终端应用标识分配',
+			        '企业代码限制', '企业代码优惠', '卡BIN限制', '卡BIN优惠',
+			        '白名单限制', '白名单优惠') and r.type_id = 1) or
+			       (r.menu_name in
+			       ('商户关联园区', 'IC卡商户参数管理', '终端应用标识管理',
+			        '企业代码限制管理', '企业代码优惠管理', '卡BIN限制管理',
+			        '卡BIN优惠管理', '白名单限制管理', '白名单优惠管理', '登录管理') and
+			       r.p_menu_res_id = 1))
+    </insert>
+    
+    <!-- IC卡交易处理及查询角色权限分配 -->
+    <insert id="Res_init_allotIcCXPmt">
+    	insert into t_p_shiro_role_permit t
+		  select t_seq_p_shiro_role_permit.nextval, p.permit_id, 6, null
+		    from t_p_shiro_permit p
+		    join t_p_shiro_res r on r.menu_res_id = p.menu_res_id
+			 where p.action_id not in (2, 4)
+			   and ((r.menu_name in
+			       ('IC卡交易', '脱机IC卡错误交易查询及处理', '脱机IC卡错误交易处理查询', '历史脱机交易查询') and r.type_id = 1) or
+			       (r.menu_name in
+			       ('脱机IC卡错误交易查询及处理', '脱机IC卡错误交易处理查询', '历史脱机交易查询', '登录管理') and
+			       r.p_menu_res_id = 1))
+    </insert>
+    
+    <!-- 报表管理角色权限分配  -->
+    <insert id="Res_init_allotIcBBPmt">
+    	insert into t_p_shiro_role_permit t
+		  select t_seq_p_shiro_role_permit.nextval, p.permit_id, 13, null
+		    from t_p_shiro_permit p
+		    join t_p_shiro_res r on r.menu_res_id = p.menu_res_id
+		   where p.action_id not in (2, 4)
+		     and p.menu_res_id in
+		         (select t.menu_res_id
+		            from t_p_shiro_res t
+		           where (t.menu_name = 'IC卡报表' and t.type_id = 1)
+		              or (t.menu_name in ('报表管理', '登录管理') and
+		                 t.p_menu_res_id = 1)
+		              or (t.p_menu_res_id =
+		                 (select t.menu_res_id
+		                     from t_p_shiro_res t
+		                    where (t.menu_name = 'IC卡报表' and t.type_id = 1))))
+    </insert>
+    
+    <!-- 快捷商户服务网站管理用户分组角色权限分配 -->
+    <insert id="Res_init_allotMerGLPmt">
+    	insert into t_p_shiro_role_permit t
+		  select t_seq_p_shiro_role_permit.nextval, p.permit_id, 7, null
+		    from t_p_shiro_permit p
+		    join t_p_shiro_res r on r.menu_res_id = p.menu_res_id
+		   where p.action_id not in (2, 4)
+		     and p.menu_res_id in
+		         (select t.menu_res_id
+		            from t_p_shiro_res t
+		           where (t.menu_name = '商户服务管理' and t.type_id = 1)
+		              or (t.menu_name in ('商户管理员用户管理', '登录管理') and
+		                 t.p_menu_res_id = 1)
+		              or (t.p_menu_res_id =
+		                 (select t.menu_res_id
+		                     from t_p_shiro_res t
+		                    where (t.menu_name = '商户服务管理' and t.type_id = 1))))
+    </insert>
+    
+    <!-- 快捷商户服务网站退货流水查询角色权限分配 -->
+    <insert id="Res_init_allotMerTHPmt">
+    	insert into t_p_shiro_role_permit t
+		  select t_seq_p_shiro_role_permit.nextval, p.permit_id, 8, null
+		    from t_p_shiro_permit p
+		    join t_p_shiro_res r on r.menu_res_id = p.menu_res_id
+		   where p.action_id not in (2, 4)
+		     and p.menu_res_id in
+		         (select t.menu_res_id
+		            from t_p_shiro_res t
+		           where (t.menu_name = '商户服务退货流水查询' and t.type_id = 1)
+		              or (t.menu_name in ('商户服务退货流水查询', '登录管理') and
+		                 t.p_menu_res_id = 1)
+		              or (t.p_menu_res_id =
+		                 (select t.menu_res_id
+		                     from t_p_shiro_res t
+		                    where (t.menu_name = '商户服务退货流水查询' and t.type_id = 1))))
+    </insert>
+    
+     <!-- 快捷商户服务网站U盾管理角色权限分配 -->
+    <insert id="Res_init_allotMerUDPmt">
+    	insert into t_p_shiro_role_permit t
+		  select t_seq_p_shiro_role_permit.nextval, p.permit_id, 9, null
+		    from t_p_shiro_permit p
+		    join t_p_shiro_res r on r.menu_res_id = p.menu_res_id
+		   where p.action_id not in (2, 4)
+		     and p.menu_res_id in
+		         (select t.menu_res_id
+		            from t_p_shiro_res t
+		           where (t.menu_name = '商户服务U盾管理' and t.type_id = 1)
+		              or (t.menu_name in ('商户服务U盾管理', '登录管理') and
+		                 t.p_menu_res_id = 1)
+		              or (t.p_menu_res_id =
+		                 (select t.menu_res_id
+		                     from t_p_shiro_res t
+		                    where (t.menu_name = '商户服务U盾管理' and t.type_id = 1))))
+    </insert>
+    
+    <!-- 快捷商户服务网站公告管理角色权限分配 -->
+    <insert id="Res_init_allotMerGGPmt">
+    	insert into t_p_shiro_role_permit t
+		  select t_seq_p_shiro_role_permit.nextval, p.permit_id, 10, null
+		    from t_p_shiro_permit p
+		    join t_p_shiro_res r on r.menu_res_id = p.menu_res_id
+		   where p.action_id not in (2, 4)
+		     and p.menu_res_id in
+		         (select t.menu_res_id
+		            from t_p_shiro_res t
+		           where (t.menu_name = '商户服务公告栏管理' and t.type_id = 1)
+		              or (t.menu_name in ('商户服务公告栏管理', '登录管理') and
+		                 t.p_menu_res_id = 1)
+		              or (t.p_menu_res_id =
+		                 (select t.menu_res_id
+		                     from t_p_shiro_res t
+		                    where (t.menu_name = '商户服务公告栏管理' and t.type_id = 1))))
+    </insert>
+    
+     <!-- 联机流水查询角色权限分配 -->
+    <insert id="Res_init_allotCXPmt">
+    	insert into t_p_shiro_role_permit t
+		  select t_seq_p_shiro_role_permit.nextval, p.permit_id, 11, null
+		    from t_p_shiro_permit p
+		    join t_p_shiro_res r on r.menu_res_id = p.menu_res_id
+		   where p.action_id not in (2, 4)
+		     and p.menu_res_id in
+		         (select t.menu_res_id
+		            from t_p_shiro_res t
+		           where (t.menu_name = '联机流水查询' and t.type_id = 1)
+		              or (t.menu_name in ('联机流水查询', '登录管理') and
+		                 t.p_menu_res_id = 1)
+		              or (t.p_menu_res_id =
+		                 (select t.menu_res_id
+		                     from t_p_shiro_res t
+		                    where (t.menu_name = '联机流水查询' and t.type_id = 1))))
+    </insert>
+    
+    <!-- 商户业务管理角色权限分配 -->
+    <insert id="Res_init_allotYWPmt">
+    	insert into t_p_shiro_role_permit t
+		  select t_seq_p_shiro_role_permit.nextval, p.permit_id, 12, null
+		    from t_p_shiro_permit p
+		    join t_p_shiro_res r on r.menu_res_id = p.menu_res_id
+		   where p.action_id not in (2, 4)
+		     and p.menu_res_id in
+		         (select t.menu_res_id
+		            from t_p_shiro_res t
+		           where (t.menu_name = '商户管理' and t.type_id = 1)
+		              or (t.menu_name in ('商户管理', '登录管理') and
+		                 t.p_menu_res_id = 1)
+		              or (t.p_menu_res_id =
+		                 (select t.menu_res_id
+		                     from t_p_shiro_res t
+		                    where (t.menu_name = '商户管理' and t.type_id = 1))))
+    </insert>
+    
+    <!-- 总行管理员角色权限分配 ,除稽核日志和权限资源的所有权限-->
+    <insert id="Res_init_allotZHPmt">
+    	insert into t_p_shiro_role_permit t
+		  select t_seq_p_shiro_role_permit.nextval, p.permit_id, 2, null
+		    from t_p_shiro_permit p
+		    join t_p_shiro_res r on r.menu_res_id = p.menu_res_id
+		   where ((p.action_id not in (2, 4) and r.type_id = 1) or
+		         p.menu_res_id in
+		         (select t.menu_res_id
+		             from t_p_shiro_res t
+		            where t.type_id = 2
+		              and t.p_menu_res_id = 1))
+		     and p.menu_res_id not in
+		         (select t.menu_res_id
+		            from t_p_shiro_res t
+		           start with t.menu_name in
+		                      ('角色管理', '资源类型管理', '资源管理', '许可管理',
+		                       '稽核日志管理', '控制类型管理', '动作管理', '权限字典',
+		                       '稽核日志查询', '角色管理', '资源权限分配')
+		          connect by prior t.menu_res_id = t.p_menu_res_id)
+    </insert>
+</mapper>
+

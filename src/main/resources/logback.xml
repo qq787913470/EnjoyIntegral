@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration >
+<configuration>
+	<!-- 控制台输出 -->
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>[%-18(%d{HH:mm:ss.SSS}]%thread)[%-5level %logger{60}]->
+				%msg%n</pattern>
+		</layout>
+	</appender>
+	<!-- 文件输出,并指定存档日期 -->
+ 	<appender name="baseLog"
+ 		class="ch.qos.logback.core.rolling.RollingFileAppender">
+ 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> 
+ 			<fileNamePattern>../logs/%d{yyyy-MM-dd}/log.log 
+ 			</fileNamePattern>
+ 			<maxHistory>30</maxHistory><!--存档日期为30天 -->
+ 		</rollingPolicy> 
+ 		<encoder> 
+ 		    <pattern>[%-18(%d{HH:mm:ss.SSS}]%thread)[%-5level %logger]-> %msg%n
+ 			</pattern> 
+ 		</encoder> 
+ 	</appender> 
+
+	<root level="WARN">
+		<appender-ref ref="baseLog" />
+	</root>
+</configuration>  

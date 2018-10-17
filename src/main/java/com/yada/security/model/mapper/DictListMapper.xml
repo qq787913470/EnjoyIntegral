@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="DictList">
+
+	<resultMap id="RM_DictList" type="com.yada.security.model.DictList">
+        <result property="dicttype" column="DICTTYPE"/>
+        <result property="dicttypename" column="DICTTYPENAME"/>
+        <result property="dictflag" column="DICTFLAG"/>
+        <result property="dicttableSql" column="DICTTABLE_SQL"/>
+        <result property="dicttableOrder" column="DICTTABLE_ORDER"/>
+	</resultMap>
+	
+	
+	<sql id="DictList_columns">
+	    <![CDATA[
+		T.DICTTYPE,T.DICTTYPENAME,T.DICTFLAG,T.DICTTABLE_SQL,T.DICTTABLE_ORDER
+	    ]]>
+	</sql>
+
+	
+	<insert id="DictList_insert" >
+	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="key-id">
+			SELECT SEQname.nextval AS ID FROM DUAL 
+        </selectKey>
+    <![CDATA[
+        INSERT INTO t_p_s_dict_list (
+        	DICTTYPE ,
+        	DICTTYPENAME ,
+        	DICTFLAG ,
+        	DICTTABLE_SQL ,
+        	DICTTABLE_ORDER 
+        ) VALUES (
+        	#{dicttype} ,
+        	#{dicttypename} ,
+        	#{dictflag} ,
+        	#{dicttableSql} ,
+        	#{dicttableOrder} 
+        )
+    ]]>
+		
+	</insert>
+    
+	<update id="DictList_update" >
+    <![CDATA[
+        UPDATE t_p_s_dict_list SET
+	        DICTTYPENAME = #{dicttypename} ,
+	        DICTFLAG = #{dictflag} ,
+	        DICTTABLE_SQL = #{dicttableSql} ,
+	        DICTTABLE_ORDER = #{dicttableOrder} 
+        WHERE 
+	        DICTTYPE = #{dicttype} 
+    ]]>
+	</update>
+
+    <delete id="DictList_delete">
+    <![CDATA[
+        DELETE FROM t_p_s_dict_list WHERE
+        DICTTYPE = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="DictList_getById" resultMap="RM_DictList">
+		SELECT <include refid="DictList_columns" />
+	    <![CDATA[
+		    FROM t_p_s_dict_list T
+	        WHERE 
+		        T.DICTTYPE = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="DictList_findPage_where">
+		
+		<where>	      				
+			<if test="dicttype != null and dicttype !=''">
+				AND T.DICTTYPE = #{dicttype}
+			</if>
+			<if test="dicttypename != null and dicttypename !=''">
+				AND T.DICTTYPENAME = #{dicttypename}
+			</if>
+			<if test="dictflag != null and dictflag !=''">
+				AND T.DICTFLAG = #{dictflag}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="DictList_findCountByWhere" resultType="long">
+        SELECT count(*) FROM t_p_s_dict_list T
+		<include refid="DictList_findPage_where"/>    
+    </select>
+    
+   
+    <select id="DictList_findListByWhere" resultMap="RM_DictList">
+    	SELECT <include refid="DictList_columns" />
+	    FROM t_p_s_dict_list T
+		<include refid="DictList_findPage_where"/>
+    </select>
+
+	
+</mapper>
+

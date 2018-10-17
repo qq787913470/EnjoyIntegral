@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.yada.enjoyIntegral.dao.ActivityProductEnjoyDao">
+
+	<resultMap id="ActivityProductEnjoy" type="com.yada.enjoyIntegral.model.ActivityProductEnjoy">
+	    <result property="id" column="ID" />
+		<result property="activityId" column="ACTIVITY_ID" />
+		<result property="productId" column="PRODUCT_ID" />
+		<result property="limitCount" column="LIMIT_COUNT" />
+		<result property="giftPrompt" column="GIFT_PROMPT" />
+		<result property="giftCount" column="GIFT_COUNT" />
+
+	</resultMap>
+	<resultMap id="ActivityProductEnjoyShow" type="com.yada.enjoyIntegral.query.ActivityProductEnjoyShowModel">
+	    <result property="id" column="ID" />
+		<result property="merName" column="MER_NAME" />
+		<result property="productName" column="PRODUCT_NAME" /> 
+		<result property="activityId" column="ACTIVITY_ID" />
+		<result property="productId" column="PRODUCT_ID" />
+		<result property="price" column="PRICE" />
+		<result property="limitCount" column="LIMIT_COUNT" />  
+		<result property="integralValue" column="INTEGRAL_VALUE" />
+		<result property="giftCount" column="GIFT_COUNT" />
+		<result property="remark" column="REMARK" />
+		<result property="picPath" column="PIC_PATH" />
+		<result property="orgName" column="ORG_NAME"/>
+		<result property="orgId" column="ORG_ID"/>
+	</resultMap>
+
+	<sql id="ActivityProductEnjoy_columns">
+	    T.ID,
+		T.ACTIVITY_ID ,
+		T.PRODUCT_ID ,
+		T.LIMIT_COUNT ,
+		T.GIFT_COUNT ,
+		T.GIFT_PROMPT 
+	</sql>
+	
+	<sql id="ActivityProductEnjoyShow_columns">
+		T.ID,T.ACTIVITY_ID ,
+		T.PRODUCT_ID ,
+		M.MER_NAME,
+		P.PRODUCT_NAME,
+		P.PRICE,
+		P.INTEGRAL_VALUE,
+		P.REMARK,
+		T.LIMIT_COUNT,
+		P.GIFT_COUNT as GIFT_COUNT,
+		P.PIC_PATH,
+		O.ORG_ID,
+		O.NAME as ORG_NAME
+	</sql>
+
+	<insert id="ActivityProductEnjoy_insert" parameterType="com.yada.enjoyIntegral.model.ActivityProductEnjoy">
+		<selectKey resultType="java.lang.String" order="BEFORE"
+			keyProperty="id">
+			SELECT T_SEQ_ACTIVITY_PRODUCT_ENJOY.nextval AS ID FROM DUAL
+		</selectKey>
+    <![CDATA[
+		insert into ACTIVITY_PRODUCT_ENJOY
+		 (ID,ACTIVITY_ID,PRODUCT_ID,LIMIT_COUNT,GIFT_PROMPT,GIFT_COUNT)  
+		   values 
+		 (#{id},#{activityId},#{productId},#{limitCount},#{giftPrompt},#{giftCount,jdbcType=VARCHAR})
+		]]>
+	</insert>
+
+	<update id="ActivityProductEnjoy_update" parameterType="com.yada.enjoyIntegral.model.ActivityProductEnjoy">
+		update ACTIVITY_PRODUCT_ENJOY set 
+			   ACTIVITY_ID=#{activityId},
+			   PRODUCT_ID=#{productId},
+			   LIMIT_COUNT=#{limitCount},
+			   GIFT_COUNT=#{giftCount,jdbcType=VARCHAR},
+			   GIFT_PROMPT=#{giftPrompt}
+		where ID=#{id}
+	</update>
+
+	<delete id="ActivityProductEnjoy_delete">
+		delete from ACTIVITY_PRODUCT_ENJOY where ID=#{id}
+	</delete>
+
+	<select id="ActivityProductEnjoy_getById" resultMap="ActivityProductEnjoy">
+		SELECT
+		<include refid="ActivityProductEnjoy_columns" />
+		FROM ACTIVITY_PRODUCT_ENJOY T
+		WHERE T.ID = #{id}
+	</select>
+	
+	<select id="ActivityProductEnjoy_getByActivityIdAndProductId" resultMap="ActivityProductEnjoy">
+		SELECT
+		<include refid="ActivityProductEnjoy_columns" />
+		FROM ACTIVITY_PRODUCT_ENJOY T
+		WHERE T.ACTIVITY_ID = #{activityId} 
+		   AND T.PRODUCT_ID = #{productId}
+	</select>
+
+	<sql id="ActivityProductEnjoy_findPage_where">
+		<where>
+			<if test="activityId != null and activityId !=''">
+				AND T.ACTIVITY_ID = #{activityId}
+			</if>
+			<if test="productId != null and productId !=''">
+				AND T.PRODUCT_ID = #{productId}
+			</if>
+			<if test="limitCount != null and limitCount !=''">
+				AND T.LIMIT_COUNT = #{limitCount}
+			</if>
+			<if test="giftPrompt != null and giftPrompt !=''">
+				AND T.GIFT_PROMPT = #{giftPrompt}
+			</if>
+			<if test="productName != null and productName !=''">
+				AND P.PRODUCT_NAME like '%'||#{productName}||'%'
+			</if>
+			<if test="merName != null and merName !=''">
+				AND M.MER_NAME like '%'||#{merName}||'%'
+			</if>
+			<if test="integralValue != null and integralValue !=''">
+				AND P.INTEGRAL_VALUE &lt;= TO_NUMBER(#{integralValue})
+			</if>
+			<if test="endDate != null and endDate !=''">
+				AND P.END_DATE &gt;= #{endDate}
+			</if>
+			<if test="isGround != null and isGround !=''">
+				AND P.IS_GROUND = #{isGround}
+			</if>
+			<if test="reviewFlagM != null and reviewFlagM !=''">
+				AND M.review_flag = #{reviewFlagM}
+			</if>
+			<if test="endServiceDate != null and endServiceDate !=''">
+				AND M.END_SERVICE_DATE &gt;= #{endServiceDate}
+			</if>
+			<if test="serviceStare != null and serviceStare !=''">
+				AND M.SERVICE_STARE = #{serviceStare}
+			</if>
+			<if test="reviewFlag != null and reviewFlag !=''">
+				AND P.review_flag = #{reviewFlag}
+			</if>
+			<if test="orgIdUser != null and orgIdUser != ''">
+				AND O.ORG_ID in
+				<foreach item="orgIdUser" index="index" collection="orgIdUser" open="("
+						 separator="," close=")">
+					#{orgIdUser}
+				</foreach>
+			</if>
+			<if test="integralValuestart != null and integralValuestart !=''">
+				AND P.INTEGRAL_VALUE &gt;= TO_NUMBER(#{integralValuestart})
+			</if>
+			<if test="integralValueend != null and integralValueend !=''">
+				AND P.INTEGRAL_VALUE &lt;= TO_NUMBER(#{integralValueend})
+			</if>
+
+
+		</where>
+	</sql>
+
+	<select id="ActivityProductEnjoy_findCountByWhere" resultType="int">
+		SELECT count(*) FROM ACTIVITY_PRODUCT_ENJOY T
+		  INNER JOIN PRODUCT_ENJOY P on p.product_id = T.PRODUCT_ID
+		INNER JOIN MERCHANT_ENJOY M ON P.MER_NO = M.MER_NO
+		INNER join t_b_org o on m.org_id = o.org_id
+		<include refid="ActivityProductEnjoy_findPage_where" />
+	</select>
+
+
+	<select id="ActivityProductEnjoy_findListByWhere" resultMap="ActivityProductEnjoyShow">
+		SELECT
+		<include refid="ActivityProductEnjoyShow_columns" />
+		FROM ACTIVITY_PRODUCT_ENJOY T
+		INNER JOIN PRODUCT_ENJOY P on p.product_id = T.PRODUCT_ID
+		INNER JOIN MERCHANT_ENJOY M ON P.MER_NO = M.MER_NO
+		INNER join t_b_org o on m.org_id = o.org_id
+		<include refid="ActivityProductEnjoy_findPage_where" /> 
+		ORDER BY T.ACTIVITY_ID DESC
+	</select>
+</mapper>
+

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.yada.enjoyIntegral.dao.ActivityDao">
+
+	<resultMap id="Activity" type="com.yada.enjoyIntegral.model.Activity">
+		<result property="activityId" column="ACTIVITY_ID" />
+		<result property="activityName" column="ACTIVITY_NAME" />
+		<result property="startDate" column="START_DATE" />
+		<result property="endDate" column="END_DATE" />
+		<result property="remark" column="REMARK" />
+		<result property="giftCount" column="GIFT_COUNT" />
+		<result property="clientPrompt" column="CLIENT_PROMPT" />
+		<result property="state" column="STATE" />
+		<result property="detail" column="DETAIL"/>
+		<result property="orgId" column="ORG_ID"/>
+		<result property="reviewFlag" column="REVIEW_FLAG"/>
+
+	</resultMap>
+	
+	<resultMap id="MerchantEnjoyNameGroup" type="java.util.Map">
+		<result property="merName" column="MER_NAME" />
+		<result property="merNo" column="MER_NO" />
+	</resultMap>
+
+	<sql id="Activity_columns">
+		T.ACTIVITY_ID ,
+		T.ACTIVITY_NAME ,
+		T.START_DATE ,
+		T.END_DATE ,
+		T.REMARK ,
+		T.GIFT_COUNT ,
+		T.CLIENT_PROMPT ,
+		T.DETAIL ,
+		T.STATE,
+		T.ORG_ID,
+		T.REVIEW_FLAG
+	</sql>
+	
+	<sql id="Activity_columns_noDetail">
+		T.ACTIVITY_ID ,
+		T.ACTIVITY_NAME ,
+		T.START_DATE ,
+		T.END_DATE ,
+		T.REMARK ,
+		T.GIFT_COUNT ,
+		T.CLIENT_PROMPT ,
+		T.STATE 
+	</sql>
+
+	<insert id="Activity_insert" parameterType="com.yada.enjoyIntegral.model.Activity">
+		<selectKey resultType="java.lang.String" order="BEFORE"
+			keyProperty="activityId">
+			SELECT T_SEQ_ACTIVITY.nextval AS ID FROM DUAL
+		</selectKey>
+    <![CDATA[
+		insert into ACTIVITY
+		 (ACTIVITY_ID,
+		 ACTIVITY_NAME,
+		 START_DATE,
+		 END_DATE,
+		 REMARK,
+		 GIFT_COUNT,
+		 CLIENT_PROMPT,
+		 STATE,
+		 DETAIL,
+		 ORG_ID,
+		 REVIEW_FLAG)
+		   values 
+		 (#{activityId,jdbcType=VARCHAR},
+		 #{activityName,jdbcType=VARCHAR},
+		 #{startDate,jdbcType=VARCHAR},
+		 #{endDate,jdbcType=VARCHAR},
+		 #{remark,jdbcType=VARCHAR},
+		 #{giftCount,jdbcType=VARCHAR},
+		 #{clientPrompt,jdbcType=VARCHAR},
+		 #{state,jdbcType=VARCHAR},
+		 #{detail,jdbcType=BLOB} ,
+		 #{orgId,jdbcType=VARCHAR},
+		 #{reviewFlag,jdbcType=VARCHAR}
+		 )
+		]]>
+	</insert>
+
+	<update id="Activity_update" parameterType="com.yada.enjoyIntegral.model.Activity">
+		update ACTIVITY set 
+			   ACTIVITY_NAME=#{activityName,jdbcType=VARCHAR},
+			   START_DATE=#{startDate,jdbcType=VARCHAR},
+			   END_DATE=#{endDate,jdbcType=VARCHAR},
+			   REMARK=#{remark,jdbcType=VARCHAR},
+			   GIFT_COUNT=#{giftCount,jdbcType=VARCHAR},
+			   CLIENT_PROMPT=#{clientPrompt,jdbcType=VARCHAR},
+			   STATE=#{state,jdbcType=VARCHAR},
+			   DETAIL=#{detail,jdbcType=BLOB},
+			   ORG_ID=#{orgId,jdbcType=VARCHAR},
+		       REVIEW_FLAG=#{reviewFlag,jdbcType=VARCHAR}
+		where ACTIVITY_ID=#{activityId,jdbcType=VARCHAR}
+	</update>
+
+	<delete id="Activity_delete">
+		delete from ACTIVITY where ACTIVITY_ID=#{activityId}
+	</delete>
+
+	<select id="Activity_getById" resultMap="Activity">
+		SELECT
+		<include refid="Activity_columns" />
+		FROM ACTIVITY T
+		WHERE T.ACTIVITY_ID = #{activityId}
+	</select> 
+	<select id="Activity_getActivityByCustomerNo" resultMap="Activity">
+		SELECT
+		<include refid="Activity_columns_noDetail" />
+		FROM ACTIVITY T
+ 		RIGHT JOIN CUSTOMER_ACTIVITY C ON C.ACTIVITY_ID = T.ACTIVITY_ID
+ 		WHERE C.CERTIFICATE_NO = #{certificateNo} AND C.CERTIFICATE_TYPE = #{certificateTypeId} AND T.STATE = '1' AND T.START_DATE &lt;= #{nowDate} AND T.END_DATE &gt;= #{nowDate} and C.IS_JOIN='1'
+	</select> 
+	
+	<select id="Activity_getActivityByCustomerNoAndProductId" resultMap="Activity">
+		SELECT
+		<include refid="Activity_columns" />
+		FROM CUSTOMER_ACTIVITY C
+	     LEFT JOIN ACTIVITY T ON C.ACTIVITY_ID = T.ACTIVITY_ID
+	     LEFT JOIN ACTIVITY_PRODUCT_ENJOY E ON C.ACTIVITY_ID = E.ACTIVITY_ID 
+	     WHERE C.CERTIFICATE_NO = #{certificateNo} AND C.CERTIFICATE_TYPE = #{certificateTypeId} AND T.STATE = '1' AND E.PRODUCT_ID = #{productId}
+	</select> 
+	
+	<select id="Activity_getMersByMerName" resultMap="MerchantEnjoyNameGroup">
+    	select MER_NAME,MER_NO from MERCHANT_ENJOY t where t.MER_NAME like '%'||#{merName}||'%' and t.review_flag ='0' and t.SERVICE_STARE = '0'
+    </select>
+
+	<sql id="Activity_findPage_where">
+		<where>
+			<if test="activityId != null and activityId !=''">
+				AND T.ACTIVITY_ID = #{activityId}
+			</if>
+			<if test="activityName != null and activityName !=''">
+				AND T.ACTIVITY_NAME like '%'||#{activityName}||'%'
+			</if>
+			<if test="startDate != null and startDate !=''">
+				AND T.START_DATE &gt;= #{startDate}
+			</if>
+			<if test="endDate != null and endDate !=''">
+				AND T.END_DATE &lt;= #{endDate}
+			</if>
+			<if test="remark != null and remark !=''">
+				AND T.REMARK = #{remark}
+			</if>
+			<if test="giftCount != null and giftCount !=''">
+				AND T.GIFT_COUNT = #{giftCount}
+			</if>
+			<if test="clientPrompt != null and clientPrompt !=''">
+				AND T.CLIENT_PROMPT = #{clientPrompt}
+			</if>
+			<if test="state != null and state !=''">
+				AND T.STATE = #{state}
+			</if>
+			<if test="activityId != null and activityId !=''">
+				AND T.REVIEW_FLAG = #{activityId}
+			</if>
+			<if test="reviewFlag != null and reviewFlag !=''">
+				AND T.REVIEW_FLAG = #{reviewFlag}
+			</if>
+			<if test="orgIdUser != null and orgIdUser != ''">
+				AND T.ORG_ID in
+				<foreach item="orgIdUser" index="index" collection="orgIdUser" open="("
+						 separator="," close=")">
+					#{orgIdUser}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+
+	<select id="Activity_findCountByWhere" resultType="int">
+		SELECT count(*) FROM ACTIVITY T
+		<include refid="Activity_findPage_where" />
+	</select>
+
+
+	<select id="Activity_findListByWhere" resultMap="Activity">
+		SELECT
+		<include refid="Activity_columns" />
+		FROM ACTIVITY T
+		<include refid="Activity_findPage_where" />
+		ORDER BY T.START_DATE DESC
+	</select>
+</mapper>
+

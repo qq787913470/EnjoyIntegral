@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.yada.enjoyIntegral.dao.CustomerActivityDao">
+
+	<resultMap id="CustomerActivity" type="com.yada.enjoyIntegral.model.CustomerActivity">
+		<result property="certificateNo" column="CERTIFICATE_NO" />
+		<result property="certificateType" column="CERTIFICATE_TYPE" />
+		<result property="activityId" column="ACTIVITY_ID" />
+		<result property="isJoin" column="IS_JOIN" />
+	</resultMap>
+
+	<sql id="CustomerActivity_columns">
+		T.CERTIFICATE_NO ,
+		T.CERTIFICATE_TYPE ,
+		T.IS_JOIN ,
+		T.ACTIVITY_ID 
+	</sql>
+
+	<insert id="CustomerActivity_insert" parameterType="com.yada.enjoyIntegral.model.CustomerActivity">
+		<selectKey resultType="java.lang.String" order="BEFORE"
+			keyProperty="id">
+			SELECT T_SEQ_CUSTOMER_ACTIVITY.nextval AS ID FROM DUAL
+		</selectKey>
+    <![CDATA[
+		insert into CUSTOMER_ACTIVITY
+		 (CERTIFICATE_NO,CERTIFICATE_TYPE,ACTIVITY_ID,IS_JOIN)  
+		   values 
+		 (#{certificateNo,jdbcType=VARCHAR},#{certificateType,jdbcType=VARCHAR},#{activityId,jdbcType=VARCHAR},#{isJoin,jdbcType=VARCHAR})
+		]]>
+	</insert>
+
+	<update id="CustomerActivity_update" parameterType="com.yada.enjoyIntegral.model.CustomerActivity">
+		update CUSTOMER_ACTIVITY set 
+			   IS_JOIN=#{isJoin,jdbcType=VARCHAR}
+		where CERTIFICATE_NO=#{certificateNo,jdbcType=VARCHAR} and CERTIFICATE_TYPE=#{certificateType,jdbcType=VARCHAR} and ACTIVITY_ID=#{activityId,jdbcType=VARCHAR}
+	</update>
+
+	<delete id="CustomerActivity_delete">
+		delete from CUSTOMER_ACTIVITY where CERTIFICATE_NO=#{certificateNo,jdbcType=VARCHAR} and CERTIFICATE_TYPE=#{certificateType,jdbcType=VARCHAR} and ACTIVITY_ID=#{activityId,jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="CustomerActivity_deleteCustomer">
+		delete from CUSTOMER_ACTIVITY where CERTIFICATE_NO=#{certificateNo,jdbcType=VARCHAR} and CERTIFICATE_TYPE=#{certificateType,jdbcType=VARCHAR} and ACTIVITY_ID=#{activityId,jdbcType=VARCHAR}
+	</delete>
+	<delete id="CustomerActivity_deleteAllCustomer">
+		delete from CUSTOMER_ACTIVITY where ACTIVITY_ID=#{activityId,jdbcType=VARCHAR}
+	</delete>
+
+	<select id="CustomerActivity_getById" resultMap="CustomerActivity">
+		SELECT
+		<include refid="CustomerActivity_columns" />
+		FROM CUSTOMER_ACTIVITY T
+		WHERE T.CERTIFICATE_NO=#{certificateNo,jdbcType=VARCHAR} and T.CERTIFICATE_TYPE=#{certificateType,jdbcType=VARCHAR} and T.ACTIVITY_ID=#{activityId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="CustomerActivity_getById_link" resultMap="CustomerActivity">
+		SELECT
+		<include refid="CustomerActivity_columns" />
+		FROM CUSTOMER_ACTIVITY T
+		WHERE T.CERTIFICATE_NO=#{certificateNo,jdbcType=VARCHAR} and T.CERTIFICATE_TYPE=#{certificateType,jdbcType=VARCHAR} and T.ACTIVITY_ID=#{activityId,jdbcType=VARCHAR} 
+	</select>
+
+	<sql id="CustomerActivity_findPage_where">
+		<where>
+			<if test="certificateNo != null and certificateNo !=''">
+				AND T.CERTIFICATE_NO=#{certificateNo,jdbcType=VARCHAR}
+			</if>
+			<if test="certificateType != null and certificateType !=''">
+				AND T.CERTIFICATE_TYPE=#{certificateType,jdbcType=VARCHAR}
+			</if>
+			<if test="activityId != null and activityId !=''">
+				AND T.ACTIVITY_ID = #{activityId,jdbcType=VARCHAR}
+			</if>
+			<if test="isJoin != null and isJoin !=''">
+				AND T.IS_JOIN = #{isJoin,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+
+	<select id="CustomerActivity_findCountByWhere" resultType="int">
+		SELECT count(*) FROM CUSTOMER_ACTIVITY T
+		<include refid="CustomerActivity_findPage_where" />
+	</select>
+
+
+	<select id="CustomerActivity_findListByWhere" resultMap="CustomerActivity">
+		SELECT
+		<include refid="CustomerActivity_columns" />
+		FROM CUSTOMER_ACTIVITY T
+		<include refid="CustomerActivity_findPage_where" />
+		ORDER BY T.CUSTOMER_NO DESC
+	</select>
+</mapper>
+

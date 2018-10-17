@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.yada.enjoyIntegral.dao.ProductEnjoyDao">
+
+	<resultMap id="ProductEnjoy" type="com.yada.enjoyIntegral.model.ProductEnjoy">
+		<result property="productId" column="PRODUCT_ID" />
+		<result property="productName" column="PRODUCT_NAME" />
+		<result property="price" column="PRICE" />
+		<result property="remark" column="REMARK" />
+		<result property="merNo" column="MER_NO" />
+		<result property="integralValue" column="INTEGRAL_VALUE" />
+		<result property="isGround" column="IS_GROUND" />
+		<result property="merName" column="MER_NAME" />
+		<result property="giftCount" column="GIFT_COUNT" />
+		<result property="detail" column="DETAIL"/>
+		<result property="picPath" column="PIC_PATH"/>
+		<result property="startDate" column="START_DATE"/>
+		<result property="endDate" column="END_DATE"/>
+		<result property="reviewFlag" column="REVIEW_FLAG"/>
+		<result property="orgName" column="ORG_NAME"/>
+		<result property="orgId" column="ORG_ID"/>
+	</resultMap>
+
+	<sql id="ProductEnjoy_columns">
+		T.PRODUCT_ID ,
+		T.PRODUCT_NAME ,
+		T.PRICE ,
+		T.REMARK ,
+		T.MER_NO ,
+		T.IS_GROUND ,
+		T.GIFT_COUNT ,
+		M.MER_NAME,
+		T.DETAIL ,
+		T.PIC_PATH ,
+		T.INTEGRAL_VALUE,
+		T.END_DATE,
+		T.START_DATE,
+		T.REVIEW_FLAG,
+		O.ORG_ID,
+		O.NAME as ORG_NAME
+	</sql>
+	<sql id="ProductEnjoy_columns_clean">
+		T.PRODUCT_ID ,
+		T.PRODUCT_NAME ,
+		T.PRICE ,
+		T.REMARK ,
+		T.MER_NO ,
+		T.IS_GROUND ,
+		T.GIFT_COUNT ,
+		T.DETAIL ,
+		T.PIC_PATH ,
+		T.INTEGRAL_VALUE,
+		T.START_DATE,
+		T.END_DATE,
+		T.REVIEW_FLAG,
+		O.ORG_ID,
+		O.NAME as ORG_NAME
+	</sql>
+	<sql id="ProductEnjoy_columns_no_detail">
+		T.PRODUCT_ID ,
+		T.PRODUCT_NAME ,
+		T.PRICE ,
+		T.REMARK ,
+		T.MER_NO ,
+		T.IS_GROUND ,
+		T.GIFT_COUNT ,
+		T.INTEGRAL_VALUE,
+		T.START_DATE,
+		T.END_DATE,
+		T.REVIEW_FLAG,
+		O.ORG_ID,
+		O.NAME as ORG_NAME
+	</sql>
+
+	<insert id="ProductEnjoy_insert" parameterType="com.yada.enjoyIntegral.model.ProductEnjoy">
+		<selectKey resultType="java.lang.String" order="BEFORE"
+			keyProperty="productId">
+			SELECT sys_guid() AS PRODUCTID FROM DUAL
+		</selectKey>
+    <![CDATA[
+		insert into PRODUCT_ENJOY
+		 (PRODUCT_ID,PRODUCT_NAME,PRICE,REMARK,MER_NO,INTEGRAL_VALUE,IS_GROUND,GIFT_COUNT,DETAIL,
+		 PIC_PATH,
+		 START_DATE,
+		 END_DATE,
+		REVIEW_FLAG)
+		   values 
+		 (#{productId,jdbcType=VARCHAR},#{productName,jdbcType=NVARCHAR},#{price,jdbcType=VARCHAR},#{remark,jdbcType=NVARCHAR},#{merNo,jdbcType=CHAR},#{integralValue,jdbcType=VARCHAR},#{isGround,jdbcType=CHAR},#{giftCount,jdbcType=INTEGER},#{detail,jdbcType=BLOB},
+		 #{picPath,jdbcType=VARCHAR},
+		 #{startDate,jdbcType=NVARCHAR},
+		 #{endDate,jdbcType=NVARCHAR},
+		 #{reviewFlag,jdbcType=CHAR})
+		]]>
+	</insert>
+	<update id="ProductEnjoy_update_review" parameterType="Map">
+		UPDATE PRODUCT_ENJOY SET
+		REVIEW_FLAG=#{reviewFlag,jdbcType=VARCHAR}
+		WHERE
+		PRODUCT_ID IN
+		<foreach collection="productId" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	<update id="ProductEnjoy_update" parameterType="com.yada.enjoyIntegral.model.ProductEnjoy">
+		update PRODUCT_ENJOY set 
+			   PRODUCT_NAME=#{productName,jdbcType=NVARCHAR},
+			   PRICE=#{price,jdbcType=VARCHAR},
+			   REMARK=#{remark,jdbcType=NVARCHAR},
+			   MER_NO=#{merNo,jdbcType=CHAR},
+			   IS_GROUND=#{isGround,jdbcType=CHAR},
+			    GIFT_COUNT=#{giftCount,jdbcType=INTEGER},
+			     PIC_PATH = #{picPath,jdbcType=VARCHAR},
+			   INTEGRAL_VALUE=#{integralValue,jdbcType=VARCHAR},
+			   DETAIL=#{detail,jdbcType=BLOB},
+			   START_DATE=#{startDate,jdbcType=VARCHAR},
+			   END_DATE=#{endDate,jdbcType=NVARCHAR},
+			   REVIEW_FLAG=#{reviewFlag,jdbcType=CHAR}
+		where PRODUCT_ID=#{productId}
+	</update>
+
+	<delete id="ProductEnjoy_delete">
+		delete from PRODUCT_ENJOY where PRODUCT_ID=#{productId}
+	</delete>
+
+	<select id="ProductEnjoy_getById" resultMap="ProductEnjoy">
+		SELECT
+		<include refid="ProductEnjoy_columns_clean" />
+		FROM PRODUCT_ENJOY T
+		inner join MERCHANT_ENJOY M ON T.MER_NO = M.MER_NO
+		inner join t_b_org o on m.org_id = o.org_id
+		WHERE T.PRODUCT_ID = #{productId}
+	</select>
+	
+	<select id="ProductEnjoy_getProductEnjoyById" resultMap="ProductEnjoy">
+		SELECT
+		<include refid="ProductEnjoy_columns_no_detail" />
+		FROM PRODUCT_ENJOY T inner join MERCHANT_ENJOY M ON T.MER_NO = M.MER_NO
+		inner join t_b_org o on m.org_id = o.org_id
+		WHERE T.PRODUCT_ID = #{productId}
+		AND m.review_flag='0'
+		AND t.review_flag='0'
+	</select>
+	
+	
+	<select id="ProductEnjoy_getProductsByMerNo" resultMap="ProductEnjoy">
+		SELECT
+		<include refid="ProductEnjoy_columns_no_detail" />
+		FROM PRODUCT_ENJOY T
+		inner join MERCHANT_ENJOY M ON T.MER_NO = M.MER_NO
+		inner join t_b_org o on m.org_id = o.org_id
+		WHERE T.MER_NO = #{merNo}
+		AND t.review_flag='0'
+		AND t.IS_GROUND = '0'
+		AND T.PRODUCT_ID  NOT IN (SELECT M.PRODUCT_ID FROM ACTIVITY_PRODUCT_ENJOY M WHERE M.ACTIVITY_ID=#{activityId})
+	</select>
+	
+	<select id="ProductEnjoy_findProductsByIds" resultMap="ProductEnjoy">
+		SELECT
+		<include refid="ProductEnjoy_columns_clean" />
+		FROM PRODUCT_ENJOY T
+		inner join MERCHANT_ENJOY M ON T.MER_NO = M.MER_NO
+		inner join t_b_org o on m.org_id = o.org_id
+		WHERE T.PRODUCT_ID in 
+		<foreach collection="array" item="productIds"  open="(" separator="," close=")">  
+         #{productIds}  
+        </foreach>
+		AND m.review_flag='0'
+		AND t.review_flag='0'
+	</select>
+
+	<sql id="ProductEnjoy_findPage_where">
+		<where>
+			<if test="productId != null and productId !=''">
+				AND T.PRODUCT_ID = #{productId}
+			</if>
+			<if test="productName != null and productName !=''">
+				AND T.PRODUCT_NAME like '%'||#{productName}||'%'
+			</if>
+			<if test="price != null and price !=''">
+				AND T.PRICE = #{price}
+			</if>
+			<if test="remark != null and remark !=''">
+				AND T.REMARK = #{remark}
+			</if>
+			<if test="merNo != null and merNo !=''">
+				AND T.MER_NO = #{merNo}
+			</if>
+			<if test="endDate != null and endDate !=''">
+				AND T.END_DATE &gt;= #{endDate}
+			</if>
+			<if test="integralValue != null and integralValue !=''">
+				AND T.INTEGRAL_VALUE = #{integralValue}
+			</if>
+			<if test="isGround != null and isGround !=''">
+				AND T.IS_GROUND = #{isGround}
+			</if>
+			<if test="merName != null and merName !=''">
+				AND M.MER_NAME like '%'||#{merName}||'%'
+			</if>
+			<if test="reviewFlagM != null and reviewFlagM !=''">
+				AND M.review_flag = #{reviewFlagM}
+			</if>
+			<if test="endServiceDate != null and endServiceDate !=''">
+				AND M.END_SERVICE_DATE &gt;= #{endServiceDate}
+			</if>
+			<if test="serviceStare != null and serviceStare !=''">
+				AND M.SERVICE_STARE = #{serviceStare}
+			</if>
+			<if test="reviewFlag != null and reviewFlag !=''">
+				AND T.review_flag = #{reviewFlag}
+			</if>
+			<if test="orgIdUser != null and orgIdUser != ''">
+				AND O.ORG_ID in
+				<foreach item="orgIdUser" index="index" collection="orgIdUser" open="("
+						 separator="," close=")">
+					#{orgIdUser}
+				</foreach>
+			</if>
+			<if test="integralValuestart != null and integralValuestart !=''">
+				AND T.INTEGRAL_VALUE &gt;= TO_NUMBER(#{integralValuestart})
+			</if>
+			<if test="integralValueend != null and integralValueend !=''">
+				AND T.INTEGRAL_VALUE &lt;= TO_NUMBER(#{integralValueend})
+			</if>
+		</where>
+	</sql>
+
+	<select id="ProductEnjoy_findCountByWhere" resultType="int">
+		SELECT count(*) FROM PRODUCT_ENJOY T inner join MERCHANT_ENJOY M ON T.MER_NO = M.MER_NO
+		inner join t_b_org o on m.org_id = o.org_id
+		<include refid="ProductEnjoy_findPage_where" />
+	</select>
+
+
+	<select id="ProductEnjoy_findListByWhere" resultMap="ProductEnjoy">
+		SELECT
+		<include refid="ProductEnjoy_columns" />
+		FROM PRODUCT_ENJOY T inner join MERCHANT_ENJOY M ON T.MER_NO = M.MER_NO
+		inner join t_b_org o on m.org_id = o.org_id
+		<include refid="ProductEnjoy_findPage_where" />
+		ORDER BY nlssort(t.product_name,'NLS_SORT=SCHINESE_PINYIN_M') 
+	</select>
+
+	<update id="ProductEnjoy_updateIsGround">
+		UPDATE PRODUCT_ENJOY SET
+		IS_GROUND = #{isGround},
+		START_DATE=#{startDate}
+		WHERE PRODUCT_ID = #{productId}
+	</update>
+</mapper>
+

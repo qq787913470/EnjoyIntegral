@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yada.security.dao.ActionDao">
+
+	<resultMap id="Action" type="com.yada.security.model.Action">
+        <result property="actionId" column="ACTION_ID"/>
+        <result property="actionName" column="ACTION_NAME"/>
+        <result property="actionValue" column="ACTION_VALUE"/>
+        <result property="actionOrder" column="ACTION_ORDER"/>
+        <result property="remark" column="REMARK"/>
+        <result property="typeId" column="TYPE_ID"/>
+        <result property="typeName" column="TYPE_NAME"/>
+	</resultMap>
+	  <!-- 一对多   多的标识 -->
+	<resultMap id="PermitsAction" type="com.yada.security.model.Action" extends="Action">
+	  <collection property="permits"   ofType="com.yada.security.model.Permit"   >
+		    <id property="permitId" column="PERMIT_ID" />
+		    <result property="menuResId" column="MENU_RES_ID"/>
+		    <result property="actionId" column="ACTION_ID"/>
+		    <result property="typeId" column="TYPE_ID"/>
+		    <result property="permitOrder" column="PERMIT_ORDER"/>
+	  </collection>
+	</resultMap>
+	<sql id="Action_columns">
+		a.ACTION_ID,ACTION_NAME,ACTION_VALUE,ACTION_ORDER,A.REMARK,T.TYPE_ID,TYPE_NAME
+	</sql>
+
+	
+	<insert id="Action_insert"  keyProperty="actionId" parameterType="com.yada.security.model.Action">
+	   <selectKey resultType="Long" order="BEFORE" keyProperty="actionId">
+			SELECT T_SEQ_P_SHIRO_ACTION.nextval AS ID FROM DUAL 
+        </selectKey>
+        INSERT INTO T_P_SHIRO_ACTION (
+        	ACTION_ID ,
+        	ACTION_NAME ,
+        	ACTION_VALUE ,
+        	ACTION_ORDER ,
+        	REMARK 
+        ) VALUES (
+        	#{actionId} ,
+        	#{actionName} ,
+        	#{actionValue} ,
+        	#{actionOrder} ,
+        	#{remark,jdbcType=VARCHAR} 
+        )
+	</insert>
+    
+    <insert id="insertType"  keyProperty="actionId" parameterType="com.yada.security.model.Action">
+        INSERT INTO T_P_SHIRO_ACTION (
+        	ACTION_ID ,
+        	ACTION_NAME ,
+        	ACTION_VALUE ,
+        	ACTION_ORDER ,
+        	REMARK 
+        ) VALUES (
+        	#{actionId} ,
+        	#{actionName} ,
+        	#{actionValue} ,
+        	#{actionOrder} ,
+        	#{remark,jdbcType=VARCHAR} 
+        )
+	</insert>
+    
+	<update id="Action_update" >
+        UPDATE T_P_SHIRO_ACTION SET
+	        ACTION_NAME = #{actionName,jdbcType=VARCHAR} ,
+	        ACTION_VALUE = #{actionValue,jdbcType=VARCHAR} ,
+	        ACTION_ORDER = #{actionOrder} ,
+	        REMARK = #{remark,jdbcType=VARCHAR}  
+        WHERE 
+	        ACTION_ID = #{actionId} 
+	</update>
+
+    <delete id="Action_delete">
+        DELETE FROM T_P_SHIRO_ACTION WHERE ACTION_ID = #{id} 
+    </delete>
+    
+    <select id="nextVal" resultType="Long">
+		SELECT T_SEQ_P_SHIRO_ACTION.nextval AS ID FROM DUAL
+	</select>
+    
+    <select id="Action_getById" resultMap="Action">
+		SELECT <include refid="Action_columns" /> 
+		FROM T_P_SHIRO_ACTION a full join T_P_SHIRO_RESTYPE_ACTION r on a.ACTION_ID=r.ACTION_ID 
+		full join T_P_SHIRO_res_type t on t.type_id = r.type_id
+		WHERE  a.ACTION_ID = #{id} 
+		and t.typeId=#{typeId}
+	</select>
+	
+	<sql id="Action_findPage_where">
+		<where>	 
+	       <if test="actionId != null and actionId !=''">
+				AND a.ACTION_ID = #{actionId}
+			</if>
+	       <if test="typeId != null and typeId !=''">
+				AND T.TYPE_ID = #{typeId}
+			</if>
+	       <if test="actionName != null and actionName !=''">
+				AND ACTION_NAME = #{actionName}
+			</if>
+	       <if test="actionValue != null and actionValue !=''">
+				AND ACTION_VALUE = #{actionValue}
+			</if>
+	       <if test="actionOrder != null and actionOrder !=''">
+				AND ACTION_ORDER = #{actionOrder}
+			</if>
+	       <if test="remark != null and remark !=''">
+				AND REMARK = #{remark}
+			</if>
+			AND a.ACTION_ID is not null
+		</where>
+	</sql>
+		
+    <select id="Action_findCountByWhere" resultType="int">
+        SELECT count(*) FROM T_P_SHIRO_ACTION 
+		<include refid="Action_findPage_where"/>    
+    </select>
+    
+    <select id="Action_findListByWhere" resultMap="Action">
+    	SELECT <include refid="Action_columns" /> FROM 
+    	T_P_SHIRO_ACTION a full join T_P_SHIRO_RESTYPE_ACTION r on a.ACTION_ID=r.ACTION_ID 
+    	full join T_P_SHIRO_res_type t on t.type_id = r.type_id 
+    	<include refid="Action_findPage_where"/>
+    	 ORDER BY a.ACTION_ORDER
+    </select>
+    
+    <select id="findListByRTpId" resultMap="Action">
+    	SELECT T.ACTION_ID,T.ACTION_NAME FROM T_P_SHIRO_ACTION T JOIN T_P_SHIRO_RESTYPE_ACTION RA ON RA.ACTION_ID=T.ACTION_ID 
+		WHERE RA.TYPE_ID=#{resTypeId} ORDER BY T.ACTION_ORDER
+    </select>
+    <select id="findListResType" resultMap="Action">
+    	SELECT DISTINCT T.TYPE_ID,TYPE_NAME FROM 
+    	T_P_SHIRO_ACTION A FULL JOIN T_P_SHIRO_RESTYPE_ACTION R ON A.ACTION_ID=R.ACTION_ID 
+    	FULL JOIN T_P_SHIRO_RES_TYPE T ON T.TYPE_ID = R.TYPE_ID  
+    	WHERE T.TYPE_ID IS NOT NULL AND T.TYPE_NAME IS NOT NULL
+    	ORDER BY T.TYPE_ID
+    </select>
+    <select id="MaxOrderNumber" resultType="java.lang.String">
+    	SELECT MAX(A.ACTION_ORDER) FROM 
+    	T_P_SHIRO_ACTION A FULL JOIN T_P_SHIRO_RESTYPE_ACTION R ON A.ACTION_ID=R.ACTION_ID 
+    	FULL JOIN T_P_SHIRO_RES_TYPE T ON T.TYPE_ID = R.TYPE_ID  WHERE T.TYPE_ID=#{typeId}
+    </select>
+    <select id="isInsert" resultMap="Action">
+    	select * from T_P_SHIRO_ACTION t left join T_P_SHIRO_restype_action ra on ra.action_id =t.action_id
+where ra.type_id=#{typeId}
+    </select>
+    <update id="updateActionOrder" >
+    	UPDATE T_P_SHIRO_ACTION T SET T.ACTION_ORDER=#{index} WHERE T.ACTION_ID=#{actionId}
+    </update>
+    
+</mapper>
+

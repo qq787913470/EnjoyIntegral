@@ -1,0 +1,19 @@
+
+body{font-size:12px;color:#000;font-family:Î¢ÈíÑÅºÚ,Arial, "ËÎÌå", SimSun ,serif, sans-serif;text-align: center;}
+*{margin:0; padding:0;}
+
+#wrapper{max-width: 1400px;min-width: 1000px;}
+#header{width: 100%;height: 124px;background: url(../images/bg_2.jpg) repeat-x center;}
+#header_inner{width: 100%;height: 92px;background: url(../images/head_bg.jpg) no-repeat right;}
+#header_inner ul{list-style-type: none;float: left;}
+#header_inner li{float: left;vertical-align: middle;}
+.logo{margin-top: 25px;margin-left:30px;}
+.title{margin-top:50px;margin-left:15px;}
+#pingtai{float: left;padding-top:5px;}
+#pingtai p{font-size: 18px;margin-left:30px;}
+#yonghu_name{float:right;margin-right: 30px;padding-top:2px;}
+#yonghu_name a{text-decoration: none;}
+a:hover{color:#5D451D;}
+
+#welcome_inner{width:100%;text-align:center;}
+
