@@ -152,11 +152,11 @@ public class TranListManager extends BaseService<TranList, java.lang.String>{
 			tranListDao.insert(tranList);
 
 			//2.更新客户信息
-			ca.setActivityId(productCarts.get(i).getActivityId());
+			/*ca.setActivityId(productCarts.get(i).getActivityId());
 			ca.setCertificateNo(productCarts.get(i).getCertificateNo());
 			ca.setCertificateType(productCarts.get(i).getCertificateType());
 			ca.setIsJoin("0");
-			customerActivityDao.update(ca);
+			customerActivityDao.update(ca);*/
 
 			//3.添加购物车信息
 			//TODO 这个生成id的方式，之前是tranList.getTraceNo()+tranList.getBatchNo()+tranList.getBillNo()，可能需要修改过来，现在是测试，就先用这个
@@ -230,5 +230,12 @@ public class TranListManager extends BaseService<TranList, java.lang.String>{
 	public void updateTranList(TranList tranList){
 		//更新pos机交易状态为交易成功
 		tranListDao.update(tranList);
+		//更新客户参加活动的权限状态
+		CustomerActivity ca = new CustomerActivity();
+		ca.setActivityId(tranList.getActivityId());
+		ca.setCertificateNo(tranList.getCertificateNo());
+		ca.setCertificateType(tranList.getCertificateType());
+		ca.setIsJoin("0");
+		customerActivityDao.update(ca);
 	}
 }
