@@ -20,6 +20,8 @@ public class CustomerActivityDaoImpl extends BaseDaoImpl<CustomerActivity, java.
 		CustomerActivity customerAct = this.getSqlSessionTemplate().selectOne("CustomerActivity_getById_link", map);
 		if(customerAct==null)
 			this.insert(customerActivity);
+		else
+			this.update(customerActivity);
 		
 	}
 

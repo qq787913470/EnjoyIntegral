@@ -69,50 +69,82 @@ public class TranQueryController {
         HttpSession session = request.getSession();
         List<ProductCart> productCarts = (List<ProductCart>) session
                 .getAttribute("productsInCart");
-        TranList tranList = new TranList();
+        List<TranList> tranLists = tranListManager.findTranListByTranId(tranId);
         //流水编号
-        tranList.setTranId(tranId);
-        //授权号
-        if (authNo != null && !(authNo.trim().equals(""))){tranList.setAuthNo(authNo.trim());}
-        //所属机构名称
-        if (bankName != null && !(bankName.trim().equals(""))){tranList.setBankName(bankName.trim());}
-        //批次号
-        if (batchNo != null && !(batchNo.trim().equals(""))){tranList.setBatchNo(batchNo.trim());}
-        //票据号
-        if (billNo != null && !(billNo.trim().equals(""))){}{tranList.setBillNo(billNo.trim());}
-        //卡类型
-        if (cardType != null && !(cardType.trim().equals(""))){tranList.setCardType(cardType.trim());}
-        //卡有效期
-        if (cartValidity != null && !(cartValidity.trim().equals(""))){tranList.setCartValidity(cartValidity.trim());}
-        //款台号
-        if (cashNo != null && !(cashNo.trim().equals(""))){tranList.setCashNo(cashNo.trim());}
-        //兑换客户卡号
-        if (customerCardNo != null && !(customerCardNo.trim().equals(""))){tranList.setCustomerCardNo(customerCardNo.trim());}
-        //供应商名称
-        if (merNamePos != null && !(merNamePos.trim().equals(""))){tranList.setMerNamePos(merNamePos);}
-        //供应商商户号
-        if (merNoPos != null && !(merNoPos.trim().equals(""))){tranList.setMerNoPos(merNoPos);}
-        //系统参考号
-        if (sysReference != null && !(sysReference.trim().equals(""))){tranList.setSysReference(sysReference.trim());}
-        //终端号
-        if (terminalNo != null && !(terminalNo.trim().equals(""))){tranList.setTerminalNo(terminalNo.trim());}
-        //流水号
-        if (traceNo != null && !(traceNo.trim().equals(""))){tranList.setTraceNo(traceNo.trim());}
-        //交易状态
-        if (tranState != null && !(tranState.trim().equals(""))){tranList.setTranState(tranState.trim());}
-        //交易方式
-        if (tranWay != null && !(tranWay.trim().equals(""))){tranList.setTranWay(tranWay.trim());}
-        //交易日期、交易时间
-        if (tranDate != null && !(tranDate.trim().equals(""))) {
-            tranList.setTranDate(tranDate.substring(0, 8));
-            tranList.setTranTime(tranDate.substring(8, tranDate.length()));
+        for(TranList tranList:tranLists) {
+            //授权号
+            if (authNo != null && !(authNo.trim().equals(""))) {
+                tranList.setAuthNo(authNo.trim());
+            }
+            //所属机构名称
+            if (bankName != null && !(bankName.trim().equals(""))) {
+                tranList.setBankName(bankName.trim());
+            }
+            //批次号
+            if (batchNo != null && !(batchNo.trim().equals(""))) {
+                tranList.setBatchNo(batchNo.trim());
+            }
+            //票据号
+            if (billNo != null && !(billNo.trim().equals(""))) {
+            }
+            {
+                tranList.setBillNo(billNo.trim());
+            }
+            //卡类型
+            if (cardType != null && !(cardType.trim().equals(""))) {
+                tranList.setCardType(cardType.trim());
+            }
+            //卡有效期
+            if (cartValidity != null && !(cartValidity.trim().equals(""))) {
+                tranList.setCartValidity(cartValidity.trim());
+            }
+            //款台号
+            if (cashNo != null && !(cashNo.trim().equals(""))) {
+                tranList.setCashNo(cashNo.trim());
+            }
+            //兑换客户卡号
+            if (customerCardNo != null && !(customerCardNo.trim().equals(""))) {
+                tranList.setCustomerCardNo(customerCardNo.trim());
+            }
+            //供应商名称
+            if (merNamePos != null && !(merNamePos.trim().equals(""))) {
+                tranList.setMerNamePos(merNamePos);
+            }
+            //供应商商户号
+            if (merNoPos != null && !(merNoPos.trim().equals(""))) {
+                tranList.setMerNoPos(merNoPos);
+            }
+            //系统参考号
+            if (sysReference != null && !(sysReference.trim().equals(""))) {
+                tranList.setSysReference(sysReference.trim());
+            }
+            //终端号
+            if (terminalNo != null && !(terminalNo.trim().equals(""))) {
+                tranList.setTerminalNo(terminalNo.trim());
+            }
+            //流水号
+            if (traceNo != null && !(traceNo.trim().equals(""))) {
+                tranList.setTraceNo(traceNo.trim());
+            }
+            //交易状态
+            if (tranState != null && !(tranState.trim().equals(""))) {
+                tranList.setTranState(tranState.trim());
+            }
+            //交易方式
+            if (tranWay != null && !(tranWay.trim().equals(""))) {
+                tranList.setTranWay(tranWay.trim());
+            }
+            //交易日期、交易时间
+            if (tranDate != null && !(tranDate.trim().equals(""))) {
+                tranList.setTranDate(tranDate.substring(0, 8));
+                tranList.setTranTime(tranDate.substring(8, tranDate.length()));
+            }
+            response.setContentType("text/html;charset=utf-8");
+            tranList.setTranState("00");
         }
-        response.setContentType("text/html;charset=utf-8");
-        tranList.setTranState("00");
-
         // 响应
         try {
-            tranListManager.updateTranList(tranList);
+            tranListManager.updateTranList(tranLists);
             response.getWriter().print("success");
         } catch (IOException e) {
             try {

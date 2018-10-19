@@ -535,9 +535,10 @@ public class BusinessController  extends BaseController {
 			 String bankName, String cardType,String cartValidity, String sysReference,
 			 String authNo,String traceNo, String billNo, String batchNo, String tranWay,
 			String cashNo,String tranId) {
-		TranList tranList = new TranList();
+		//TranList tranList = new TranList();
+		List<TranList> tranLists = tranListManager.findTranListByTranId(tranId);
 		//流水编号
-		tranList.setTranId(tranId);
+		for(TranList tranList:tranLists){
 		//授权号
 		if (authNo != null && !(authNo.trim().equals(""))){tranList.setAuthNo(authNo.trim());}
 		//所属机构名称
@@ -575,11 +576,11 @@ public class BusinessController  extends BaseController {
 		}
 		//流水状态
 		tranList.setState("00");
-
+		}
 		response.setContentType("text/html;charset=utf-8");
 		// 响应
 		try {
-			tranListManager.updateTranList(tranList);
+			tranListManager.updateTranList(tranLists);
 			response.getWriter().print("success");
 		} catch (IOException e) {
 			try {
