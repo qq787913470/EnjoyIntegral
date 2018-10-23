@@ -69,6 +69,16 @@ public class ProductEnjoy {
 	private String orgName;
 	private String orgId;
 
+	public String getClose_reason() {
+		return close_reason;
+	}
+
+	public void setClose_reason(String close_reason) {
+		this.close_reason = close_reason;
+	}
+
+	private String close_reason;
+
 	public String getOrgName() {
 		return orgName;
 	}

@@ -57,6 +57,19 @@ public class MerchantBase {
 	private String endServiceDate;
 	private String serviceStare;
 
+	public String getMerDetail() {
+		return merDetail;
+	}
+
+	public void setMerDetail(String merDetail) {
+		this.merDetail = merDetail;
+	}
+
+	private String merDetail;
+
+
+
+
 	public String getEndServiceDate() {
 		return endServiceDate;
 	}

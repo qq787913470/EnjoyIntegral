@@ -76,6 +76,17 @@ public class Activity {
 	private java.lang.String state;
 	private Object detail;
 
+	public String getCloseeason() {
+		return closeeason;
+	}
+
+	public void setCloseeason(String closeeason) {
+		this.closeeason = closeeason;
+	}
+
+	//	活动关闭原因
+   private java.lang.String  closeeason ;
+
 	//columns END
 
 	public Activity(){
