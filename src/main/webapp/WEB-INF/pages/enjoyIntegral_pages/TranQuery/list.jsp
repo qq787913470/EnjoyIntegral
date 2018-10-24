@@ -265,24 +265,26 @@
             //var responMessageStr = '5400                                                          0000                                                                         00                                000112            000000000000                              000000080008                                                                                                                                                ';
             var responMessage = new responseMess(responMessageStr);
             var integral = responMessage.getSzResult(); //查询响应结果
-		    if(integral == '00'){
+            var customerCardNo = responMessage.getSzCardNo();
+            var merNoPos = responMessage.getSzMerchant();
+            var merNamePos = responMessage.getSzMerchantName();
+            var tranDate = responMessage.getSzChargeDateTime();
+            var terminalNo = responMessage.getSzTermId();
+            var tranState = responMessage.getSzResult();
+            var bankName = responMessage.getSzBankName();
+            var cardType = responMessage.getSzCardType();
+            var cartValidity = responMessage.getSzExpr();
+            var sysReference = responMessage.getSzRefNo();
+            var authNo = responMessage.getSzAuthId();
+            var traceNo = responMessage.getSzTraceNo();
+            var billNo = responMessage.getSzSeqNo();
+            var batchNo = responMessage.getSzBatchNo();
+            var tranWay = responMessage.getSzTranFlag();
+            var cashNo = responMessage.getSzDesktopNo();
+            if (integral == '99'|| integral=="" || integral == null) {
+                alert("响应超时,请先去查询界面查询该交易！失败后再重新发起查询");
+            }else{
                 //TODO 需要恢复的注释
-				var customerCardNo = responMessage.getSzCardNo();
-				 var merNoPos = responMessage.getSzMerchant();
-				 var merNamePos = responMessage.getSzMerchantName();
-				 var tranDate = responMessage.getSzChargeDateTime();
-				 var terminalNo = responMessage.getSzTermId();
-				 var tranState = responMessage.getSzResult();
-				 var bankName = responMessage.getSzBankName();
-				 var cardType = responMessage.getSzCardType();
-				 var cartValidity = responMessage.getSzExpr();
-				 var sysReference = responMessage.getSzRefNo();
-				 var authNo = responMessage.getSzAuthId();
-				 var traceNo = responMessage.getSzTraceNo();
-				 var billNo = responMessage.getSzSeqNo();
-				 var batchNo = responMessage.getSzBatchNo();
-				 var tranWay = responMessage.getSzTranFlag();
-				 var cashNo = responMessage.getSzDesktopNo();
                /* var customerCardNo = "111";
                 var merNoPos = "111";
                 var merNamePos = "111";
@@ -321,10 +323,11 @@
                         batchNo : batchNo,
                         tranWay : tranWay,
                         cashNo : cashNo,
+                        integral:integral,
                         t : new Date().getTime()
                     },
                     load : function(data) {
-                        if(data == 'success'){
+                        if(data == 'success'&&integral=='00'){
                             count ++;
 						}
                     },

@@ -319,6 +319,7 @@
                                         batchNo : batchNo,
                                         tranWay : tranWay,
                                         cashNo : cashNo,
+                                        integral:integral,
                                         t : new Date().getTime()
                                     },
                                     load : function(data) {

@@ -534,7 +534,7 @@ public class BusinessController  extends BaseController {
 			String merNamePos, String tranDate, String terminalNo,String tranState,
 			 String bankName, String cardType,String cartValidity, String sysReference,
 			 String authNo,String traceNo, String billNo, String batchNo, String tranWay,
-			String cashNo,String tranId) {
+			String cashNo,String tranId,String integral) {
 		//TranList tranList = new TranList();
 		List<TranList> tranLists = tranListManager.findTranListByTranId(tranId);
 		//流水编号
@@ -575,12 +575,12 @@ public class BusinessController  extends BaseController {
 			tranList.setTranTime(tranDate.substring(8, tranDate.length()));
 		}
 		//流水状态
-		tranList.setState("00");
+		//tranList.setState("00");
 		}
 		response.setContentType("text/html;charset=utf-8");
 		// 响应
 		try {
-			tranListManager.updateTranList(tranLists);
+			tranListManager.updateTranList(tranLists,integral);
 			response.getWriter().print("success");
 		} catch (IOException e) {
 			try {

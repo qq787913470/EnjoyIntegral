@@ -66,19 +66,11 @@ public class TranListManager extends BaseService<TranList, java.lang.String> {
         //查询这条交易下的所有交易
         List<TranList> tranLists = tranListDao.getTranListByTranId(oldTranList.getTranId());
 
+        CustomerActivity ca = new CustomerActivity();
         //更新原交易流水数据，交易状态为成功，系统记录为撤销操作
         for (TranList tranList : tranLists) {
             tranList.setState("02");
             tranListDao.update(tranList);
-        }
-
-        CustomerActivity ca = new CustomerActivity();
-        for (TranList tranList : tranLists) {
-            /*//将state，置为01.表撤销  tran_state，置为空，等待pos机返回结果后再更新数据
-			tranList.setTranId(uuid);
-			tranList.setTranState("");
-			tranList.setState("01");
-			tranListDao.insert(tranList);*/
 
             //还原之前兑换的商品数量和积分
             ProductEnjoy activityProduct = productEnjoyDao.getById(tranList.getProductId());
@@ -154,7 +146,7 @@ public class TranListManager extends BaseService<TranList, java.lang.String> {
             tranListDao.insert(tranList);
 
             //2.更新客户信息
-			/*ca.setActivityId(productCarts.get(i).getActivityId());
+            /*ca.setActivityId(productCarts.get(i).getActivityId());
 			ca.setCertificateNo(productCarts.get(i).getCertificateNo());
 			ca.setCertificateType(productCarts.get(i).getCertificateType());
 			ca.setIsJoin("0");
@@ -189,12 +181,12 @@ public class TranListManager extends BaseService<TranList, java.lang.String> {
         //查询这条交易下的所有交易
         List<TranList> tranLists = tranListDao.getTranListByTranId(tranId);
 
-        CustomerActivity ca = new CustomerActivity();
+        //CustomerActivity ca = new CustomerActivity();
         //添加撤销流水数据
         for (TranList tranList : tranLists) {
             //更新原交易流水数据，交易状态为成功，系统记录为撤销操作
-            tranList.setState("02");
-            tranListDao.update(tranList);
+            //tranList.setState("02");
+            //tranListDao.update(tranList);
 
 
             //添加新的交易流水，将state，置为01.表撤销  tran_state，置为空，等待pos机返回结果后再更新数据
@@ -204,7 +196,7 @@ public class TranListManager extends BaseService<TranList, java.lang.String> {
             tranList.setOldTranId(tranId);
             tranListDao.insert(tranList);
 
-            //还原之前兑换的商品数量和积分
+            /*//还原之前兑换的商品数量和积分
             ProductEnjoy activityProduct = productEnjoyDao.getById(tranList.getProductId());
             if (activityProduct != null) {
                 activityProduct.setGiftCount(activityProduct.getGiftCount() + tranList.getTranCount().intValue());
@@ -226,14 +218,34 @@ public class TranListManager extends BaseService<TranList, java.lang.String> {
             ca.setCertificateNo(tranList.getCertificateNo());
             ca.setCertificateType(tranList.getCertificateType());
             ca.setIsJoin("1");
-            customerActivityDao.update(ca);
+            customerActivityDao.update(ca);*/
         }
     }
 
-    public void updateTranList(List<TranList> tranLists) {
+    public void updateTranList(List<TranList> tranLists, String integral) {
         //更新pos机交易状态为交易成功
         for (TranList tranList : tranLists) {
             tranListDao.update(tranList);
+
+            //原之前兑换的商品数量
+            //如果交易失败 要还原之前的产品个数
+            if (!integral.equals("00")) {
+                ProductEnjoy activityProduct = productEnjoyDao.getById(tranList.getProductId());
+                if (activityProduct != null) {
+                    activityProduct.setGiftCount(activityProduct.getGiftCount() + tranList.getTranCount().intValue());
+                    productEnjoyDao.update(activityProduct);
+                }
+                ProductBase productBase = productBaseDao.getById(tranList.getProductId());
+                if (productBase != null) {
+                    if (productBase.getGiftCount() != null) {
+                        System.out.println(productBase.getGiftCount());
+                        System.out.println("-------------");
+                        productBase.setGiftCount(productBase.getGiftCount() + tranList.getTranCount().intValue());
+                        System.out.println(productBase.getGiftCount());
+                        productBaseDao.update(productBase);
+                    }
+                }
+            }
         }
         //更新客户参加活动的权限状态
         CustomerActivity ca = new CustomerActivity();
@@ -242,5 +254,64 @@ public class TranListManager extends BaseService<TranList, java.lang.String> {
         ca.setCertificateType(tranLists.get(0).getCertificateType());
         ca.setIsJoin("0");
         customerActivityDao.update(ca);
+    }
+
+    public void updateTranListForQuqery(List<TranList> tranLists, String integral) {
+        //更新pos机交易状态
+        for (TranList tranList : tranLists) {
+            String tranType = tranList.getState();
+            tranList.setTranState(integral);
+            tranListDao.update(tranList);
+
+
+            //原之前兑换的商品数量
+            //如果是消费并且失败 或者是撤销并且成功的情况下 要还原之前的产品个数
+            if ((tranType.equals("00") && !integral.equals("00")) || (tranType.equals("01") && integral.equals("00"))) {
+
+                ProductEnjoy activityProduct = productEnjoyDao.getById(tranList.getProductId());
+                if (activityProduct != null) {
+                    activityProduct.setGiftCount(activityProduct.getGiftCount() + tranList.getTranCount().intValue());
+                    productEnjoyDao.update(activityProduct);
+                }
+                ProductBase productBase = productBaseDao.getById(tranList.getProductId());
+                if (productBase != null) {
+                    if (productBase.getGiftCount() != null) {
+                        System.out.println(productBase.getGiftCount());
+                        System.out.println("-------------");
+                        productBase.setGiftCount(productBase.getGiftCount() + tranList.getTranCount().intValue());
+                        System.out.println(productBase.getGiftCount());
+                        productBaseDao.update(productBase);
+                    }
+                }
+            }
+
+        }
+
+        //判断交易类型
+        String tranType = tranLists.get(0).getState();
+        //交易为消费的话直接更新原交易状态，如果为撤销交易并且交易成功，还要更显原交易的交易类型为已撤销
+        if (tranType.equals("01")) {
+            List<TranList> oldTrans = tranListDao.getTranListByTranId(tranLists.get(0).getOldTranId());
+            for (TranList tran : oldTrans) {
+                if (integral.equals("00")) {
+                    tran.setState("02");
+                    tranListDao.update(tran);
+                }
+            }
+        }
+
+        //更新客户参加活动的权限状态
+        CustomerActivity ca = new CustomerActivity();
+        ca.setActivityId(tranLists.get(0).getActivityId());
+        ca.setCertificateNo(tranLists.get(0).getCertificateNo());
+        ca.setCertificateType(tranLists.get(0).getCertificateType());
+
+        //判断查询的交易类型 撤销交易需要重置客户参加活动的状态为未参加 如果是消费交易需要更新客户单价活动的状态为已参加
+        if (tranLists.get(0).getState().equals("00") && integral.equals("00")) {
+            ca.setIsJoin("0");
+        } else if (tranLists.get(0).getState().equals("01") && integral.equals("00"))
+            ca.setIsJoin("1");
+        customerActivityDao.update(ca);
+
     }
 }

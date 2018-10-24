@@ -65,7 +65,7 @@ public class TranQueryController {
                                     String customerCardNo, String merNoPos,String merNamePos, String tranDate,
                                     String terminalNo,String tranState, String bankName, String cardType,
                                     String cartValidity, String sysReference, String authNo,String traceNo,
-                                    String billNo, String batchNo, String tranWay,String cashNo,String tranId) {
+                                    String billNo, String batchNo, String tranWay,String cashNo,String tranId,String integral) {
         HttpSession session = request.getSession();
         List<ProductCart> productCarts = (List<ProductCart>) session
                 .getAttribute("productsInCart");
@@ -140,11 +140,11 @@ public class TranQueryController {
                 tranList.setTranTime(tranDate.substring(8, tranDate.length()));
             }
             response.setContentType("text/html;charset=utf-8");
-            tranList.setTranState("00");
+            //tranList.setTranState("00");
         }
         // 响应
         try {
-            tranListManager.updateTranList(tranLists);
+            tranListManager.updateTranListForQuqery(tranLists,integral);
             response.getWriter().print("success");
         } catch (IOException e) {
             try {
