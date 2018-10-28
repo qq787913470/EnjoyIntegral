@@ -62,11 +62,18 @@
 							<tr>
 								<td class="lgridlist">活动：</td>
 								<td><input value="${productBase.productName}"  readonly="readonly"></td>
-
-								<td class="lgridlist">原因：</td>
-								<td><input data-dojo-type="dijit/form/TextBox" name="closeReason"
-									id="closeReason" ></td>
 							</tr>
+							<tr>
+								<td class="lgridlist">原因：</td>
+								<td colspan="3">
+									<textarea rows="3" cols="6" id="closeReason" name="closeReason" maxlength="100">${model.closeReason}</textarea>
+									<span style="color: red" id="closeReasonMess">*</span>
+								</td>
+							</tr>
+
+
+
+
 
 						</table>
 						<table class="b">

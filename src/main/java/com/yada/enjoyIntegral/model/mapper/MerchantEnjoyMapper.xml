@@ -37,6 +37,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		T.END_SERVICE_DATE,
 		T.SERVICE_STARE,
 		MER_DETAIL
+
 	</sql>
 
 	<insert id="MerchantEnjoy_insert" parameterType="com.yada.enjoyIntegral.model.MerchantEnjoy">

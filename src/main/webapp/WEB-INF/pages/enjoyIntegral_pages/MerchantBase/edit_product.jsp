@@ -131,6 +131,24 @@
                     <span style="color: red" id="remarkMess">*</span>
                 </td>
             </tr>
+
+
+            <tr>
+
+                <td class="lgridlist">
+                    商品上下架原因:
+                </td>
+                <td colspan="3">
+                    <textarea rows="3" cols="6" id="closeReason" name="closeReason" maxlength="100">${model.closeReason}</textarea>
+                    <span style="color: red" id="">*</span>
+                </td>
+            </tr>
+
+
+
+
+
+
             <tr>
                 <td class="lgridlist">
                     <%=ProductBase.ALIAS_DETAIL%>:

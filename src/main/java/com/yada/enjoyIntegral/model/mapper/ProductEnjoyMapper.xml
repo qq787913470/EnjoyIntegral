@@ -22,6 +22,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="reviewFlag" column="REVIEW_FLAG"/>
 		<result property="orgName" column="ORG_NAME"/>
 		<result property="orgId" column="ORG_ID"/>
+		<result property="closeReason" column="CLOSE_REASON"/>
 	</resultMap>
 
 	<sql id="ProductEnjoy_columns">
@@ -39,6 +40,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		T.END_DATE,
 		T.START_DATE,
 		T.REVIEW_FLAG,
+		T.CLOSE_REASON,
 		O.ORG_ID,
 		O.NAME as ORG_NAME
 	</sql>
@@ -56,6 +58,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		T.START_DATE,
 		T.END_DATE,
 		T.REVIEW_FLAG,
+		T.CLOSE_REASON,
 		O.ORG_ID,
 		O.NAME as ORG_NAME
 	</sql>
@@ -71,6 +74,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		T.START_DATE,
 		T.END_DATE,
 		T.REVIEW_FLAG,
+		T.CLOSE_REASON,
 		O.ORG_ID,
 		O.NAME as ORG_NAME
 	</sql>
@@ -117,7 +121,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			   DETAIL=#{detail,jdbcType=BLOB},
 			   START_DATE=#{startDate,jdbcType=VARCHAR},
 			   END_DATE=#{endDate,jdbcType=NVARCHAR},
-			   REVIEW_FLAG=#{reviewFlag,jdbcType=CHAR}
+			   REVIEW_FLAG=#{reviewFlag,jdbcType=CHAR},
+			   CLOSE_REASON=#{closeReason,jdbcType=VARCHAR}
 		where PRODUCT_ID=#{productId}
 	</update>
 

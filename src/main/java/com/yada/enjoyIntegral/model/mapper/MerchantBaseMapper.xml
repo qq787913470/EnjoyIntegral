@@ -103,7 +103,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		       REVIEW_FLAG=#{reviewFlag,jdbcType=CHAR},
 			   END_SERVICE_DATE=#{endServiceDate,jdbcType=VARCHAR},
 		       SERVICE_STARE=#{serviceStare,jdbcType=CHAR},
-		       MER_DETAIL=#{merDetail,jdbcType=VARCHAR},
+		       MER_DETAIL=#{merDetail,jdbcType=VARCHAR}
 		  WHERE 
 		     MER_NO=#{merNo}
 	</update>
