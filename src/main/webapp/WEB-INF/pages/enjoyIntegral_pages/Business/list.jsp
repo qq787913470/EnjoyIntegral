@@ -27,9 +27,7 @@
 	border: 0px solid #F3F3CD;
 	border-top: none;
 	background-color: #F3F3CD;
-	background-image: url("images/form_bg.jpg");
-	background-repeat: repeat-x;
-}
+	background-image: url("images/form_bg.jpg");  }
 </style>
 </head>
 
@@ -104,9 +102,9 @@
 		var responMessageStr='';
         console.log("积分查询的报文：")
         console.log(requestMessage.packMessage());
-
-        var responMessageStr =  YADAMIS.MISPOS(requestMessage.packMessage());
-        //var responMessageStr = '5400                                                          0000                                                                         00                                000112            000000000000                              000000080008                                                                                                                                                ';
+//真实环境放开此代码
+        //var responMessageStr =  YADAMIS.MISPOS(requestMessage.packMessage());
+        var responMessageStr = '5400                                                          0000                                                                         00                                000112            000000000000                              000000080008                                                                                                                                                ';
 		var responMessage = new responseMess(responMessageStr);
 		var integral = responMessage.getSzResult(); //查询响应结果
 		var integralresult = responMessage.getSzPoint(); //查询出来的积分值

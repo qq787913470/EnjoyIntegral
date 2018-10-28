@@ -19,6 +19,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="reviewFlag" column="REVIEW_FLAG"/>
 		<result property="endServiceDate" column="END_SERVICE_DATE"/>
 		<result property="serviceStare" column="SERVICE_STARE"/>
+		<result property="merDetail" column="MER_DETAIL"/>
 	</resultMap>
 
 	<sql id="MerchantBase_columns">
@@ -34,7 +35,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		T.ORG_ID,
 		T.REVIEW_FLAG,
 		T.END_SERVICE_DATE,
-		T.SERVICE_STARE
+		T.SERVICE_STARE,
+		T.MER_DETAIL
 	</sql>
 
 	<insert id="MerchantBase_insert" parameterType="com.yada.enjoyIntegral.model.MerchantBase">
@@ -56,7 +58,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		 ORG_ID,
 		 REVIEW_FLAG,
 		 END_SERVICE_DATE,
-		 SERVICE_STARE
+		 SERVICE_STARE,
+		 MER_DETAIL
 		 )
 		   values
 		 (#{merNo},
@@ -71,7 +74,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		 #{orgId,jdbcType=VARCHAR},
 		 #{reviewFlag,jdbcType=VARCHAR},
 		 #{endServiceDate},
-		 #{serviceStare}
+		 #{serviceStare},
+		 #{merDetail}
 		 )
 		]]>
 	</insert>
@@ -98,7 +102,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			   ORG_ID=#{orgId,jdbcType=VARCHAR,jdbcType=VARCHAR},
 		       REVIEW_FLAG=#{reviewFlag,jdbcType=CHAR},
 			   END_SERVICE_DATE=#{endServiceDate,jdbcType=VARCHAR},
-		       SERVICE_STARE=#{serviceStare,jdbcType=CHAR}
+		       SERVICE_STARE=#{serviceStare,jdbcType=CHAR},
+		       MER_DETAIL=#{merDetail,jdbcType=VARCHAR},
 		  WHERE 
 		     MER_NO=#{merNo}
 	</update>

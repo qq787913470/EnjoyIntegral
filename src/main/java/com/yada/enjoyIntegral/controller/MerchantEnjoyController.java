@@ -258,9 +258,22 @@ public class MerchantEnjoyController extends BaseController {
 	 * @param merNo:
 	 */
 	@RequestMapping
-	public String changeProductState(Model model, @RequestParam("id") String id, @RequestParam("isGround") String isGround,String merNo) {
-		productEnjoyManager.updateIsGround(id,isGround);
+	public String changeProductState(Model model, @RequestParam("id") String id, @RequestParam("isGround") String isGround,@RequestParam("closeReason") String closeReason,String merNo) {
+		productEnjoyManager.updateIsGround(id,isGround,closeReason);
 		return "redirect:linkProduct.do?merNo="+merNo;
+	}
+
+
+	@RequestMapping
+	public String changeProductStateReason(Model model,String productId) {
+		ProductEnjoy productEnjoy = productEnjoyManager.getById(productId);
+		model.addAttribute("productEnjoy",productEnjoy);
+		return "/enjoyIntegral_pages/MerchantEnjoy/closeReason";
+	}
+	@RequestMapping
+	public String saveProductStateReason(ProductEnjoy productEnjoy ) {
+		productEnjoyManager.updateIsGround(productEnjoy.getProductId(),productEnjoy.getIsGround(),productEnjoy.getCloseReason());
+		return "redirect:linkProduct.do?merNo="+productEnjoy.getMerNo();
 	}
 	
 	/**
@@ -288,5 +301,6 @@ public class MerchantEnjoyController extends BaseController {
 			e.printStackTrace();
 		}
 	}
+
 	
 }

@@ -248,9 +248,21 @@ public class MerchantBaseController extends BaseController {
 		return "redirect:list.do?";
 	}
 	@RequestMapping
-	public String changeProductState(Model model,@RequestParam("id") String id,@RequestParam("isGround") String isGround,String merNo) {
-		productBaseManager.updateIsGroup(id,isGround);
+	public String changeProductState(Model model,@RequestParam("id") String id,@RequestParam("isGround") String isGround,@RequestParam("closeReason") String closeReason, String merNo) {
+		productBaseManager.updateIsGroup(id,isGround,closeReason);
 		return "redirect:linkProduct.do?merNo=" + merNo;
+	}
+	@RequestMapping
+	public String changeProductStateReason(Model model,String productId) {
+		ProductBase productBase = productBaseManager.getById(productId);
+		model.addAttribute("productBase",productBase);
+		return "/enjoyIntegral_pages/MerchantBase/closeReason";
+	}
+
+	@RequestMapping
+	public String saveProductStateReason(ProductBase productBase ) {
+		productBaseManager.updateIsGroup(productBase.getProductId(),productBase.getIsGround(),productBase.getCloseReason());
+		return "redirect:linkProduct.do?merNo="+productBase.getMerNo();
 	}
 
 	/**

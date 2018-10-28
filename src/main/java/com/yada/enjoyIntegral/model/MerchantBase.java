@@ -42,6 +42,7 @@ public class MerchantBase {
 	public static final String ALIAS_REVIEW_FLAG = "复核状态"; //符合表示1未复核，0是复核
 	public static final String END_SERVICE_DATE = "结束服务时间"; //符合表示1未复核，0是复核
 	public static final String SERVICE_STARE = "开/关服务标识"; //开启/关闭服务开启/关闭服务1关闭 0是开启
+	public static final String MERDETAIL = "商户详情";
 
 	private String orgId;
 	private String reviewFlag;

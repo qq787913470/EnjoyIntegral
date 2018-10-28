@@ -32,11 +32,12 @@ public class ProductEnjoyDaoImpl extends BaseDaoImpl<ProductEnjoy, java.lang.Str
 		this.getSqlSessionTemplate().update("ProductEnjoy_update_review",map);
 	}
 
-	public void updateIsGround(String productId ,String isGround,String startDate){
+	public void updateIsGround(String productId ,String isGround,String startDate,String closeReason){
 		Map<String,String> map = new HashMap<>();
 		map.put("productId",productId);
 		map.put("isGround",isGround);
 		map.put("startDate",startDate);
+		map.put("closeReason",closeReason);
 		this.getSqlSessionTemplate().update("ProductEnjoy_updateIsGround",map);
 	}
 }

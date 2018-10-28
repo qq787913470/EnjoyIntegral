@@ -19,11 +19,12 @@ public class ProductBaseDaoImpl extends BaseDaoImpl<ProductBase, java.lang.Strin
 	public void updateReview(Map<String,Object> map){
 		this.getSqlSessionTemplate().update("ProductBase_update_review",map);
 	}
-	public void updateIsGroup(String productId,String isGround,String startDate){
+	public void updateIsGroup(String productId,String isGround,String startDate,String closeReason){
 		Map<String,String> map = new HashMap();
 		map.put("productId",productId);
 		map.put("isGround",isGround);
 		map.put("startDate",startDate);
+		map.put("closeReason",closeReason);
 		this.getSqlSessionTemplate().update("ProductBase_updateIsGroup",map);
 	}
 }
