@@ -32,7 +32,6 @@ import com.yada.service.util.BlobUtil;
 
 
 public class Activity {
-	
 	//alias
 	public static final String TABLE_ALIAS = "活动";
 	public static final String ALIAS_ACTIVITY_ID = "活动ID";
@@ -42,10 +41,11 @@ public class Activity {
 	public static final String ALIAS_REMARK = "活动简介";
 	public static final String ALIAS_GIFT_COUNT = "可兑换礼品种类";
 	public static final String ALIAS_CLIENT_PROMPT = "客户提示";
-	public static final String ALIAS_STATE = "活动状态"; 
+	public static final String ALIAS_STATE = "活动状态";     ////0是上架    1是下架
 	public static final String ALIAS_DETAIL = "活动详情";
 	public static final String ALIAS_ORG_ID = "所属机构";
 	public static final String ALIAS_REVIEW_FLAG = "复核状态"; //符合表示1未复核，0是复核
+	public static final String CLOSE_REASON = "活动关闭开启原因"; //符合表示1未复核，0是复核
 
 	private String orgId;
 	private String reviewFlag;
@@ -75,17 +75,18 @@ public class Activity {
 	private java.lang.String clientPrompt;
 	private java.lang.String state;
 	private Object detail;
+	private String  closeReason ;
 
-	public String getCloseeason() {
-		return closeeason;
+	public String getCloseReason() {
+		return closeReason;
 	}
 
-	public void setCloseeason(String closeeason) {
-		this.closeeason = closeeason;
+	public void setCloseReason(String closeeason) {
+		this.closeReason = closeReason;
 	}
 
 	//	活动关闭原因
-   private java.lang.String  closeeason ;
+
 
 	//columns END
 

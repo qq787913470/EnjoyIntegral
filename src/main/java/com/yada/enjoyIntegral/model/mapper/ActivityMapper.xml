@@ -17,6 +17,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="detail" column="DETAIL"/>
 		<result property="orgId" column="ORG_ID"/>
 		<result property="reviewFlag" column="REVIEW_FLAG"/>
+		<result property="closeReason" column="CLOSE_REASON"/>
 
 	</resultMap>
 	

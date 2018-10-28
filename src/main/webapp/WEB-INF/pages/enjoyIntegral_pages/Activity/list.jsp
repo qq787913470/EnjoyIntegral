@@ -129,10 +129,10 @@
 							&nbsp;|&nbsp; <a href="linkProduct.do?id=${item.activityId}">添加礼品>></a>
 							&nbsp;|&nbsp; <a href="linkCustomers.do?activityId=${item.activityId}">关联客户>></a>
 							<c:if test="${item.state==0}">
-							&nbsp;|&nbsp; <a href="open.do?id=${item.activityId}">开启>></a>
+							&nbsp;|&nbsp; <a href="changeActiveStateReason.do?id=${item.activityId}">开启>></a>
 							</c:if>
 							<c:if test="${item.state==1}">
-							&nbsp;|&nbsp; <a href="close.do?id=${item.activityId}">关闭>></a>
+							&nbsp;|&nbsp; <a href="changeActiveStateReason.do?id=${item.activityId}">关闭>></a>
 							</c:if>
 						</td>
 						   <td><c:out value='${item.activityName}' />&nbsp;</td>

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.yada.enjoyIntegral.model.*;
 import com.yada.security.base.BaseController;
 import com.yada.security.model.Org;
 import com.yada.security.service.OrgManager;
@@ -27,11 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.yada.common.dict.util.DictUtil;
-import com.yada.enjoyIntegral.model.Activity;
-import com.yada.enjoyIntegral.model.ActivityProductEnjoy;
-import com.yada.enjoyIntegral.model.CustomerInfo;
-import com.yada.enjoyIntegral.model.ProductCart;
-import com.yada.enjoyIntegral.model.ProductEnjoy;
 import com.yada.enjoyIntegral.query.ActivityProductEnjoyQuery;
 import com.yada.enjoyIntegral.query.ActivityQuery;
 import com.yada.enjoyIntegral.query.CustomerInfoQuery;
@@ -244,17 +240,24 @@ public class ActivityController extends BaseController {
 	}
 
 	@RequestMapping
-	public String open(Model model, @RequestParam("id") String id) {
+	public String changeActiveStateReason(Model model,String id) {
 		Activity activity = activityManager.getById(id);
-		activity.setState("1");
+		model.addAttribute("activity",activity);
+		return "/enjoyIntegral_pages/MerchantBase/closeReason";
+}
+	@RequestMapping
+	public String changeActiveState(Model model, @RequestParam("id") String id) {
+		Activity activity = activityManager.getById(id);
+		activity.setState("0");
 		activityManager.update(activity);
 		return "redirect:list.do";
 	}
 
 	@RequestMapping
-	public String close(Model model, @RequestParam("id") String id) {
-		Activity activity = activityManager.getById(id);
-		activity.setState("0");
+	public String saveActivityStateReason(Activity activity) {
+		activity.setActivityId(activity.getActivityId());
+		activity.setState(activity.getState());
+		activity.setCloseReason(activity.getCloseReason());
 		activityManager.update(activity);
 		return "redirect:list.do";
 	}
