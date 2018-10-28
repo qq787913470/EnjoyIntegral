@@ -66,6 +66,7 @@ public class ProductCart {
 	private java.lang.String activityRemark;
 	private java.lang.String merNo;
 	private java.lang.String merName;
+	private String merDetail;
 
 	public ProductCart(){
 	}
@@ -249,6 +250,14 @@ public class ProductCart {
 		this.productType = productType;
 	}
 
+
+	public String getMerDetail() {
+		return merDetail;
+	}
+
+	public void setMerDetail(String merDetail) {
+		this.merDetail = merDetail;
+	}
 
 	@Override
 	public int hashCode() {

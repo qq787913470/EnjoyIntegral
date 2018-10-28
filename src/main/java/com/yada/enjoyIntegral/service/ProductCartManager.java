@@ -115,6 +115,7 @@ public class ProductCartManager extends
 					pc.setActivityDetail(activity.getDetail());
 					pc.setProductDetail(productEnjoy.getDetail());
 					pc.setProductType("1");
+					pc.setMerDetail(merchant.getMerDetail());
 					productCarts.add(pc);
 				}else if(productBase!=null){
 					Double integral = productBase.getIntegralValue();
@@ -135,6 +136,7 @@ public class ProductCartManager extends
 					pc.setMerName(merchant.getMerName());
 					pc.setProductDetail(productBase.getDetail());
 					pc.setProductType("0");
+					pc.setMerDetail(merchant.getMerDetail());
 					productCarts.add(pc);
 				}
 			}

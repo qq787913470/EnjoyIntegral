@@ -483,6 +483,34 @@ public class BusinessController  extends BaseController {
 			e.printStackTrace();
 		}
 	}
+
+	@RequestMapping
+	public void AJAX_getPrintContent1(HttpServletRequest request,
+									  HttpServletResponse response){
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("name");
+		String certificateNo = (String) session.getAttribute("certificateNo");
+		String phone = (String) session.getAttribute("phone");
+		String certificateType = (String) session .getAttribute("certificateType");
+		List<ProductCart> productCarts = (List<ProductCart>) session .getAttribute("productsInCart");
+		List<ProductCart> productCartsPrint = new ArrayList<ProductCart>();
+
+		productCartsPrint.addAll(productCarts);
+		// 响应
+		try {
+			PrintWriter out = response.getWriter();
+			PageUtil.writePageNew(out, name, certificateNo, phone,
+					certificateType, productCartsPrint);
+			// out.print(sb.toString());
+			out.flush();
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
+	}
+
 	@RequestMapping
 	public void AJAX_validateGiftCount(HttpServletRequest request,
 			HttpServletResponse response) {
