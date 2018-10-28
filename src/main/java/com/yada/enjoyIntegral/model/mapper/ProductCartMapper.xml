@@ -25,6 +25,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="activityDetail" column="ACTIVITY_DETAIL" />
 		<result property="productType" column="product_type"/>
 		<result property="merDetail" column="MER_DETAIL"/>
+		<result property="merPhone" column="MER_PHONE"/>
 	</resultMap>
 
 	<sql id="ProductCart_columns">
@@ -46,6 +47,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		T.PRODUCT_DETAIL ,
 		T.ACTIVITY_DETAIL ,
 		T.MER_DETAIL ,
+		T.MER_PHONE,
 		T.PRODUCT_TYPE
 	</sql>
 
@@ -56,9 +58,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</selectKey>
     <![CDATA[
 		insert into PRODUCT_CART
-		 (PRODUCT_CART_ID,CERTIFICATE_TYPE,CERTIFICATE_NO,PRODUCT_ID,COUNT,INTEGRAL_VALUE,PRODUCT_NAME,IS_PRINT,PRICE,ACTIVITY_NAME,ACTIVITY_ID,PRODUCT_REMARK,ACTIVITY_REMARK,MER_NO,MER_NAME,PRODUCT_DETAIL,ACTIVITY_DETAIL,PRODUCT_TYPE,MER_DETAIL)
+		 (PRODUCT_CART_ID,CERTIFICATE_TYPE,CERTIFICATE_NO,PRODUCT_ID,COUNT,INTEGRAL_VALUE,PRODUCT_NAME,IS_PRINT,PRICE,ACTIVITY_NAME,ACTIVITY_ID,PRODUCT_REMARK,ACTIVITY_REMARK,MER_NO,MER_NAME,PRODUCT_DETAIL,ACTIVITY_DETAIL,PRODUCT_TYPE,MER_DETAIL,MER_PHONE)
 		   values 
-		 (#{productCartId},#{certificateType},#{certificateNo},#{productId},#{count},#{integralValue},#{productName},#{isPrint},#{price},#{activityName},#{activityId},#{productRemark,jdbcType=VARCHAR},#{activityRemark,jdbcType=VARCHAR},#{merNo},#{merName},#{productDetail,jdbcType=BLOB},#{activityDetail,jdbcType=BLOB},#{productType},#{merDetail})
+		 (#{productCartId},#{certificateType},#{certificateNo},#{productId},#{count},#{integralValue},#{productName},#{isPrint},#{price},#{activityName},#{activityId},#{productRemark,jdbcType=VARCHAR},#{activityRemark,jdbcType=VARCHAR},#{merNo},#{merName},#{productDetail,jdbcType=BLOB},#{activityDetail,jdbcType=BLOB},#{productType},#{merDetail},#{merPhone})
 		]]>
 	</insert>
 
@@ -81,6 +83,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			   PRODUCT_DETAIL=#{productDetail},
 			   ACTIVITY_DETAIL=#{activityDetail},
 			   MER_DETAIL=#{merDetail},
+			   MER_PHONE=#{merPhone},
 			   PRODUCT_TYPE = #{productType}
 		where PRODUCT_CART_ID=#{productCartId}
 	</update>
