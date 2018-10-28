@@ -31,12 +31,15 @@
 </head>
 <script type="text/javascript">
 	require([ "dijit/Dialog", "dijit/form/TextBox", "dijit/form/Button" ]);
-	var init = function() {
-		myDialog.show();
-	}
-	dojo.addOnLoad(init);
-         window.location.href = "saveProductStateReason?";
-     }
+    var init = function() {
+        myDialog.show();
+    }
+    dojo.addOnLoad(init);
+    function getIntegral(productId){
+        var name = dojo.byId("closeReason").value;
+
+        window.location.href = "saveActivityStateReason?";
+    }
 
 
 
@@ -50,7 +53,7 @@
 					<mvc:form id="queryForm" name="queryForm" action="saveActivityStateReason.do"
 							  method="post" style="display: inline;">
 						<table class="grid">
-							<input type="hidden" name="id" value="${activity.activityId}"/>
+							<input type="hidden" name="activityId" value="${activity.activityId}"/>
 
 							<input type="hidden" name="state"
 								<c:if test="${activity.state == '0'}">value="1"</c:if>
