@@ -451,7 +451,7 @@ public class BusinessController  extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping
-	public void AJAX_getPrintContent(HttpServletRequest request,
+	public void AJAX_getPrintContent1(HttpServletRequest request,
 			HttpServletResponse response) {
 		HttpSession session = request.getSession();
 		// StringBuilder sb = new StringBuilder();
@@ -485,7 +485,7 @@ public class BusinessController  extends BaseController {
 	}
 
 	@RequestMapping
-	public void AJAX_getPrintContent1(HttpServletRequest request,
+	public void AJAX_getPrintContent(HttpServletRequest request,
 									  HttpServletResponse response){
 		HttpSession session = request.getSession();
 		String name = (String) session.getAttribute("name");
