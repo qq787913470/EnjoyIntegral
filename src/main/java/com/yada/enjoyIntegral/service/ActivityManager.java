@@ -87,4 +87,10 @@ public class ActivityManager extends BaseService<Activity, java.lang.String>{
 		
 	}
 
+	public void updateIsGroup(String activityId,String state,String closeReason){
+
+
+		activityDao.updateIsGroup(activityId,state,closeReason);
+	}
+
 }

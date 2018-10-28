@@ -68,6 +68,16 @@
 			          <textarea rows="3" cols="6" id="remark" name="remark" maxlength="500">${model.remark}</textarea>
 		       </td>
           </tr>
+<tr>
+
+	<td class="lgridlist">
+		活动开启关闭原因:
+	</td>
+	<td colspan="3">
+		<textarea rows="3" cols="6" id="closeReason" name="closeReason" maxlength="100">${model.closeReason}</textarea>
+		<span style="color: red" id="">*</span>
+	</td>
+</tr>
         <tr>
                <td class="lgridlist">
 			       <%=Activity.ALIAS_DETAIL%>:

@@ -81,9 +81,10 @@ public class Activity {
 		return closeReason;
 	}
 
-	public void setCloseReason(String closeeason) {
+	public void setCloseReason(String closeReason) {
 		this.closeReason = closeReason;
 	}
+
 
 	//	活动关闭原因
 

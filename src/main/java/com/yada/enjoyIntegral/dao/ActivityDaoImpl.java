@@ -35,4 +35,12 @@ public class ActivityDaoImpl extends BaseDaoImpl<Activity, java.lang.String>{
 		return this.getSqlSessionTemplate().selectOne("Activity_getActivityByCustomerNoAndProductId",map);
 	}
 
+	public void updateIsGroup(String activityId,String state,String closeReason){
+		Map<String,String> map = new HashMap();
+		map.put("activityId",activityId);
+		map.put("state",state);
+		map.put("closeReason",closeReason);
+		this.getSqlSessionTemplate().update("Activity_updateIsGroup",map);
+	}
+
 }

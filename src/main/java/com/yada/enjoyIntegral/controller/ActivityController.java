@@ -254,11 +254,8 @@ public class ActivityController extends BaseController {
 	}
 
 	@RequestMapping
-	public String saveActivityStateReason(Activity activity) {
-		activity.setActivityId(activity.getActivityId());
-		activity.setState(activity.getState());
-		activity.setCloseReason(activity.getCloseReason());
-		activityManager.update(activity);
+	public String saveActivityStateReason(String activityId,String state,String closeReason) {
+		activityManager.updateIsGroup(activityId,state,closeReason);
 		return "redirect:list.do";
 	}
 

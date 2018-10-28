@@ -37,7 +37,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		T.DETAIL ,
 		T.STATE,
 		T.ORG_ID,
-		T.REVIEW_FLAG
+		T.REVIEW_FLAG,
+		T.CLOSE_REASON
 	</sql>
 	
 	<sql id="Activity_columns_noDetail">
@@ -48,7 +49,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		T.REMARK ,
 		T.GIFT_COUNT ,
 		T.CLIENT_PROMPT ,
-		T.STATE 
+		T.STATE,
+		CLOSE_REASON
 	</sql>
 
 	<insert id="Activity_insert" parameterType="com.yada.enjoyIntegral.model.Activity">
@@ -96,7 +98,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			   STATE=#{state,jdbcType=VARCHAR},
 			   DETAIL=#{detail,jdbcType=BLOB},
 			   ORG_ID=#{orgId,jdbcType=VARCHAR},
-		       REVIEW_FLAG=#{reviewFlag,jdbcType=VARCHAR}
+		       REVIEW_FLAG=#{reviewFlag,jdbcType=VARCHAR},
+		       CLOSE_REASON=#{closeReason,jdbcType=VARCHAR}
 		where ACTIVITY_ID=#{activityId,jdbcType=VARCHAR}
 	</update>
 
@@ -186,5 +189,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<include refid="Activity_findPage_where" />
 		ORDER BY T.START_DATE DESC
 	</select>
+
+	<update id="Activity_updateIsGroup">
+		update ACTIVITY set
+		STATE=#{state,jdbcType=CHAR},
+		CLOSE_REASON=#{closeReason,jdbcType=VARCHAR}
+		where ACTIVITY_ID=#{activityId,jdbcType=VARCHAR}
+	</update>
 </mapper>
 
