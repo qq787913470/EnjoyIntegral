@@ -23,6 +23,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="reviewFlag" column="REVIEW_FLAG"/>
 		<result property="orgName" column="ORG_NAME"/>
 		<result property="orgId" column="ORG_ID"/>
+		<result property="closeReason" column="CLOSE_REASON"/>
+
+
 	</resultMap>
 
 	<sql id="ProductBase_columns">
@@ -40,6 +43,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		T.END_DATE,
 		T.START_DATE,
 		T.REVIEW_FLAG,
+		T.CLOSE_REASON,
 		O.ORG_ID,
 		O.NAME as ORG_NAME
 	</sql>
@@ -223,6 +227,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<update id="ProductBase_updateIsGroup">
 		update PRODUCT_BASE set
 			   IS_GROUND=#{isGround,jdbcType=CHAR},
+		       CLOSE_REASON=#{closeReason,jdbcType=VARCHAR},
 			   <if test="startDate != null">START_DATE=#{startDate,jdbcType=VARCHAR}</if>
 		where PRODUCT_ID=#{productId,jdbcType=VARCHAR}
 	</update>

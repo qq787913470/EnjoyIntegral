@@ -13,7 +13,6 @@
 		</p>
 		<p class="line"></p>
 	</div>
- 
   <mvc:form id="queryForm" name="queryForm" action="list.do"
 		method="post" style="display: inline;">
 
@@ -127,7 +126,6 @@
 					   <th><%=MerchantBase.ALIAS_REVIEW_FLAG%></th>
 					   <th><%=MerchantBase.SERVICE_STARE%></th>
 					   <th><%=MerchantBase.END_SERVICE_DATE%></th>
-		               
 				 </tr>`
 			  </thead>
 			  <tbody>

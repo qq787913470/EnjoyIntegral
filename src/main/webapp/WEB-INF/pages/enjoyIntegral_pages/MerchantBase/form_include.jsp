@@ -104,6 +104,16 @@
 		             <span style="color: red" id="contactAddrMess"></span>
 		       </td>
          </tr>
+          <tr>
+			  <td class="lgridlist">
+				  商户描述:
+			  </td>
+			  <td >
+				  <textarea rows="3" cols="6" id="merDetail" name="merDetail" maxlength="64">${model.merDetail}</textarea>
+				  <span style="color: red">*</span>
+				  <span style="color: red" id="merDetailMess"></span>
+			  </td>
+		  </tr>
 <tr>
 	<td class="lgridlist">
 		<%=MerchantBase.END_SERVICE_DATE%>:

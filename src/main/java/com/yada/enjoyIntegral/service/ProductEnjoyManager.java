@@ -1,7 +1,7 @@
 /*
  * Powered By []
- * Web Site: 
- * 
+ * Web Site:
+ *
  */
 
 package com.yada.enjoyIntegral.service;
@@ -49,7 +49,7 @@ public class ProductEnjoyManager extends BaseService<ProductEnjoy, java.lang.Str
 		for(String id:ids){
 			ProductEnjoy product = productEnjoyDao.getById(id);
 			if(product!=null)
-			 products.add(product);
+				products.add(product);
 		}
 		return products;
 	}
@@ -67,7 +67,7 @@ public class ProductEnjoyManager extends BaseService<ProductEnjoy, java.lang.Str
 	 * @param productId: 商品id
 	 * @param isGround:  商品状态  1表示下架   0表示上架
 	 */
-	public void updateIsGround(String productId,String isGround){
+	public void updateIsGround(String productId,String isGround,String closeReason){
 		String startDate;
 		if("1".equals(isGround)){
 			startDate = "";
@@ -77,6 +77,6 @@ public class ProductEnjoyManager extends BaseService<ProductEnjoy, java.lang.Str
 			String nowDate = sdf.format(date);
 			startDate = nowDate;
 		}
-		productEnjoyDao.updateIsGround(productId,isGround,startDate);
+		productEnjoyDao.updateIsGround(productId,isGround,startDate,closeReason);
 	}
 }

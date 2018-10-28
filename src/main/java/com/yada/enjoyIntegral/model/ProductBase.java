@@ -48,7 +48,7 @@ public class ProductBase {
 	public static final String ALIAS_END_DATE = "商品结束时间";
 	public static final String ALIAS_REVIEW_FLAG = "复核状态"; //符合表示1未复核，0是复核
 	public static final String ALIAS_ORG_NAME = "商品所属机构"; //符合表示1未复核，0是复核
-
+	public static final String CLOSE_REASON = "商品下架上架原因";
 
 	//date formats
 	
@@ -78,6 +78,10 @@ public class ProductBase {
 	private String reviewFlag;
 	private String orgName;
 	private String orgId;
+
+	private String closeReason;
+
+
 
 	public String getOrgId() {
 		return orgId;
@@ -276,6 +280,14 @@ public class ProductBase {
 		.append(",MER_NO=" + getMerNo())
 		.append(",INTEGRAL_VALUE=" + getIntegralValue())
 		.toString();
+	}
+
+	public String getCloseReason() {
+		return closeReason;
+	}
+
+	public void setCloseReason(String closeReason) {
+		this.closeReason = closeReason;
 	}
 }
 

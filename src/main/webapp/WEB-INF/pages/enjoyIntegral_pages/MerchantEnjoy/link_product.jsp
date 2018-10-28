@@ -120,13 +120,13 @@
 					<tr class="${status.count % 2 == 0 ? 'odd' : 'even'}">
 					    <td align="center">&nbsp;|&nbsp; <a
 							href="editProduct.do?id=${item.productId}">编辑>></a>
-							&nbsp;|&nbsp;  
-						  <c:if test="${item.isGround==0}">
-							<a href="changeProductState.do?id=${item.productId}&isGround=1&merNo=${model.merNo}">下架>></a>
-						   </c:if>
-						  <c:if test="${item.isGround==1}">
-							<a href="changeProductState.do?id=${item.productId}&isGround=0&merNo=${model.merNo}">上架>></a>
-						   </c:if>
+							&nbsp;|&nbsp;
+							<c:if test="${item.isGround==0}">
+								<a href="changeProductStateReason.do?productId=${item.productId}">下架>></a>
+							</c:if>
+							<c:if test="${item.isGround==1}">
+								<a href="changeProductStateReason.do?productId=${item.productId}">上架>></a>
+							</c:if>
 							&nbsp;|&nbsp; 
 						</td>
 						<td>

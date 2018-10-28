@@ -61,7 +61,7 @@ public class ProductBaseManager extends BaseService<ProductBase, java.lang.Strin
 	 * @param isGround:	   上下架状态
 	 * @param startDate:   开始时间，如果下架，则开始时间为"",如果上架，则取当前时间
 	 */
-	public void updateIsGroup(String productId,String isGround){
+	public void updateIsGroup(String productId,String isGround,String closeReason){
 		String startDate = "";
 		if("1".equals(isGround)){
 			startDate = "";
@@ -71,6 +71,6 @@ public class ProductBaseManager extends BaseService<ProductBase, java.lang.Strin
 			String nowDate = sdf.format(date);
 			startDate =nowDate;
 		}
-		productBaseDao.updateIsGroup(productId,isGround,startDate);
+		productBaseDao.updateIsGroup(productId,isGround,startDate,closeReason);
 	}
 }

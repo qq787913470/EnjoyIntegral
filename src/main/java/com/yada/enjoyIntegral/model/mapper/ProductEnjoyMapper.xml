@@ -247,6 +247,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<update id="ProductEnjoy_updateIsGround">
 		UPDATE PRODUCT_ENJOY SET
 		IS_GROUND = #{isGround},
+		CLOSE_REASON=#{closeReason,jdbcType=VARCHAR},
 		START_DATE=#{startDate}
 		WHERE PRODUCT_ID = #{productId}
 	</update>
