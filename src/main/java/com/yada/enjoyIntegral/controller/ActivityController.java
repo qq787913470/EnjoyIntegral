@@ -243,7 +243,7 @@ public class ActivityController extends BaseController {
 	public String changeActiveStateReason(Model model,String id) {
 		Activity activity = activityManager.getById(id);
 		model.addAttribute("activity",activity);
-		return "/enjoyIntegral_pages/MerchantBase/closeReason";
+		return "/enjoyIntegral_pages/Activity/closeReason";
 }
 	@RequestMapping
 	public String changeActiveState(Model model, @RequestParam("id") String id) {
