@@ -53,36 +53,40 @@
 
         }
         function revokeIt(newTranId, oldTranId, traceNo, billNo, batchNo, integralValue, url) {
-            //禁止再次点击撤销，等待pos机返回结果
-            var pushButton = dojo.byId("pushButton");
-            dojo.style(pushButton, {"background": "url(../images/btn_bg.jpg) repeat-x center"});
-            pushButton.disabled = true;
-            alert("开始撤销！");
-            var requestMessage = new requestMess();
-            requestMessage.setSzTranId(newTranId);
-            requestMessage.setSzPackType('52');
-            requestMessage.setSzPoint(integralValue);
-            requestMessage.setSzTraceNo(billNo);
-            requestMessage.setSzDesktopNo('00000001');
-            requestMessage.setSzOperator('000000001');
-            console.log("交易撤销的报文：");
-            console.log(requestMessage.packMessage());
-            var responMessageStr = YADAMIS.MISPOS(requestMessage.packMessage());
-            var responMessage = new responseMess(responMessageStr);
-            var integral = responMessage.getSzResult(); //查询响应结果
-            if (integral == '00') {
-                var queryForm = document.getElementById("queryForm");
-                queryForm.action = url + "?newTranId=" + newTranId + "&tranId=" + oldTranId;
-                queryForm.submit();
+            if (newTranId == "error") {
+                alert("数据预存流水失败！交易取消")
             } else {
-                if (integral == '99'|| integral=="" || integral == null) {
-                    alert("响应超时,请先去查询界面查询该撤销交易！失败后再重新发起撤销");
-                    window.location.href = "list.do";
+                //禁止再次点击撤销，等待pos机返回结果
+                var pushButton = dojo.byId("pushButton");
+                dojo.style(pushButton, {"background": "url(../images/btn_bg.jpg) repeat-x center"});
+                pushButton.disabled = true;
+                alert("开始撤销！");
+                var requestMessage = new requestMess();
+                requestMessage.setSzTranId(newTranId);
+                requestMessage.setSzPackType('52');
+                requestMessage.setSzPoint(integralValue);
+                requestMessage.setSzTraceNo(billNo);
+                requestMessage.setSzDesktopNo('00000001');
+                requestMessage.setSzOperator('000000001');
+                console.log("交易撤销的报文：");
+                console.log(requestMessage.packMessage());
+                var responMessageStr = YADAMIS.MISPOS(requestMessage.packMessage());
+                var responMessage = new responseMess(responMessageStr);
+                var integral = responMessage.getSzResult(); //查询响应结果
+                if (integral == '00') {
+                    var queryForm = document.getElementById("queryForm");
+                    queryForm.action = url + "?newTranId=" + newTranId + "&tranId=" + oldTranId;
+                    queryForm.submit();
                 } else {
-                    alert("撤销失败,请重新发起撤销!");
-                    pushButton.disabled = false;
-                    window.location.href = "revokeDefeat.do?integral=" + integral + "&tranId=" + newTranId;
-                    //alert(responMessage.getSzCHNResult())
+                    if (integral == '99' || integral == "" || integral == null) {
+                        alert("响应超时,请先去查询界面查询该撤销交易！失败后再重新发起撤销");
+                        window.location.href = "list.do";
+                    } else {
+                        alert("撤销失败,请重新发起撤销!");
+                        pushButton.disabled = false;
+                        window.location.href = "revokeDefeat.do?integral=" + integral + "&tranId=" + newTranId;
+                        //alert(responMessage.getSzCHNResult())
+                    }
                 }
             }
         }
@@ -154,11 +158,7 @@
                     tranId: tranId
                 },
                 load: function (data) {
-                    if (data == "error") {
-                        alert("数据预存流水失败！交易取消")
-                    } else {
-                        revokeIt(data, tranId, traceNo, billNo, batchNo, integralValue, url)
-                    }
+                    revokeIt(data, tranId, traceNo, billNo, batchNo, integralValue, url)
                 },
                 error: function (error) {
                     alert(error);
@@ -194,7 +194,9 @@
                         <%=CustomerInfo.ALIAS_CERTIFICATE_NO%>
                     </td>
                     <td>
-                        <input type="text" value="${query.certificateNo}" name="certificateNo" id="certificateNo" data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="trim:true,required:false"/>
+                        <input type="text" value="${query.certificateNo}" name="certificateNo" id="certificateNo"
+                               data-dojo-type="dijit.form.ValidationTextBox"
+                               data-dojo-props="trim:true,required:false"/>
                     </td>
                     <td class="lgridlist">
                         <%=CustomerInfo.ALIAS_CERTIFICATE_TYPE%>
@@ -207,38 +209,54 @@
                 <tr>
                     <td class="lgridlist"><%=TranList.ALIAS_CUSTOMER_NAME%>
                     </td>
-                    <td><input type="text" value="${query.customerName}"name="customerName" data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="trim:true,required:false"/>
+                    <td><input type="text" value="${query.customerName}" name="customerName"
+                               data-dojo-type="dijit.form.ValidationTextBox"
+                               data-dojo-props="trim:true,required:false"/>
                         <input type="hidden" value="${query.message}" id="message">
                     </td>
                     <td class="lgridlist"><%=TranList.ALIAS_CUSTOMER_CARD_NO%>
                     </td>
-                    <td><input type="text" value="${query.customerCardNo}" name="customerCardNo" data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="trim:true,required:false"/></td>
+                    <td><input type="text" value="${query.customerCardNo}" name="customerCardNo"
+                               data-dojo-type="dijit.form.ValidationTextBox"
+                               data-dojo-props="trim:true,required:false"/></td>
                 </tr>
                 <tr>
                     <td class="lgridlist"><%=TranList.ALIAS_CUSTOMER_PHONE%>
                     </td>
-                    <td><input type="text" value="${query.customerPhone}" name="customerPhone" data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="trim:true,required:false"/></td>
+                    <td><input type="text" value="${query.customerPhone}" name="customerPhone"
+                               data-dojo-type="dijit.form.ValidationTextBox"
+                               data-dojo-props="trim:true,required:false"/></td>
                     <td class="lgridlist"><%=TranList.ALIAS_BILL_NO%>
                     </td>
-                    <td><input type="text" value="${query.billNo}" name="billNo" data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="trim:true,required:false"/>
+                    <td><input type="text" value="${query.billNo}" name="billNo"
+                               data-dojo-type="dijit.form.ValidationTextBox"
+                               data-dojo-props="trim:true,required:false"/>
                     </td>
                 </tr>
                 <tr>
                     <td class="lgridlist"><%=TranList.ALIAS_SYS_REFERENCE%>
                     </td>
-                    <td><input type="text" value="${query.sysReference}" name="sysReference" data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="trim:true,required:false"/></td>
+                    <td><input type="text" value="${query.sysReference}" name="sysReference"
+                               data-dojo-type="dijit.form.ValidationTextBox"
+                               data-dojo-props="trim:true,required:false"/></td>
                     <td class="lgridlist"><%=TranList.ALIAS_AUTH_NO%>
                     </td>
-                    <td><input type="text" value="${query.authNo}" name="authNo" data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="trim:true,required:false"/>
+                    <td><input type="text" value="${query.authNo}" name="authNo"
+                               data-dojo-type="dijit.form.ValidationTextBox"
+                               data-dojo-props="trim:true,required:false"/>
                     </td>
                 </tr>
                 <tr>
                     <td class="lgridlist"><%=TranList.ALIAS_BATCH_NO%>
                     </td>
-                    <td><input type="text" value="${query.batchNo}" name="batchNo" data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="trim:true,required:false"/></td>
+                    <td><input type="text" value="${query.batchNo}" name="batchNo"
+                               data-dojo-type="dijit.form.ValidationTextBox"
+                               data-dojo-props="trim:true,required:false"/></td>
                     <td class="lgridlist"><%=TranList.ALIAS_TRACE_NO%>
                     </td>
-                    <td><input type="text" value="${query.traceNo}" name="traceNo" data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="trim:true,required:false"/></td>
+                    <td><input type="text" value="${query.traceNo}" name="traceNo"
+                               data-dojo-type="dijit.form.ValidationTextBox"
+                               data-dojo-props="trim:true,required:false"/></td>
                 </tr>
             </table>
             <table class="b">

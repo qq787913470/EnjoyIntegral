@@ -238,112 +238,113 @@
                             t: new Date().getTime()
                         },
                         load: function (data) {
-                            if (data == "error") {
-                                alert("数据预存流水失败！交易取消")
-                            } else {
-                                dojo.byId("tranId").value = data;
-                                var restIntegral = dojo.byId('totalIntegralValue').value;
-                                var exitContent = dojo.byId("exitContent");
-                                var pushButton = dojo.byId("pushButton");
-                                var tranId = document.getElementById("tranId").value;
-                                //TODO 需要恢复的注释
-                                var requestMessage = new requestMess();
-                                requestMessage.setSzPackType('50');
-                                requestMessage.setSzPoint(restIntegral);
-                                requestMessage.setSzDesktopNo('00000001');
-                                requestMessage.setSzOperator('000000001');
-                                requestMessage.setSzTranId(tranId);
-                                console.log("积分消费的报文：");
-                                console.log(requestMessage.packMessage());
-                                var responMessageStr = YADAMIS.MISPOS(requestMessage.packMessage());
-                                //var responMessageStr = '5011                                        62178501000027335772424                                        10411008220189011269113          0120151118142129532287785171      000170000003000010000000000000                              000000000000                                                                                                                                                ';
-                                var responMessage = new responseMess(responMessageStr);
-                                var integral = responMessage.getSzResult(); //查询响应结果
-
-                                //TODO 需要恢复的注释
-                                if (integral == "99" || integral == "" || integral == null) {
-                                    dojo.attr("pushButton", "disabled", "disabled");
-                                    dojo.style(
-                                        "pushButton",
-                                        {
-                                            "background": "url(../images/btn_bg2.jpg) repeat-x center"
-                                        });
-                                    alert('POS交易出现问题,请去交易查询界面重新发起查询！')
-                                    window.location.href = "list.do";
-                                } else {
-                                    var inputName = document.getElementById("inputName").value;
-                                    var inputPhone = document.getElementById("inputPhone").innerText;
-                                    var certificateTypeIdHidden = document.getElementById("certificateTypeIdHidden").value;
-                                    var certificateNoHidden = document.getElementById("certificateNoHidden").value;
-
-                                    var customerCardNo = responMessage.getSzCardNo();
-                                    var merNoPos = responMessage.getSzMerchant();
-                                    var merNamePos = responMessage.getSzMerchantName();
-                                    var tranDate = responMessage.getSzChargeDateTime();
-                                    var terminalNo = responMessage.getSzTermId();
-                                    var tranState = responMessage.getSzResult();
-                                    var bankName = responMessage.getSzBankName();
-                                    var cardType = responMessage.getSzCardType();
-                                    var cartValidity = responMessage.getSzExpr();
-                                    var sysReference = responMessage.getSzRefNo();
-                                    var authNo = responMessage.getSzAuthId();
-                                    var traceNo = responMessage.getSzTraceNo();
-                                    var billNo = responMessage.getSzSeqNo();
-                                    var batchNo = responMessage.getSzBatchNo();
-                                    var tranWay = responMessage.getSzTranFlag();
-                                    var cashNo = responMessage.getSzDesktopNo();
-                                    dojo.xhrGet({
-                                        url: "AJAX_updateTranList.do",
-                                        sync: true,
-                                        content: {
-                                            tranId: tranId,
-                                            customerCardNo: customerCardNo,
-                                            merNoPos: merNoPos,
-                                            merNamePos: merNamePos,
-                                            tranDate: tranDate,
-                                            terminalNo: terminalNo,
-                                            tranState: tranState,
-                                            bankName: bankName,
-                                            cardType: cardType,
-                                            cartValidity: cartValidity,
-                                            sysReference: sysReference,
-                                            authNo: authNo,
-                                            traceNo: traceNo,
-                                            billNo: billNo,
-                                            batchNo: batchNo,
-                                            tranWay: tranWay,
-                                            cashNo: cashNo,
-                                            integral: integral,
-                                            t: new Date().getTime()
-                                        },
-                                        load: function (data) {
-                                            var exitContent = dojo.byId("exitContent");
-                                            if (integral == '00') {
-                                                exitContent.innerHTML = '<center>交易成功</center>';
-                                            } else {
-                                                exitContent.innerHTML = '<center>交易失败</center>';
-                                            }
-                                            dojo
-                                                .style(
-                                                    pushButton,
-                                                    {
-                                                        "background": "url(../images/btn_bg2.jpg) repeat-x center"
-                                                    });
-                                            pushButton.disabled;
-                                            exitDialog.show();
-                                        },
-                                        error: function (error) {
-                                            alert(error);
-                                            alert("POS交易成功！但本地系统未成功记账！请联系支行个金部！");
-                                        }
-                                    });
-                                }
-                            }
+                            dojo.byId("tranId").value = data;
                         },
                         error: function (error) {
                             alert(error);
                         }
                     });
+
+                    var tranId = document.getElementById("tranId").value;
+                    if (tranId==''||tranId == "error") {
+                        alert("数据预存流水失败！交易取消")
+                    } else {
+                        var restIntegral = dojo.byId('totalIntegralValue').value;
+                        var exitContent = dojo.byId("exitContent");
+                        var pushButton = dojo.byId("pushButton");
+                        //TODO 需要恢复的注释
+                        var requestMessage = new requestMess();
+                        requestMessage.setSzPackType('50');
+                        requestMessage.setSzPoint(restIntegral);
+                        requestMessage.setSzDesktopNo('00000001');
+                        requestMessage.setSzOperator('000000001');
+                        requestMessage.setSzTranId(tranId);
+                        console.log("积分消费的报文：");
+                        console.log(requestMessage.packMessage());
+                        var responMessageStr = YADAMIS.MISPOS(requestMessage.packMessage());
+                        //var responMessageStr = '5011                                        62178501000027335772424                                        10411008220189011269113          0120151118142129532287785171      000170000003000010000000000000                              000000000000                                                                                                                                                ';
+                        var responMessage = new responseMess(responMessageStr);
+                        var integral = responMessage.getSzResult(); //查询响应结果
+
+                        //TODO 需要恢复的注释
+                        if (integral == "99" || integral == "" || integral == null) {
+                            dojo.attr("pushButton", "disabled", "disabled");
+                            dojo.style(
+                                "pushButton",
+                                {
+                                    "background": "url(../images/btn_bg2.jpg) repeat-x center"
+                                });
+                            alert('POS交易出现问题,请去交易查询界面重新发起查询！')
+                            window.location.href = "list.do";
+                        } else {
+                            var inputName = document.getElementById("inputName").value;
+                            var inputPhone = document.getElementById("inputPhone").innerText;
+                            var certificateTypeIdHidden = document.getElementById("certificateTypeIdHidden").value;
+                            var certificateNoHidden = document.getElementById("certificateNoHidden").value;
+
+                            var customerCardNo = responMessage.getSzCardNo();
+                            var merNoPos = responMessage.getSzMerchant();
+                            var merNamePos = responMessage.getSzMerchantName();
+                            var tranDate = responMessage.getSzChargeDateTime();
+                            var terminalNo = responMessage.getSzTermId();
+                            var tranState = responMessage.getSzResult();
+                            var bankName = responMessage.getSzBankName();
+                            var cardType = responMessage.getSzCardType();
+                            var cartValidity = responMessage.getSzExpr();
+                            var sysReference = responMessage.getSzRefNo();
+                            var authNo = responMessage.getSzAuthId();
+                            var traceNo = responMessage.getSzTraceNo();
+                            var billNo = responMessage.getSzSeqNo();
+                            var batchNo = responMessage.getSzBatchNo();
+                            var tranWay = responMessage.getSzTranFlag();
+                            var cashNo = responMessage.getSzDesktopNo();
+                            dojo.xhrGet({
+                                url: "AJAX_updateTranList.do",
+                                sync: true,
+                                content: {
+                                    tranId: tranId,
+                                    customerCardNo: customerCardNo,
+                                    merNoPos: merNoPos,
+                                    merNamePos: merNamePos,
+                                    tranDate: tranDate,
+                                    terminalNo: terminalNo,
+                                    tranState: tranState,
+                                    bankName: bankName,
+                                    cardType: cardType,
+                                    cartValidity: cartValidity,
+                                    sysReference: sysReference,
+                                    authNo: authNo,
+                                    traceNo: traceNo,
+                                    billNo: billNo,
+                                    batchNo: batchNo,
+                                    tranWay: tranWay,
+                                    cashNo: cashNo,
+                                    integral: integral,
+                                    t: new Date().getTime()
+                                },
+                                load: function (data) {
+                                    var exitContent = dojo.byId("exitContent");
+                                    if (integral == '00') {
+                                        exitContent.innerHTML = '<center>交易成功</center>';
+                                    } else {
+                                        exitContent.innerHTML = '<center>交易失败</center>';
+                                    }
+                                    dojo
+                                        .style(
+                                            pushButton,
+                                            {
+                                                "background": "url(../images/btn_bg2.jpg) repeat-x center"
+                                            });
+                                    pushButton.disabled;
+                                    exitDialog.show();
+                                },
+                                error: function (error) {
+                                    alert(error);
+                                    alert("POS交易成功！但本地系统未成功记账！请联系支行个金部！");
+                                }
+                            });
+                        }
+                    }
                 } else {
                     alert('您选购的商品中有库存不足的，请重新选择！');
                     dojo.byId("pushButton").removeAttribute("disabled");
