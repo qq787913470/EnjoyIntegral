@@ -241,10 +241,8 @@
         var tranIds= new Array();
 		var obj = document.getElementsByName("ids");
         for(var i=0;i<obj.length;i++){
-            var a = 0;
             if(obj[i].checked){
-                tranIds[a]=obj[i].value;
-                a++;
+                tranIds.push(obj[i].value);
             }
         }
         //判断是否有选中
@@ -339,6 +337,7 @@
 		}
 		var failCount = parseInt(tranIds.length)-parseInt(count);
 		alert("共查询了"+tranIds.length+"条交易，"+count+"条成功,"+failCount+"条失败。");
+        window.location.reload();
     }
 </script>
 </html>
