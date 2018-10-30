@@ -137,7 +137,7 @@ public class PageUtil {
         String dateStr = format.format(new Date());
         StringBuilder sb = new StringBuilder();
         Double totalIntegralValue = 0.0;
-        if (hasNomalProduct(productCarts)) {
+        //if (hasNomalProduct(productCarts)) {
             //打印确认单
             sb.append("<div class='dy'>");
             sb.append("<h1>积分兑换确认单</h1>");
@@ -243,7 +243,7 @@ public class PageUtil {
                 //打印数据分隔符
                 sb.append("-convertPage-");
             }
-        }
+        //}
         sb.append("%" + totalIntegralValue);
         writer.print(sb.toString());
 
