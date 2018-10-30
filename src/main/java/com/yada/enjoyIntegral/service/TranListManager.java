@@ -6,24 +6,19 @@
 
 package com.yada.enjoyIntegral.service;
 
+import com.yada.enjoyIntegral.dao.*;
+import com.yada.enjoyIntegral.model.*;
+import com.yada.enjoyIntegral.util.DateUtil;
+import com.yada.security.base.BaseDao;
+import com.yada.security.base.BaseService;
 import com.yada.security.model.Org;
 import com.yada.security.model.User;
-import com.yada.security.service.OrgManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yada.mybatis.paging.Page;
-import com.yada.security.base.BaseDao;
-import com.yada.security.base.BaseService;
-import com.yada.service.util.BeanUtils;
-
 import java.text.SimpleDateFormat;
-import java.util.*;
-
-import com.yada.enjoyIntegral.model.*;
-import com.yada.enjoyIntegral.dao.*;
-import com.yada.enjoyIntegral.service.*;
-import com.yada.enjoyIntegral.query.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author sg
@@ -61,6 +56,7 @@ public class TranListManager extends BaseService<TranList, java.lang.String> {
     public void updateTranLists(TranList oldTranList, TranList newTranList) {
         //更新新交易流水状态
         newTranList.setTranState("00");
+        newTranList.setTranTime(DateUtil.getNowTime());
         tranListDao.update(newTranList);
 
         //查询这条交易下的所有交易
