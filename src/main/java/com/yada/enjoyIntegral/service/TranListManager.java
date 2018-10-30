@@ -305,8 +305,17 @@ public class TranListManager extends BaseService<TranList, java.lang.String> {
         //判断查询的交易类型 撤销交易需要重置客户参加活动的状态为未参加 如果是消费交易需要更新客户单价活动的状态为已参加
         if (tranLists.get(0).getState().equals("00") && integral.equals("00")) {
             ca.setIsJoin("0");
-        } else if (tranLists.get(0).getState().equals("01") && integral.equals("00"))
+        } else{
+            //修改为，如果交易成功就设置状态为已经成功，否则就未参加
             ca.setIsJoin("1");
+        }
+
+            /*if (tranLists.get(0).getState().equals("01") && integral.equals("00")){
+            ca.setIsJoin("1");
+        }*/
+
+
+
         customerActivityDao.update(ca);
 
     }
