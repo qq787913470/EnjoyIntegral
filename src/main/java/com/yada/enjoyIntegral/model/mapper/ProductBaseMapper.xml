@@ -223,7 +223,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		FROM PRODUCT_BASE T inner join MERCHANT_BASE M ON T.MER_NO = M.MER_NO
 		inner join t_b_org o on m.org_id = o.org_id
 		<include refid="ProductBase_findPage_where" />
-		ORDER BY T.INTEGRAL_VALUE DESC<!-- nlssort(t.product_name,'NLS_SORT=SCHINESE_PINYIN_M')  按照中文首字母排列-->
+		ORDER BY cast(T.INTEGRAL_VALUE as int) DESC<!-- nlssort(t.product_name,'NLS_SORT=SCHINESE_PINYIN_M')  按照中文首字母排列-->
 	</select>
 
 	<update id="ProductBase_updateIsGroup">
