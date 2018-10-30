@@ -195,16 +195,17 @@ public class TranListController {
             //添加撤销交易的流水
             uuid = UUID.randomUUID().toString().replace("-", "");
             tranListManager.addRevokeTranList(uuid, tranId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //将uuid返回给页面,uuid将做为这笔撤销交易的标识
-        response.setContentType("text/html;charset=utf-8");
-        try {
             response.getWriter().print(uuid);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            //将uuid返回给页面,uuid将做为这笔撤销交易的标识
+            response.setContentType("text/html;charset=utf-8");
+            try {
+                response.getWriter().print("error");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
+
     }
 
     /**

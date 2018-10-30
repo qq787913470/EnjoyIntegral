@@ -154,7 +154,11 @@
                     tranId: tranId
                 },
                 load: function (data) {
-                    revokeIt(data, tranId, traceNo, billNo, batchNo, integralValue, url)
+                    if (data == "error") {
+                        alert("数据预存流水失败！交易取消")
+                    } else {
+                        revokeIt(data, tranId, traceNo, billNo, batchNo, integralValue, url)
+                    }
                 },
                 error: function (error) {
                     alert(error);
