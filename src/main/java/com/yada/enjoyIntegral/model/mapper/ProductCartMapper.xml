@@ -60,7 +60,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		insert into PRODUCT_CART
 		 (PRODUCT_CART_ID,CERTIFICATE_TYPE,CERTIFICATE_NO,PRODUCT_ID,COUNT,INTEGRAL_VALUE,PRODUCT_NAME,IS_PRINT,PRICE,ACTIVITY_NAME,ACTIVITY_ID,PRODUCT_REMARK,ACTIVITY_REMARK,MER_NO,MER_NAME,PRODUCT_DETAIL,ACTIVITY_DETAIL,PRODUCT_TYPE,MER_DETAIL,MER_PHONE)
 		   values 
-		 (#{productCartId},#{certificateType},#{certificateNo},#{productId},#{count},#{integralValue},#{productName},#{isPrint},#{price},#{activityName},#{activityId},#{productRemark,jdbcType=VARCHAR},#{activityRemark,jdbcType=VARCHAR},#{merNo},#{merName},#{productDetail,jdbcType=BLOB},#{activityDetail,jdbcType=BLOB},#{productType},#{merDetail},#{merPhone})
+		 (#{productCartId},#{certificateType},#{certificateNo},#{productId},#{count},#{integralValue},#{productName},#{isPrint},#{price},#{activityName},#{activityId},#{productRemark,jdbcType=VARCHAR},#{activityRemark,jdbcType=VARCHAR},#{merNo},#{merName},#{productDetail,jdbcType=BLOB},#{activityDetail,jdbcType=BLOB},#{productType},#{merDetail,jdbcType=VARCHAR},#{merPhone})
 		]]>
 	</insert>
 
