@@ -44,4 +44,10 @@ public class MerchantBaseManager extends BaseService<MerchantBase, java.lang.Str
 		merchantBaseDao.updateReview(map);
 	}
 
+	public void updateReason(String merNo,String serviceStare,String closeReason){
+
+
+		merchantBaseDao.updateReason(merNo,serviceStare,closeReason);
+	}
+
 }
