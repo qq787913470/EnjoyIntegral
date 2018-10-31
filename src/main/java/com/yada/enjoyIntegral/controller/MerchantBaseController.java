@@ -248,6 +248,18 @@ public class MerchantBaseController extends BaseController {
 		return "redirect:list.do?";
 	}
 	@RequestMapping
+	public String changeMerchanStateReason(Model model,@RequestParam("id") String id) {
+		MerchantBase merchantBase = merchantBaseManager.getById(id);
+		model.addAttribute("merchantBase",merchantBase);
+		return "/enjoyIntegral_pages/MerchantBase/merchanCloseReason";
+	}
+	@RequestMapping
+	public String changeMerchanState(MerchantBase merchantBase) {
+		merchantBaseManager.updateReason(merchantBase.getMerNo(),merchantBase.getServiceStare(),merchantBase.getCloseReason());
+		return "redirect:list.do?merNo="+merchantBase.getMerNo();
+	}
+
+	@RequestMapping
 	public String changeProductState(Model model,@RequestParam("id") String id,@RequestParam("isGround") String isGround,@RequestParam("closeReason") String closeReason, String merNo) {
 		productBaseManager.updateIsGroup(id,isGround,closeReason);
 		return "redirect:linkProduct.do?merNo=" + merNo;

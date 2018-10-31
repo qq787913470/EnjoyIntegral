@@ -12,6 +12,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.yada.enjoyIntegral.model.MerchantBase;
 import com.yada.security.base.BaseController;
 import com.yada.security.model.Org;
 import com.yada.security.service.OrgManager;
@@ -302,5 +303,16 @@ public class MerchantEnjoyController extends BaseController {
 		}
 	}
 
+	@RequestMapping
+	public String changeMerchanStateReason(Model model,@RequestParam("id") String id) {
+		MerchantEnjoy merchantEnjoy = merchantEnjoyManager.getById(id);
+		model.addAttribute("merchantEnjoy",merchantEnjoy);
+		return "/enjoyIntegral_pages/MerchantEnjoy/merchanCloseReason";
+	}
+	@RequestMapping
+	public String changeMerchanState(MerchantBase merchantBase) {
+		merchantEnjoyManager.updateReason(merchantBase.getMerNo(),merchantBase.getServiceStare(),merchantBase.getCloseReason());
+		return "redirect:list.do?merNo="+merchantBase.getMerNo();
+	}
 	
 }
