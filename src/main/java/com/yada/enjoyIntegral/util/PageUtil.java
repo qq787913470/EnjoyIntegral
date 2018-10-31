@@ -181,7 +181,9 @@ public class PageUtil {
             Iterator iter = merMessMap.entrySet().iterator();
             while (iter.hasNext()) {
                 Map.Entry entry = (Map.Entry) iter.next();
-                sb.append("<p class='bit'>" + entry.getKey() + ":" + entry.getValue() + "</p>  ");
+                String merName = (String) entry.getKey();
+                String detail = entry.getValue()==null?"": (String) entry.getValue();
+                sb.append("<p class='bit'>" + merName + ":" + detail+ "</p>  ");
             }
 
             sb.append("<p class='bit'></p>  ");
@@ -234,6 +236,9 @@ public class PageUtil {
                 sb.append("<p class='bit'>2、此兑换单为服务凭证，复印无效。</p>");
                 sb.append("<p class='bit'>3、服务有效期为兑换后90天，逾期视为客户主动放弃。</p>");
                 sb.append("<p class='bit'>4、中国银行苏州分行保留尊享积分兑换服务的最终解释权。</p>");
+                String merName = (String) entry.getKey();
+                String detail = entry.getValue()==null?"": (String) entry.getValue();
+                sb.append("<p class='bit'>" + merName + ":" + detail+ "</p>  ");
                 sb.append("<p class='bit'></p> ");
                 sb.append("<div class='nothing'></div>");
 
