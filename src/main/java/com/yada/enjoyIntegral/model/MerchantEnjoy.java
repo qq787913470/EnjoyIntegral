@@ -71,6 +71,8 @@ public class MerchantEnjoy {
 	private String endServiceDate;
 	private String serviceStare;
 
+	private String  closeReason ;
+
 
 
 
@@ -239,6 +241,14 @@ public class MerchantEnjoy {
 		.append(",CONTACT_ADDR=" + getContactAddr())
 		.append(",SERVICE_PHONE=" + getServicePhone())
 		.toString();
+	}
+
+	public String getCloseReason() {
+		return closeReason;
+	}
+
+	public void setCloseReason(String closeReason) {
+		this.closeReason = closeReason;
 	}
 }
 
