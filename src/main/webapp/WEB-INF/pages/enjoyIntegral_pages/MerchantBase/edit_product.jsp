@@ -148,7 +148,6 @@
 
 
 
-
             <tr>
                 <td class="lgridlist">
                     <%=ProductBase.ALIAS_DETAIL%>:
