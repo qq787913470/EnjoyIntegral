@@ -194,6 +194,12 @@ public class MerchantBaseController extends BaseController {
 	}
 
 	@RequestMapping
+	public String showProduct(Model model, @RequestParam("id") String id) {
+		model.addAttribute("model", productBaseManager.getById(id));
+		return "/enjoyIntegral_pages/MerchantBase/show_product";
+	}
+
+	@RequestMapping
 	public String updateProduct(@ModelAttribute("model") ProductBase productBase,@RequestParam("file") CommonsMultipartFile cmpfile) {
 		
 		//原始名称  

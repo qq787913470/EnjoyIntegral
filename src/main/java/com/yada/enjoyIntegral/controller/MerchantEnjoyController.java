@@ -194,6 +194,12 @@ public class MerchantEnjoyController extends BaseController {
 		model.addAttribute("model", productEnjoyManager.getById(id));
 		return "/enjoyIntegral_pages/MerchantEnjoy/edit_product";
 	}
+
+	@RequestMapping
+	public String showProduct(Model model, @RequestParam("id") String id) {
+		model.addAttribute("model", productEnjoyManager.getById(id));
+		return "/enjoyIntegral_pages/MerchantEnjoy/show_product";
+	}
 	
 	@RequestMapping
 	public String updateProduct(@ModelAttribute("model") ProductEnjoy productEnjoy,@RequestParam("file") CommonsMultipartFile cmpfile) {
