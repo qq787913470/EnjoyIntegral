@@ -9,7 +9,7 @@
 <body class="claro" >
     <div id="dqwz">
 		<p>
-			当前位置：业务管理&nbsp;〉&nbsp;<%=MerchantBase.TABLE_ALIAS%>管理
+			当前位置：业务管理&nbsp;〉&nbsp;常规商户复核管理
 		</p>
 		<p class="line"></p>
 	</div>
