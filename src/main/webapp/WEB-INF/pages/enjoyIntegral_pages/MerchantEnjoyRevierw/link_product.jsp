@@ -9,7 +9,7 @@
 <body class="claro" >
     <div id="dqwz">
 		<p>
-			当前位置：业务管理&nbsp;〉&nbsp;<%=ProductBase.TABLE_ALIAS%>管理
+			当前位置：业务管理&nbsp;〉&nbsp;尊享商品复核管理
 		</p>
 		<p class="line"></p>
 	</div>
@@ -35,7 +35,7 @@
 					data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="trim:true,required:false"
 							value="${model.productName}"/>
 		             <input type="hidden" name="merNo" id="merNo" value="${model.merNo}"/> 
-		             <span style="color: red" id="productNameMess">*</span>
+
 		       </td>
         
                <td class="lgridlist">
@@ -45,7 +45,7 @@
 		             <input id="price" maxlength="20" name="price"
 							data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="trim:true,required:false,regExp:'^([1-9]([0-9]+)?(\.[0-9]{1,2})?)|((0){1})|([0-9]\.[0-9]([0-9])?)$',invalidMessage:'请输入整数或小数(小数点后保留两位)'"
 							value="${model.price}"/>
-		             <span style="color: red" id="priceMess">*</span>
+
 		       </td>
         </tr>
 		    <tr>
@@ -58,7 +58,6 @@
 		             <input id="integralValue" maxlength="20" name="integralValue"
 							data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="trim:true,required:false,regExp:'^([1-9]([0-9]+)?(\.[0-9]{1,2})?)|((0){1})|([0-9]\.[0-9]([0-9])?)$',invalidMessage:'请输入整数或小数(小数点后保留两位)'"
 							value="${model.integralValue}"/>
-		             <span style="color: red" id="integralValueMess">*</span>
 		       </td>
 		       
                <td class="lgridlist">
