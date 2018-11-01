@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.yada.enjoyIntegral.model.ProductCart;
+import org.apache.commons.lang.StringUtils;
 
 
 public class PageUtil {
@@ -186,8 +187,9 @@ public class PageUtil {
         while (iter.hasNext()) {
             Map.Entry entry = (Map.Entry) iter.next();
             String merName = (String) entry.getKey();
-            String detail = entry.getValue() == null ? "" : (String) entry.getValue();
-            sb.append("<p class='bit'>" + merName + ":" + detail + "</p>  ");
+            String detail = (String) entry.getValue();
+            if (StringUtils.isNotEmpty(detail))
+                sb.append("<p class='bit'>" + merName + ":" + detail + "</p>  ");
         }
 
         sb.append("<p class='bit'></p>  ");
@@ -245,8 +247,9 @@ public class PageUtil {
             sb.append("<p class='bit'>3、服务有效期为兑换后90天，逾期视为客户主动放弃。</p>");
             sb.append("<p class='bit'>4、中国银行苏州分行保留尊享积分兑换服务的最终解释权。</p>");
             String merName = (String) entry.getKey();
-            String detail = entry.getValue() == null ? "" : (String) entry.getValue();
-            sb.append("<p class='bit'>" + merName + ":" + detail + "</p>  ");
+            String detail = (String) entry.getValue();
+            if (StringUtils.isNotEmpty(detail))
+                sb.append("<p class='bit'>" + merName + ":" + detail + "</p>  ");
             sb.append("<p class='bit'></p> ");
             sb.append("<div class='nothing'></div>");
 

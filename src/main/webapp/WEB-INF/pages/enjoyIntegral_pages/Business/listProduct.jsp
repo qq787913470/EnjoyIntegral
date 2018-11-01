@@ -518,8 +518,8 @@
                                 </th>
                                 <td><c:out value='${item.activityName}'/>&nbsp;</td>
                                 <td><c:out value='${item.productName}'/>&nbsp;</td>
-                                    <%--<td><c:out value='${item.count}' />&nbsp;</td>--%>
-                                <td><input type="text" size="2" value="${item.count}" readOnly="true"/></td>
+                                <td><c:out value='${item.count}' />&nbsp;</td>
+                               <%-- <td><input type="text" size="2" value="${item.count}" readOnly="true"/></td>--%>
                                 <td><c:out value='${item.integralValue}'/>&nbsp;</td>
                             </tr>
                         </c:forEach>
