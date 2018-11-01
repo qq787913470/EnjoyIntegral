@@ -75,6 +75,20 @@
 						<mytag:write value="${model.serviceStare}" dictName="SERVICE_STARE"/>
 					</td>
 				</tr>
+				<tr>
+					<td class="lgridlist">
+						商户描述:
+					</td>
+					<td >
+						<textarea rows="3" cols="6" id="merDetail" name="merDetail" maxlength="64" readonly>${model.merDetail}</textarea>
+					</td>
+					<td class="lgridlist">
+						商户关闭（开启）原因:
+					</td>
+					<td >
+						<textarea rows="3" cols="6" id="closeReason" name="closeReason" maxlength="64" readonly>${model.closeReason}</textarea>
+					</td>
+				</tr>
 			</table>
 			<table class="b">
 				<tr align="center">

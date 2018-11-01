@@ -81,16 +81,14 @@
         
         </tr>
         <tr>
-
-			<td class="lgridlist">所属机构:</td>
-			<td>
-				<select id="orgId" name="orgId">
-					<option value="">--请选择--</option>
-					<c:forEach  items="${ListOrgId}" var="item">
-						<option <c:if test="${model.orgId==item.orgId}">selected</c:if> value="${item.orgId}">${item.name}</option>
-					</c:forEach>
-				</select> <span style="color: red" id="ListOrgIdMess">*</span>
+			<td class="lgridlist">
+				商户开启（关闭）原因:
 			</td>
+			<td >
+				<textarea rows="3" cols="6" id="closeReason" name="closeReason" maxlength="64">${model.closeReason}</textarea>
+			</td>
+
+
                <td class="lgridlist">
 			       <%=MerchantEnjoy.ALIAS_CONTACT_ADDR%>:
 		       </td>
@@ -100,6 +98,19 @@
 		             <span style="color: red" id="contactAddrMess"></span>
 		       </td>
          </tr>
+         <tr>
+			 <td class="lgridlist">所属机构:</td>
+			 <td>
+				 <select id="orgId" name="orgId">
+					 <option value="">--请选择--</option>
+					 <c:forEach  items="${ListOrgId}" var="item">
+						 <option <c:if test="${model.orgId==item.orgId}">selected</c:if> value="${item.orgId}">${item.name}</option>
+					 </c:forEach>
+				 </select> <span style="color: red" id="ListOrgIdMess">*</span>
+			 </td>
+			 <td class="lgridlist"></td>
+			 <td ></td>
+		 </tr>
 <tr>
 	<td class="lgridlist">
 		<%=MerchantEnjoy.END_SERVICE_DATE%>:

@@ -118,9 +118,12 @@
 				</c:if>
 				<c:forEach items="${page.result}" var="item" varStatus="status">
 					<tr class="${status.count % 2 == 0 ? 'odd' : 'even'}">
-					    <td align="center">&nbsp;|&nbsp; <a
-							href="editProduct.do?id=${item.productId}">编辑>></a>
+					    <td align="center">
+							<a href="showProduct.do?id=${item.productId}">查看>></a>
 							&nbsp;|&nbsp;
+							<a href="editProduct.do?id=${item.productId}">编辑>></a>
+							&nbsp;|&nbsp;
+
 							<c:if test="${item.isGround==0}">
 								<a href="changeProductStateReason.do?productId=${item.productId}">下架>></a>
 							</c:if>
