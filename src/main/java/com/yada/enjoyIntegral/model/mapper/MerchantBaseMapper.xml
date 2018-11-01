@@ -20,6 +20,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="endServiceDate" column="END_SERVICE_DATE"/>
 		<result property="serviceStare" column="SERVICE_STARE"/>
 		<result property="merDetail" column="MER_DETAIL"/>
+		<result property="closeReason" column="CLOSE_REASON"/>
 	</resultMap>
 
 	<sql id="MerchantBase_columns">
@@ -36,7 +37,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		T.REVIEW_FLAG,
 		T.END_SERVICE_DATE,
 		T.SERVICE_STARE,
-		T.MER_DETAIL
+		T.MER_DETAIL,
+		T.CLOSE_REASON
 	</sql>
 
 	<insert id="MerchantBase_insert" parameterType="com.yada.enjoyIntegral.model.MerchantBase">
@@ -184,4 +186,15 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<include refid="MerchantBase_findPage_where" />
 		ORDER BY T.MER_NO DESC
 	</select>
+
+	<update id="MerchantBase_updateReason">
+		update MERCHANT_BASE set
+		SERVICE_STARE=#{serviceStare,jdbcType=CHAR},
+		CLOSE_REASON=#{closeReason,jdbcType=VARCHAR}
+		where MER_NO=#{merNo,jdbcType=VARCHAR}
+	</update>
+
+
+
+
 </mapper>

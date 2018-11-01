@@ -58,6 +58,10 @@ public class MerchantBase {
 	private String endServiceDate;
 	private String serviceStare;
 
+	private String  closeReason ;
+
+
+
 	public String getMerDetail() {
 		return merDetail;
 	}
@@ -241,6 +245,14 @@ public class MerchantBase {
 		.append(",CONTACT_ADDR=" + getContactAddr())
 		.append(",SERVICE_PHONE=" + getServicePhone())
 		.toString();
+	}
+
+	public String getCloseReason() {
+		return closeReason;
+	}
+
+	public void setCloseReason(String closeReason) {
+		this.closeReason = closeReason;
 	}
 }
 

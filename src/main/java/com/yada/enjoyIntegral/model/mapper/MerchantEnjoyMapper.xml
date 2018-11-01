@@ -20,6 +20,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="endServiceDate" column="END_SERVICE_DATE"/>
 		<result property="serviceStare" column="SERVICE_STARE"/>
 		<result property="merDetail" column="MER_DETAIL"/>
+		<result property="closeReason" column="CLOSE_REASON"/>
 	</resultMap>
 
 	<sql id="MerchantEnjoy_columns">
@@ -36,8 +37,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		T.REVIEW_FLAG,
 		T.END_SERVICE_DATE,
 		T.SERVICE_STARE,
-		MER_DETAIL
-
+		MER_DETAIL,
+		T.CLOSE_REASON
 	</sql>
 
 	<insert id="MerchantEnjoy_insert" parameterType="com.yada.enjoyIntegral.model.MerchantEnjoy">
@@ -103,7 +104,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		       REVIEW_FLAG=#{reviewFlag,jdbcType=CHAR},
 			   END_SERVICE_DATE=#{endServiceDate,jdbcType=VARCHAR},
 		       SERVICE_STARE=#{serviceStare,jdbcType=CHAR},
-		        MER_DETAIL=#{merDetail,jdbcType=VARCHAR}
+		        MER_DETAIL=#{merDetail,jdbcType=VARCHAR},
+		        CLOSE_REASON=#{closeReason,jdbcType=VARCHAR}
 		  WHERE
 		     MER_NO=#{merNo}
 	</update>
@@ -180,4 +182,14 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<include refid="MerchantEnjoy_findPage_where" />
 		ORDER BY T.END_SERVICE_DATE DESC
 	</select>
+	<update id="MerchantEnjoy_updateReason">
+		update MERCHANT_ENJOY set
+		SERVICE_STARE=#{serviceStare,jdbcType=CHAR},
+		CLOSE_REASON=#{closeReason,jdbcType=VARCHAR}
+		where MER_NO=#{merNo,jdbcType=VARCHAR}
+	</update>
+
+
+
+
 </mapper>

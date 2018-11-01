@@ -62,7 +62,7 @@
                 </td>
                 <td>
                     <input data-dojo-type="dijit.form.ValidationTextBox" id="productName" maxlength="32"
-                           name="productName" data-dojo-props="trim:true,required:true" value="${model.productName}"/>
+                           name="productName" data-dojo-props="trim:true,required:true" value="${model.productName}" readonly= "true" />
                     <span style="color: red" id="productNameMess">*</span>
                 </td>
                 <td colspan="2" rowspan="2">
@@ -74,7 +74,7 @@
                     <c:if test="${model.picPath ==null}">
                         <img id="imgPre" src="../images/noPic.jpg" style="display: block;" width="200" height="200"/>
                     </c:if>
-                    <input type="file" name="file" id="file" onchange="preImg(this.id,'imgPre');"/>
+                        <%--<input type="file" name="file" id="file" onchange="preImg(this.id,'imgPre');"/>--%>
                 </td>
             </tr>
             <tr>
@@ -85,7 +85,7 @@
                 <td>
                     <input data-dojo-type="dijit.form.ValidationTextBox" id="price" maxlength="20" name="price"
                            data-dojo-props="trim:true,required:true,regExp:'^([1-9]([0-9]+)?(\.[0-9]{1,2})?)|((0){1})|([0-9]\.[0-9]([0-9])?)$',invalidMessage:'请输入整数或小数(小数点后保留两位)'"
-                           value="${model.price}"/>
+                           value="${model.price}" readonly= "true"/>
                     <span style="color: red" id="priceMess">*</span>
                 </td>
             </tr>
@@ -97,6 +97,7 @@
                 </td>
                 <td>
                     <input data-dojo-type="dijit.form.ValidationTextBox" id="integralValue" maxlength="20"
+                           readonly= "true"
                            name="integralValue" data-dojo-props="trim:true,required:true,regExp:'^([1-9]([0-9]+)?(\.[0-9]{1,2})?)|((0){1})|([0-9]\.[0-9]([0-9])?)$',invalidMessage:'请输入整数或小数(小数点后保留两位)'"
                            value="${model.integralValue}"
                            onkeyup="this.value=this.value.replace(/\D/g,'')"/>
@@ -104,7 +105,7 @@
                 </td>
                 <td class="lgridlist"><%=ProductBase.ALIAS_GIFT_COUNT%>:</td>
                 <td colspan="3">
-                    <input data-dojo-type="dijit.form.ValidationTextBox" id="giftCount" maxlength="5" name="giftCount"  data-dojo-props="trim:true,required:true,regExp:'^[1-9][0-9]*$',invalidMessage:'请输入整数'"
+                    <input data-dojo-type="dijit.form.ValidationTextBox" readonly= "true" id="giftCount" maxlength="5" name="giftCount"  data-dojo-props="trim:true,required:true,regExp:'^[1-9][0-9]*$',invalidMessage:'请输入整数'"
                            value="${model.giftCount}"/>
                     <span style="color: red" id="giftCountMess">*</span>
                 </td>
@@ -115,8 +116,8 @@
                     <%=ProductBase.ALIAS_END_DATE%>:
                 </td>
                 <td>
-                    <input id="endDate" name="endDate" value="${model.endDate}"
-                           class="Wdate" type="text" onFocus="WdatePicker({dateFmt:'yyyyMMdd'})"/>
+                    <input readonly= "true" id="endDate" name="endDate" value="${model.endDate}"
+                           class="Wdate" type="text" />
                 </td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -127,7 +128,7 @@
                     <%=ProductBase.ALIAS_REMARK%>:
                 </td>
                 <td colspan="3">
-                    <textarea rows="3" cols="6" id="remark" name="remark" maxlength="100">${model.remark}</textarea>
+                    <textarea rows="3" cols="6" id="remark" name="remark" maxlength="100" readonly>${model.remark}</textarea>
                     <span style="color: red" id="remarkMess">*</span>
                 </td>
             </tr>
@@ -139,21 +140,21 @@
                     商品上下架原因:
                 </td>
                 <td colspan="3">
-                    <textarea rows="3" cols="6" id="closeReason" name="closeReason" maxlength="100">${model.closeReason}</textarea>
+                    <textarea rows="3" cols="6" id="closeReason" name="closeReason" maxlength="100" readonly>${model.closeReason}</textarea>
                     <span style="color: red" id="">*</span>
                 </td>
             </tr>
 
 
 
-
+、
 
             <tr>
                 <td class="lgridlist">
                     <%=ProductBase.ALIAS_DETAIL%>:
                 </td>
                 <td colspan="3">
-					       <textarea name="detailString" id="detailString" rows="10" cols="80">
+					       <textarea name="detailString" id="detailString" rows="10" cols="80" readonly>
                                    ${model.detailString}
                            </textarea>
                     <script>
@@ -166,9 +167,7 @@
         </table>
         <table class="b">
             <tr align="center">
-                <td><input id="submitButton" name="submitButton" type="submit" value="保存"/></td>
-                <td><input type="button" value="返回" onclick="window.location='linkProduct.do?merNo=${model.merNo}'"/>
-                </td>
+                <td><input type="button" value="返回" onclick="window.location='linkProduct.do?merNo=${model.merNo}'"/></td>
             </tr>
         </table>
     </mvc:form>

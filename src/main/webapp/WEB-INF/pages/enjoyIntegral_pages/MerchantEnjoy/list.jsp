@@ -151,12 +151,12 @@
 						<td align="center">
 						    &nbsp;|&nbsp; <a href="edit.do?id=${item.merNo}">编辑>></a>
 							&nbsp;|&nbsp; <a href="show.do?id=${item.merNo}">查看>></a>
-							&nbsp;|&nbsp; <a href="linkProduct.do?merNo=${item.merNo}">添加商品>></a>
+							&nbsp;|&nbsp; <a href="linkProduct.do?merNo=${item.merNo}">操作商品>></a>
 							<c:if test="${item.serviceStare==0}">
-								<a href="changeMerState.do?id=${item.merNo}&serviceStare=1">关闭>></a>
+								<a href="changeMerchanStateReason.do?id=${item.merNo}">关闭>></a>
 							</c:if>
 							<c:if test="${item.serviceStare==1}">
-								<a href="changeMerState.do?id=${item.merNo}&serviceStare=0">开启></a>
+								<a href="changeMerchanStateReason.do?id=${item.merNo}">开启></a>
 							</c:if>
 						</td>
 						   <td><c:out value='${item.merNo}' />&nbsp;</td>

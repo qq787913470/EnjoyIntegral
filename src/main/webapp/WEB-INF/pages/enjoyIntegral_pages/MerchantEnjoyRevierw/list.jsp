@@ -9,7 +9,7 @@
 <body class="claro" >
     <div id="dqwz">
 		<p>
-			当前位置：业务管理&nbsp;〉&nbsp;<%=MerchantEnjoy.TABLE_ALIAS%>管理
+			当前位置：业务管理&nbsp;〉&nbsp;<%=MerchantEnjoy.TABLE_ALIAS%>复核管理
 		</p>
 		<p class="line"></p>
 	</div>

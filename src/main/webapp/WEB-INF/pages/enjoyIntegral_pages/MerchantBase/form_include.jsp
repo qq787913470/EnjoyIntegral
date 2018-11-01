@@ -84,16 +84,27 @@
 
         <tr>
 
-	<td class="lgridlist">所属机构:</td>
-	<td>
-		<select id="orgId" name="orgId">
-			<option value="">--请选择--</option>
-			<c:forEach  items="${ListOrgId}" var="item">
-				<option <c:if test="${query.ListOrgId==item.orgId}">selected</c:if> value="${item.orgId}">${item.name}</option>
-			</c:forEach>
-		</select> <span style="color: red" id="ListOrgIdMess"></span>
-	</td>
 
+
+			<td class="lgridlist">所属机构:</td>
+			<td>
+				<select id="orgId" name="orgId">
+					<option value="">--请选择--</option>
+					<c:forEach  items="${ListOrgId}" var="item">
+						<option <c:if test="${query.ListOrgId==item.orgId}">selected</c:if> value="${item.orgId}">${item.name}</option>
+					</c:forEach>
+				</select> <span style="color: red" id="ListOrgIdMess"></span>
+			</td></tr>
+
+<tr>
+	<td class="lgridlist">
+		商户描述:
+	</td>
+	<td >
+		<textarea rows="3" cols="6" id="merDetail" name="merDetail" maxlength="64">${model.merDetail}</textarea>
+		<span style="color: red">*</span>
+		<span style="color: red" id="merDetailMess"></span>
+	</td>
 
                <td class="lgridlist">
 			       <%=MerchantBase.ALIAS_CONTACT_ADDR%>:
@@ -104,16 +115,7 @@
 		             <span style="color: red" id="contactAddrMess"></span>
 		       </td>
          </tr>
-          <tr>
-			  <td class="lgridlist">
-				  商户描述:
-			  </td>
-			  <td >
-				  <textarea rows="3" cols="6" id="merDetail" name="merDetail" maxlength="64">${model.merDetail}</textarea>
-				  <span style="color: red">*</span>
-				  <span style="color: red" id="merDetailMess"></span>
-			  </td>
-		  </tr>
+
 <tr>
 	<td class="lgridlist">
 		<%=MerchantBase.END_SERVICE_DATE%>:

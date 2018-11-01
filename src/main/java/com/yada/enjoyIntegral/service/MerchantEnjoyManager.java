@@ -35,4 +35,10 @@ public class MerchantEnjoyManager extends BaseService<MerchantEnjoy, java.lang.S
 	public void updateReview(Map<String,Object> map){
 		merchantEnjoyDao.updateReview(map);
 	}
+
+	public void updateReason(String merNo,String serviceStare,String closeReason){
+
+
+		merchantEnjoyDao.updateReason(merNo,serviceStare,closeReason);
+	}
 }

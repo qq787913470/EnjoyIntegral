@@ -1,5 +1,6 @@
 package com.yada.enjoyIntegral.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,13 @@ public class MerchantBaseDaoImpl extends BaseDaoImpl<MerchantBase, java.lang.Str
 
 	public void updateReview(Map<String,Object> map){
 		this.getSqlSessionTemplate().update("MerchantBase_update_review",map);
+	}
+	public void updateReason(String merNo,String serviceStare,String closeReason){
+		Map<String,String> map = new HashMap();
+		map.put("merNo",merNo);
+		map.put("serviceStare",serviceStare);
+		map.put("closeReason",closeReason);
+		this.getSqlSessionTemplate().update("MerchantBase_updateReason",map);
 	}
 
 }
