@@ -138,116 +138,124 @@ public class PageUtil {
         StringBuilder sb = new StringBuilder();
         Double totalIntegralValue = 0.0;
         //if (hasNomalProduct(productCarts)) {
-            //打印确认单
+        //打印确认单
+        sb.append("<div class='dy'>");
+        sb.append("<div class='nothing'></div>");
+        sb.append("<div class='nothing'></div>");
+        sb.append("<div class='nothing'></div>");
+        sb.append("<div class='nothing'></div>");
+        sb.append("<h1>积分兑换确认单</h1>");
+        sb.append("<p class='bit'>您本次兑换的相关信息如下：</p>");
+        sb.append("<table class='tab'>");
+        sb.append("<tr>");
+        sb.append("<td >姓名</td>");
+        sb.append("<td >兑换时间</td>");
+        sb.append("<td>接收服务手机号</td>");
+        sb.append("<td>兑换积分</td>");
+        sb.append("<td>服务供应商</td>");
+        sb.append("<td>兑换项目</td>");
+        sb.append("<td>兑换份数</td>");
+        sb.append("</tr>");
+        sb.append("<tr>");
+        sb.append("<td rowspan='" + productCarts.size() + 1 + "'>" + name + "</td>");
+        sb.append("<td rowspan='" + productCarts.size() + 1 + "'>" + dateStr + "</td>");
+        sb.append("<td rowspan='" + productCarts.size() + 1 + "'>" + phone + "</td>");
+        Map<String, String> merMessMap = new HashMap<>();
+        for (int i = 0; i < productCarts.size(); i++) {
+            totalIntegralValue = totalIntegralValue + productCarts.get(i).getIntegralValue();
+            merMessMap.put(productCarts.get(i).getMerName(), productCarts.get(i).getMerDetail());
+            sb.append("<tr>");
+            sb.append("<td>" + productCarts.get(i).getIntegralValue() + "</td>");
+            sb.append("<td>" + productCarts.get(i).getMerName() + "</td>");
+            sb.append("<td>" + productCarts.get(i).getProductName() + "</td>");
+            sb.append("<td>" + productCarts.get(i).getCount() + "</td>");
+            sb.append("</tr>");
+        }
+
+        sb.append("</tr>");
+        sb.append("</table>");
+        sb.append("<p class='bit'>您本次兑换所需要尊享积分共计：" + totalIntegralValue + "分</p> ");
+        sb.append("<p class='bit'>相关说明：</p>");
+        sb.append("<p class='bit'>1、积分仅限兑换当日撤销冲正。</p>  ");
+        sb.append("<p class='bit'>2、服务确认有效期为兑换日后90天，请尽快使用。</p>");
+        sb.append("<p class='bit'>3、兑换服务将于3个工作日后生效。</p>");
+        sb.append("<p class='bit'>4、兑换保险卡一般将于30天后可激活使用，具体时间以中银保险服务人员通知为准。</p>");
+        sb.append("<p class='bit'></p>  ");
+
+        Iterator iter = merMessMap.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            String merName = (String) entry.getKey();
+            String detail = entry.getValue() == null ? "" : (String) entry.getValue();
+            sb.append("<p class='bit'>" + merName + ":" + detail + "</p>  ");
+        }
+
+        sb.append("<p class='bit'></p>  ");
+        sb.append("<p class='bit'>请您核对以上信息无误并再次明确服务使用规则后，签字确认。</p>");
+        sb.append("<p class='write'>客户签字：___________</p>");
+        sb.append("<div class='nothing'></div>");
+        sb.append("-printButton-");
+        sb.append("<div><input type='button' style='width: 80px' value='打印确认单' onclick='printPage(confirmPage)' /></div>");
+        sb.append("</div>");
+        //打印数据分隔符
+        sb.append("-confirmPage-");
+
+        Iterator iter1 = merMessMap.entrySet().iterator();
+        //打印兑换单
+        int j = 0;
+        while (iter1.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter1.next();
             sb.append("<div class='dy'>");
-            sb.append("<h1>积分兑换确认单</h1>");
-            sb.append("<p class='bit'>您本次兑换的相关信息如下：</p>");
+            sb.append("<div class='nothing'></div>");
+            sb.append("<div class='nothing'></div>");
+            sb.append("<div class='nothing'></div>");
+            sb.append("<div class='nothing'></div>");
+            sb.append("<h1>尊享积分兑换单</h1>");
             sb.append("<table class='tab'>");
             sb.append("<tr>");
             sb.append("<td >姓名</td>");
             sb.append("<td >兑换时间</td>");
             sb.append("<td>接收服务手机号</td>");
             sb.append("<td>兑换积分</td>");
-            sb.append("<td>服务供应商</td>");
-            sb.append("<td>兑换项目</td>");
             sb.append("<td>兑换份数</td>");
-            sb.append("</tr>");
-            sb.append("<tr>");
-            sb.append("<td rowspan='" + productCarts.size() + 1 + "'>" + name + "</td>");
-            sb.append("<td rowspan='" + productCarts.size() + 1 + "'>" + dateStr + "</td>");
-            sb.append("<td rowspan='" + productCarts.size() + 1 + "'>" + phone + "</td>");
-            Map<String, String> merMessMap = new HashMap<>();
+            sb.append("<td>服务供应商</td>");
+            sb.append("<td>服务供应商联系电话</td>");
+            sb.append("<td>兑换项目</td>");
+            sb.append("</tr>	");
             for (int i = 0; i < productCarts.size(); i++) {
-                totalIntegralValue = totalIntegralValue + productCarts.get(i).getIntegralValue();
-                merMessMap.put(productCarts.get(i).getMerName(), productCarts.get(i).getMerDetail());
-                sb.append("<tr>");
-                sb.append("<td>" + productCarts.get(i).getIntegralValue() + "</td>");
-                sb.append("<td>" + productCarts.get(i).getMerName() + "</td>");
-                sb.append("<td>" + productCarts.get(i).getProductName() + "</td>");
-                sb.append("<td>" + productCarts.get(i).getCount() + "</td>");
-                sb.append("</tr>");
-            }
 
-            sb.append("</tr>");
+                if (productCarts.get(i).getMerName().equals(entry.getKey())) {
+
+                    sb.append("<tr>");
+                    sb.append("<td>" + name + "</td>");
+                    sb.append("<td>" + dateStr + "</td>");
+                    sb.append("<td>" + phone + "</td>");
+                    sb.append("<td>" + productCarts.get(i).getIntegralValue() + "</td>");
+                    sb.append("<td>" + productCarts.get(i).getCount() + "</td>");
+                    sb.append("<td>" + productCarts.get(i).getMerName() + "</td>");
+                    sb.append("<td>" + productCarts.get(i).getMerPhone() + "</td>");
+                    sb.append("<td>" + productCarts.get(i).getProductName() + "</td>");
+                    sb.append("</tr>");
+                }
+            }
             sb.append("</table>");
-            sb.append("<p class='bit'>您本次兑换所需要尊享积分共计：" + totalIntegralValue + "分</p> ");
-            sb.append("<p class='bit'>相关说明：</p>");
-            sb.append("<p class='bit'>1、积分仅限兑换当日撤销冲正。</p>  ");
-            sb.append("<p class='bit'>2、服务确认有效期为兑换日后90天，请尽快使用。</p>");
-            sb.append("<p class='bit'>3、兑换服务将于3个工作日后生效。</p>");
-            sb.append("<p class='bit'>4、兑换保险卡一般将于30天后可激活使用，具体时间以中银保险服务人员通知为准。</p>");
-            sb.append("<p class='bit'></p>  ");
-
-            Iterator iter = merMessMap.entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry entry = (Map.Entry) iter.next();
-                String merName = (String) entry.getKey();
-                String detail = entry.getValue()==null?"": (String) entry.getValue();
-                sb.append("<p class='bit'>" + merName + ":" + detail+ "</p>  ");
-            }
-
-            sb.append("<p class='bit'></p>  ");
-            sb.append("<p class='bit'>请您核对以上信息无误并再次明确服务使用规则后，签字确认。</p>");
-            sb.append("<p class='write'>客户签字：___________</p>");
+            sb.append("<p class='bit'>备注：</p>");
+            sb.append("<p class='bit'>1、兑换服务将于3个工作日后生效。</p>  ");
+            sb.append("<p class='bit'>2、此兑换单为服务凭证，复印无效。</p>");
+            sb.append("<p class='bit'>3、服务有效期为兑换后90天，逾期视为客户主动放弃。</p>");
+            sb.append("<p class='bit'>4、中国银行苏州分行保留尊享积分兑换服务的最终解释权。</p>");
+            String merName = (String) entry.getKey();
+            String detail = entry.getValue() == null ? "" : (String) entry.getValue();
+            sb.append("<p class='bit'>" + merName + ":" + detail + "</p>  ");
+            sb.append("<p class='bit'></p> ");
             sb.append("<div class='nothing'></div>");
+
             sb.append("-printButton-");
-            sb.append("<div><input type='button' style='width: 80px' value='打印确认单' onclick='printPage(confirmPage)' /></div>");
+            sb.append("<div><input type='button' style='width: 80px' value='打印兑换单' onclick='printPage(convertPage" + j++ + ")' /></div>");
             sb.append("</div>");
             //打印数据分隔符
-            sb.append("-confirmPage-");
-
-            Iterator iter1 = merMessMap.entrySet().iterator();
-            //打印兑换单
-            int j=0;
-            while (iter1.hasNext()) {
-                Map.Entry entry = (Map.Entry) iter1.next();
-                sb.append("<div class='dy'>");
-                sb.append("<h1>尊享积分兑换单</h1>");
-                sb.append("<table class='tab'>");
-                sb.append("<tr>");
-                sb.append("<td >姓名</td>");
-                sb.append("<td >兑换时间</td>");
-                sb.append("<td>接收服务手机号</td>");
-                sb.append("<td>兑换积分</td>");
-                sb.append("<td>兑换份数</td>");
-                sb.append("<td>服务供应商</td>");
-                sb.append("<td>服务供应商联系电话</td>");
-                sb.append("<td>兑换项目</td>");
-                sb.append("</tr>	");
-                for (int i = 0; i < productCarts.size(); i++) {
-
-                    if (productCarts.get(i).getMerName().equals(entry.getKey())) {
-
-                        sb.append("<tr>");
-                        sb.append("<td>" + name + "</td>");
-                        sb.append("<td>" + dateStr + "</td>");
-                        sb.append("<td>" + phone + "</td>");
-                        sb.append("<td>" + productCarts.get(i).getIntegralValue() + "</td>");
-                        sb.append("<td>" + productCarts.get(i).getCount() + "</td>");
-                        sb.append("<td>" + productCarts.get(i).getMerName() + "</td>");
-                        sb.append("<td>" + productCarts.get(i).getMerPhone() + "</td>");
-                        sb.append("<td>" + productCarts.get(i).getProductName() + "</td>");
-                        sb.append("</tr>");
-                    }
-                }
-                sb.append("</table>");
-                sb.append("<p class='bit'>备注：</p>");
-                sb.append("<p class='bit'>1、兑换服务将于3个工作日后生效。</p>  ");
-                sb.append("<p class='bit'>2、此兑换单为服务凭证，复印无效。</p>");
-                sb.append("<p class='bit'>3、服务有效期为兑换后90天，逾期视为客户主动放弃。</p>");
-                sb.append("<p class='bit'>4、中国银行苏州分行保留尊享积分兑换服务的最终解释权。</p>");
-                String merName = (String) entry.getKey();
-                String detail = entry.getValue()==null?"": (String) entry.getValue();
-                sb.append("<p class='bit'>" + merName + ":" + detail+ "</p>  ");
-                sb.append("<p class='bit'></p> ");
-                sb.append("<div class='nothing'></div>");
-
-                sb.append("-printButton-");
-                sb.append("<div><input type='button' style='width: 80px' value='打印兑换单' onclick='printPage(convertPage"+j+++")' /></div>");
-                sb.append("</div>");
-                //打印数据分隔符
-                sb.append("-convertPage-");
-            }
+            sb.append("-convertPage-");
+        }
         //}
         sb.append("%" + totalIntegralValue);
         writer.print(sb.toString());
