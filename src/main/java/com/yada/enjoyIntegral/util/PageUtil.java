@@ -152,6 +152,7 @@ public class PageUtil {
         sb.append("<td >姓名</td>");
         sb.append("<td >兑换时间</td>");
         sb.append("<td>接收服务手机号</td>");
+        sb.append("<td>积分单价</td>");
         sb.append("<td>兑换积分</td>");
         sb.append("<td>服务供应商</td>");
         sb.append("<td>兑换项目</td>");
@@ -166,6 +167,7 @@ public class PageUtil {
             totalIntegralValue = totalIntegralValue + productCarts.get(i).getIntegralValue();
             merMessMap.put(productCarts.get(i).getMerName(), productCarts.get(i).getMerDetail());
             sb.append("<tr>");
+            sb.append("<td>" + productCarts.get(i).getIntegralValue()/productCarts.get(i).getCount() + "</td>");
             sb.append("<td>" + productCarts.get(i).getIntegralValue() + "</td>");
             sb.append("<td>" + productCarts.get(i).getMerName() + "</td>");
             sb.append("<td>" + productCarts.get(i).getProductName() + "</td>");
@@ -218,6 +220,7 @@ public class PageUtil {
             sb.append("<td >姓名</td>");
             sb.append("<td >兑换时间</td>");
             sb.append("<td>接收服务手机号</td>");
+            sb.append("<td>单价</td>");
             sb.append("<td>兑换积分</td>");
             sb.append("<td>兑换份数</td>");
             sb.append("<td>服务供应商</td>");
@@ -231,7 +234,8 @@ public class PageUtil {
                     sb.append("<tr>");
                     sb.append("<td>" + name + "</td>");
                     sb.append("<td>" + dateStr + "</td>");
-                    sb.append("<td>" + phone + "</td>");
+                    sb.append("<td>" + phone.replace(phone.substring(4,8),"****")+"</td>");
+                    sb.append("<td>" + productCarts.get(i).getIntegralValue()/productCarts.get(i).getCount() + "</td>");
                     sb.append("<td>" + productCarts.get(i).getIntegralValue() + "</td>");
                     sb.append("<td>" + productCarts.get(i).getCount() + "</td>");
                     sb.append("<td>" + productCarts.get(i).getMerName() + "</td>");
