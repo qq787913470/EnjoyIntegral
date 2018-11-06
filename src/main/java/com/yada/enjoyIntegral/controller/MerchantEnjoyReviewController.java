@@ -67,13 +67,13 @@ public class MerchantEnjoyReviewController extends BaseController {
 		return "redirect:list.do";
 	}
 	@RequestMapping
-	public String updateprocket(HttpServletRequest request,String[] ids) {
+	public String updateprocket(HttpServletRequest request,String[] ids,String merNo) {
 		System.out.println("Arrays.asList(ids):"+Arrays.asList(ids));
 		Map<String,Object> map = new ArrayMap<String,Object>();
 		map.put("productId", Arrays.asList(ids));
 		map.put("reviewFlag","0");
 		productEnjoyManager.updateReview(map);
-		return "redirect:list.do";
+		return "redirect:linkProduct.do?merNo="+merNo;
 	}
 	@RequestMapping
 	public String show(Model model, @RequestParam("id") String id) {
