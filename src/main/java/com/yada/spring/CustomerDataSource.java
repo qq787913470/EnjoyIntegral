@@ -37,12 +37,14 @@ public class CustomerDataSource extends DataSource {
                 String password = "";
                 String connStr = "";
                 while((connStr=reader.readLine())!=null){
-                    if (connStr.startsWith(username)) {
+                    int begin=0;
+                    int last=connStr.indexOf("@");
+                    String txtUser=connStr.substring(begin,last);
+                    if(txtUser.equals(username)){
                         password = connStr.split(" ")[1].trim();
                         break;
                     }
-
-                } ;
+                }
                 log.info("获取新的数据库密码");
                 if (StringUtils.isNotEmpty(password))
                     this.getPoolProperties().setPassword(password);
