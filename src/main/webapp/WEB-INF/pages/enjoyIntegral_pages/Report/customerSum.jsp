@@ -94,6 +94,8 @@
 					<td class="lgridlist">姓名</td>
 					<td><input type="text" value="${customerName}"
 							   id="customerName" /></td>
+					<td class="lgridlist"></td>
+					<td></td>
 				</tr>
 			</table>
 			<table class="b">
