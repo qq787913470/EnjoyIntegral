@@ -7,8 +7,9 @@
 </head>
 <script type="text/javascript">
 	function dosubmit() {
-        	var tranDate = dojo.byId("tranDate").value;
-        	if(tranDate == null || tranDate == ""){
+        	var tranDateStart = dojo.byId("tranDateStartPre").value;
+        var tranDateEnd = dojo.byId("tranDateEndPre").value;
+        	if(tranDateStart == null || tranDateStart == ""|| tranDateEnd == null || tranDateEnd == ""){
         	    alert("请输入日期");
         	    return ;
 			}
@@ -39,8 +40,10 @@
 					+ merNo
 					+ "&merName="
 					+ merName
-					+ "&tranDate="
-					+ tranDate;
+					+ "&tranDateStart="
+					+ tranDateStart
+                + "&tranDateEnd="
+                + tranDateEnd;
 			console.log(url);
 			dojo.attr(report,"src",url);
 	}
@@ -70,9 +73,15 @@
 						<input type="hidden" value="${orgId}" id="orgId" />
 					</td>
 					<td class="lgridlist">交易日期</td>
-					<td><input id="tranDate" id="tranDate"
-							   value="${query.tranDate}" class="Wdate" type="text"
-							   onFocus="WdatePicker({dateFmt:'yyyyMMdd'})" /></td>
+					<td>
+
+						从<input name="tranDateStartPre" id="tranDateStartPre"
+								value="${tranDateStart}" class="Wdate" type="text"
+								onFocus="WdatePicker({dateFmt:'yyyyMMdd',maxDate : '#F{$dp.$D(\'tranDateEndPre\')}'})" />
+						至<input name="tranDateEndPre" id="tranDateEndPre"
+								value="${tranDateEnd}" class="Wdate" type="text"
+								onFocus="WdatePicker({dateFmt:'yyyyMMdd',minDate :'#F{$dp.$D(\'tranDateStartPre\')}',maxDate:'#F{$dp.$D(\'tranDateStartPre\',{M:3});}'})" />
+					</td>
 				</tr>
 				<tr>
 					<td class="lgridlist">商户名称</td>
