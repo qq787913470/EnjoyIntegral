@@ -13,6 +13,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="customerCardNo" column="CUSTOMER_CARD_NO" />
 		<result property="producrName" column="PRODUCT_NAME" />
 		<result property="integralvalue" column="INTEGRAL_VALUE" />
+		<result property="partCustomerPhone" column="PART_CUSTOMER_PHONE" />
 		<result property="orgId" column="ORG_ID" />
 		<result property="orgName" column="ORG_NAME" />
 		<result property="tranDate" column="TRAN_DATE" />
@@ -23,7 +24,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		T.MER_NO,
 		T.MER_NAME,
 		T.CUSTOMER_NAME,
-		replace(t.CUSTOMER_PHONE,substr(t.CUSTOMER_PHONE,4,4),'****') CUSTOMER_PHONE,
+		t.CUSTOMER_PHONE,
+		replace(t.CUSTOMER_PHONE,substr(t.CUSTOMER_PHONE,4,4),'****') PART_CUSTOMER_PHONE,
 		T.CUSTOMER_CARD_NO,
 		T.PRODUCT_NAME,
 		T.INTEGRAL_VALUE,
@@ -77,7 +79,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.mer_name,
 		t.CUSTOMER_NAME,
 		t.CUSTOMER_PHONE,
-		replace(t.CUSTOMER_PHONE,substr(t.CUSTOMER_PHONE,4,4),'****') CUSTOMER_PHONE,
+		replace(t.CUSTOMER_PHONE,substr(t.CUSTOMER_PHONE,4,4),'****') PART_CUSTOMER_PHONE,
 		t.CUSTOMER_CARD_NO,
 		t.PRODUCT_NAME,
 		t.INTEGRAL_VALUE,
@@ -98,7 +100,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		t.mer_name,
 		t.CUSTOMER_NAME,
 		t.CUSTOMER_PHONE,
-		replace(t.CUSTOMER_PHONE,substr(t.CUSTOMER_PHONE,4,4),'****') CUSTOMER_PHONE,
+		replace(t.CUSTOMER_PHONE,substr(t.CUSTOMER_PHONE,4,4),'****') PART_CUSTOMER_PHONE,
 		t.CUSTOMER_CARD_NO,
 		t.PRODUCT_NAME,
 		t.INTEGRAL_VALUE,

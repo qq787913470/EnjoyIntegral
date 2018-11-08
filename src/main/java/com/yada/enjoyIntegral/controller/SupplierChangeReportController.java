@@ -140,6 +140,7 @@ public class SupplierChangeReportController extends BaseController {
 				"merNo",
 				"merName",
 				"customerName",
+				"partCustomerPhone",
 				"customerPhone",
 				"customerCardNo",
 				"producrName",

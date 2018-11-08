@@ -30,6 +30,7 @@ public class SupplierChangeReport {
 	public static final String MER_NAME = "商户名称";
 
 	public static final String CUSTOMER_NAME = "客户姓名";
+	public static final String PART_CUSTOMER_PHONE = "部分手机号";
 	public static final String CUSTOMER_PHONE = "手机号";
 	public static final String CUSTOMER_CARD_NO = "兑换卡号";
 	public static final String PRODUCT_NAME = "商品名称";
@@ -49,6 +50,7 @@ public class SupplierChangeReport {
 	private String orgName;
 	private String tranDate;
 	private String tranTime;
+	private String partCustomerPhone;
 
 	public String getMerNo() {
 		return merNo;
@@ -136,6 +138,14 @@ public class SupplierChangeReport {
 
 	public void setTranTime(String tranTime) {
 		this.tranTime = tranTime;
+	}
+
+	public String getPartCustomerPhone() {
+		return partCustomerPhone;
+	}
+
+	public void setPartCustomerPhone(String partCustomerPhone) {
+		this.partCustomerPhone = partCustomerPhone;
 	}
 
 	@Override

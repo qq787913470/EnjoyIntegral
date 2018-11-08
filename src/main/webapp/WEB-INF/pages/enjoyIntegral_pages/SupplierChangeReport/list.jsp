@@ -163,6 +163,7 @@
                         <th><%=SupplierChangeReport.MER_NO%></th>
                         <th><%=SupplierChangeReport.MER_NAME%></th>
                         <th><%=SupplierChangeReport.CUSTOMER_NAME%></th>
+                        <th><%=SupplierChangeReport.PART_CUSTOMER_PHONE%></th>
                         <th><%=SupplierChangeReport.CUSTOMER_PHONE%></th>
                         <th><%=SupplierChangeReport.CUSTOMER_CARD_NO%></th>
                         <th><%=SupplierChangeReport.PRODUCT_NAME%></th>
@@ -184,6 +185,7 @@
                             <td><c:out value='${item.merNo}'/>&nbsp;</td>
                             <td><c:out value='${item.merName}'/>&nbsp;</td>
                             <td><c:out value='${item.customerName}'/>&nbsp;</td>
+                            <td><c:out value='${item.partCustomerPhone}'/>&nbsp;</td>
                             <td><c:out value='${item.customerPhone}'/>&nbsp;</td>
                             <td><c:out value='${item.customerCardNo}'/>&nbsp;</td>
                             <td><c:out value='${item.producrName}'/>&nbsp;</td>
@@ -198,7 +200,7 @@
                     <c:if test="${countIntegralValue !=  0.0}">
                         <tr>
                             <td style="text-align: right" colspan="6">积分消费总数：</td>
-                            <td style="text-align: left" colspan="5">${countIntegralValue}</td>
+                            <td style="text-align: left" colspan="6">${countIntegralValue}</td>
                         </tr>
                     </c:if>
                     </tbody>

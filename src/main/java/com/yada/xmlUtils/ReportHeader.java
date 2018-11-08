@@ -66,6 +66,7 @@ public class ReportHeader {
         SupplierChangeReportHeader.put("merNo", SupplierChangeReport.MER_NO);
         SupplierChangeReportHeader.put("merName", SupplierChangeReport.MER_NAME);
         SupplierChangeReportHeader.put("customerName", SupplierChangeReport.CUSTOMER_NAME);
+        SupplierChangeReportHeader.put("partCustomerPhone", SupplierChangeReport.PART_CUSTOMER_PHONE);
         SupplierChangeReportHeader.put("customerPhone", SupplierChangeReport.CUSTOMER_PHONE);
         SupplierChangeReportHeader.put("customerCardNo", SupplierChangeReport.CUSTOMER_CARD_NO);
         SupplierChangeReportHeader.put("producrName", SupplierChangeReport.PRODUCT_NAME);
