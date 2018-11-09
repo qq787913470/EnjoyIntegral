@@ -103,8 +103,8 @@
         console.log("积分查询的报文：")
         console.log(requestMessage.packMessage());
 //真实环境放开此代码
-        var responMessageStr =  YADAMIS.MISPOS(requestMessage.packMessage());
-        //var responMessageStr = '5400                                                          0000                                                                         00                                000112            000000000000                              000000080008                                                                                                                                                ';
+//        var responMessageStr =  YADAMIS.MISPOS(requestMessage.packMessage());
+        var responMessageStr = '5400                                                          0000                                                                         00                                000112            000000000000                              000000080008                                                                                                                                                ';
 		var responMessage = new responseMess(responMessageStr);
 		var integral = responMessage.getSzResult(); //查询响应结果
 		var integralresult = responMessage.getSzPoint(); //查询出来的积分值

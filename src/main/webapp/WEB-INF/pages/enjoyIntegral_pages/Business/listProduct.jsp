@@ -549,7 +549,7 @@
                     </tr>
                 </table>
             </div>
-            <div data-dojo-type="dijit/Dialog" data-dojo-id="printDialog"
+            <div data-dojo-type="dijit/Dialog" data-dojo-id=",l1``````````````````````-"
                  title="单据打印">
                 <div id="printDetail"></div>
                 <table class="b">

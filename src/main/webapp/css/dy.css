@@ -59,6 +59,7 @@
 .dy .tab {
 	border-collapse: collapse;
 	margin-top: 15px;
+	width:750px;
 }
 
 .dy .tab tr:first-child {

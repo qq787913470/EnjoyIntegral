@@ -292,7 +292,7 @@
 				</table>
 			</div>
 			<div data-dojo-type="dijit/Dialog" data-dojo-id="printDialog"
-				 title="单据打印">
+				 title="单据打印····">
 				<div id="printDetail"></div>
 				<table class="b">
 					<tr align="center">

@@ -20,7 +20,7 @@ public class PageUtil {
         writer.println("<h1>积分兑换确认单</h1>");
         if (hasNomalProduct(productCarts)) {
             writer.println("<h3>您本次尊享积分兑换的服务如下：</h3>");
-            writer.println("<table>");
+            writer.println("<table > ");
             int nomalCount = 1;
             for (int i = 0; i < productCarts.size(); i++) {
                 if (productCarts.get(i).getActivityName().equals("nomal")) {
@@ -234,7 +234,7 @@ public class PageUtil {
                     sb.append("<tr>");
                     sb.append("<td>" + name + "</td>");
                     sb.append("<td>" + dateStr + "</td>");
-                    sb.append("<td>" + phone.replace(phone.substring(4,8),"****")+"</td>");
+                    sb.append("<td>" + phone.substring(0,4)+"****"+phone.substring(7,phone.length()) +"</td>");
                     sb.append("<td>" + productCarts.get(i).getIntegralValue()/productCarts.get(i).getCount() + "</td>");
                     sb.append("<td>" + productCarts.get(i).getIntegralValue() + "</td>");
                     sb.append("<td>" + productCarts.get(i).getCount() + "</td>");
